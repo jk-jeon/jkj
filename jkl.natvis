@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <!-- bitfield -->
+  
+  <Type Name="jkl::bitfield&lt;*&gt;">
+    <DisplayString IncludeView="noparens"></DisplayString>
+    <DisplayString ExcludeView="noparens">()</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+    </Expand>
+  </Type>  
+  <Type Name="jkl::bitfield&lt;*,*&gt;">
+    <DisplayString IncludeView="noparens">{underlying_type((value&amp;final_mask)&gt;&gt;final_offset)}</DisplayString>
+    <DisplayString ExcludeView="noparens">({*this,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+      <Item Name="field">underlying_type((value&amp;final_mask)&gt;&gt;final_offset)</Item>
+    </Expand>
+  </Type>  
+  <Type Name="jkl::bitfield&lt;*,*,*&gt;">
+    <DisplayString IncludeView="noparens">{*(exclude_last_field_t*)this,view(noparens)}, {underlying_type((value&amp;final_mask)&gt;&gt;final_offset)}</DisplayString>
+    <DisplayString ExcludeView="noparens">({*this,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+      <ExpandedItem>*(exclude_last_field_t*)this,view(nopacked)</ExpandedItem>
+      <Item Name="field">underlying_type((value&amp;final_mask)&gt;&gt;final_offset)</Item>
+    </Expand>
+  </Type>
+  
+  <Type Name="jkl::bitfield_view&lt;*&gt;">
+    <DisplayString IncludeView="noparens"></DisplayString>
+    <DisplayString ExcludeView="noparens">()</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+    </Expand>
+  </Type>  
+  <Type Name="jkl::bitfield_view&lt;*,*&gt;">
+    <DisplayString IncludeView="noparens">{underlying_type((value&amp;final_mask)&gt;&gt;final_offset)}</DisplayString>
+    <DisplayString ExcludeView="noparens">({*this,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+      <Item Name="field">underlying_type((value&amp;final_mask)&gt;&gt;final_offset)</Item>
+    </Expand>
+  </Type>  
+  <Type Name="jkl::bitfield_view&lt;*,*,*&gt;">
+    <DisplayString IncludeView="noparens">{*(exclude_last_field_t*)this,view(noparens)}, {underlying_type((value&amp;final_mask)&gt;&gt;final_offset)}</DisplayString>
+    <DisplayString ExcludeView="noparens">({*this,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[packed]" ExcludeView="nopacked">value</Item>
+      <ExpandedItem>*(exclude_last_field_t*)this,view(nopacked)</ExpandedItem>
+      <Item Name="field">underlying_type((value&amp;final_mask)&gt;&gt;final_offset)</Item>
+    </Expand>
+  </Type>
+  
+  <Type Name="jkl::detail::bitfield_base&lt;*&gt;::element_reference_base&lt;*,*,*&gt;">
+    <DisplayString>{$T1((value&amp;mask)&gt;&gt;offset)}</DisplayString>
+    <Expand>
+      <Item Name="[ref]">value</Item>
+      <Item Name="[value]">$T1((value&amp;mask)&gt;&gt;offset)</Item>
+    </Expand>
+  </Type>
+  
+  
+  <!-- tmp module -->
+  <Type Name="jkl::tmp::generate_constructors&lt;*&gt;">
+    <DisplayString>{*(ultimate_base_type *)this}</DisplayString>
+    <Expand>
+      <Item Name="[contained]">*(ultimate_base_type *)this</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::tmp::generate_constructors&lt;*,*&gt;">
+    <DisplayString>{*(ultimate_base_type *)this}</DisplayString>
+    <Expand>
+      <ExpandedItem>*(ultimate_base_type *)this</ExpandedItem>
+    </Expand>
+  </Type>
+  
+
+  <!-- math module -->
+  <Type Name="jkl::math::detail::constructor_provider&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">$T1</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::GL2_elmt&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">4</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="jkl::math::gl3_elmt&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">9</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::GL3_elmt&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">9</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::SO3_elmt&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">9</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::SU2_elmt&lt;*,*,*&gt;">
+    <DisplayString>{r_}</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">4</Item>
+      <ExpandedItem>r_</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::SE3_elmt&lt;*,*,*,*,*&gt;">
+    <DisplayString>(rotation={rot_},translation={trans_})</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">7</Item>
+      <Item Name="[rotation]">rot_</Item>
+      <Item Name="[translation]">trans_</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="jkl::math::se3_elmt&lt;*,*,*,*,*&gt;">
+    <DisplayString>({{angular part}}={rot_},{{linear part}}={trans_})</DisplayString>
+    <Expand>
+      <Item Name="[components]" ExcludeView="simple">6</Item>
+      <Item Name="[angular part]">rot_</Item>
+      <Item Name="[linear part]">trans_</Item>
+    </Expand>
+  </Type>
+  
+  <Type Name="jkl::math::dual_number&lt;*,*&gt;">
+    <DisplayString>(primary={prim},dual={dual})</DisplayString>
+    <Expand>
+      <Item Name="[primary]">prim</Item>
+      <Item Name="[dual]">dual</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
