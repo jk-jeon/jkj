@@ -411,7 +411,9 @@ namespace jkl {
 					: std::true_type
 				{
 					static constexpr bool is_noexcept = noexcept(StorageTraits::x(std::declval<Storage>()));
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s) noexcept(is_noexcept) {
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s) noexcept(is_noexcept)
+						-> decltype(StorageTraits::x(std::forward<Storage>(s)))
+					{
 						return StorageTraits::x(std::forward<Storage>(s));
 					}
 				};
@@ -424,7 +426,9 @@ namespace jkl {
 					: std::true_type
 				{
 					static constexpr bool is_noexcept = noexcept(StorageTraits::y(std::declval<Storage>()));
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s) noexcept(is_noexcept) {
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s) noexcept(is_noexcept)
+						-> decltype(StorageTraits::y(std::forward<Storage>(s)))
+					{
 						return StorageTraits::y(std::forward<Storage>(s));
 					}
 				};
@@ -437,7 +441,9 @@ namespace jkl {
 					: std::true_type
 				{
 					static constexpr bool is_noexcept = noexcept(StorageTraits::z(std::declval<Storage>()));
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s) noexcept(is_noexcept) {
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s) noexcept(is_noexcept)
+						-> decltype(StorageTraits::z(std::forward<Storage>(s)))
+					{
 						return StorageTraits::z(std::forward<Storage>(s));
 					}
 				};
@@ -450,7 +456,9 @@ namespace jkl {
 					: std::true_type
 				{
 					static constexpr bool is_noexcept = noexcept(StorageTraits::w(std::declval<Storage>()));
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s) noexcept(is_noexcept) {
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s) noexcept(is_noexcept)
+						-> decltype(StorageTraits::w(std::forward<Storage>(s)))
+					{
 						return StorageTraits::w(std::forward<Storage>(s));
 					}
 				};
@@ -516,8 +524,9 @@ namespace jkl {
 
 				template <std::size_t I, class Storage>
 				struct call_appropriate<I, Storage, storage_access_method::named> {
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s)
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s)
 						noexcept(choose_inspector_t<I, Storage>::is_noexcept)
+						-> decltype(choose_inspector_t<I, Storage>::get(std::forward<Storage>(s)))
 					{
 						return choose_inspector_t<I, Storage>::get(std::forward<Storage>(s));
 					}
@@ -525,8 +534,9 @@ namespace jkl {
 
 				template <std::size_t I, class Storage>
 				struct call_appropriate<I, Storage, storage_access_method::tuple_like> {
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s)
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s)
 						noexcept(has_get<I, Storage>::is_noexcept)
+						-> decltype(StorageTraits::template get<I>(std::forward<Storage>(s)))
 					{
 						return StorageTraits::template get<I>(std::forward<Storage>(s));
 					}
@@ -534,8 +544,9 @@ namespace jkl {
 
 				template <std::size_t I, class Storage>
 				struct call_appropriate<I, Storage, storage_access_method::array_operator> {
-					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s)
+					FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s)
 						noexcept(has_array_operator<Storage, std::size_t>::is_noexcept)
+						-> decltype(StorageTraits::array_operator(std::forward<Storage>(s), I))
 					{
 						return StorageTraits::array_operator(std::forward<Storage>(s), I);
 					}
@@ -543,16 +554,18 @@ namespace jkl {
 
 				// Tuple-like access
 				template <std::size_t I, class Storage>
-				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s)
+				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto get(Storage&& s)
 					noexcept(noexcept(call_appropriate<I, Storage>::get(std::forward<Storage>(s))))
+					-> decltype(call_appropriate<I, Storage>::get(std::forward<Storage>(s)))
 				{
 					return call_appropriate<I, Storage>::get(std::forward<Storage>(s));
 				}
 
 				// Array operator
 				template <class Storage, class Index, class = std::enable_if_t<has_array_operator<Storage, Index>::value>>
-				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) array_operator(Storage&& s, Index&& idx)
+				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr auto array_operator(Storage&& s, Index&& idx)
 					noexcept(has_array_operator<Storage, Index>::is_noexcept)
+					-> decltype(StorageTraits::array_operator(std::forward<Storage>(s), std::forward<Index>(idx)))
 				{
 					return StorageTraits::array_operator(std::forward<Storage>(s), std::forward<Index>(idx));
 				}

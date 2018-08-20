@@ -103,48 +103,56 @@ namespace jkl {
 
 			// Tuple-style accessors
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
 
 			// Array-style accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) operator[](std::size_t idx) & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx)))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx);
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) operator[](std::size_t idx) const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto operator[](std::size_t idx) const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx)))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::array_operator(storage(), idx);
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) operator[](std::size_t idx) && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx)))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx);
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) operator[](std::size_t idx) const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto operator[](std::size_t idx) const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx)))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::array_operator(std::move(*this).storage(), idx);
 			}
@@ -427,23 +435,27 @@ namespace jkl {
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
@@ -454,23 +466,27 @@ namespace jkl {
 				"the x-component deduced from the given storage traits cannot be converted to the given component type");
 
 			// y-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
@@ -482,26 +498,30 @@ namespace jkl {
 
 			// Tuple-style accessors
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
@@ -795,23 +815,27 @@ namespace jkl {
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
@@ -822,23 +846,27 @@ namespace jkl {
 				"the x-component deduced from the given storage traits cannot be converted to the component type");
 
 			// y-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
@@ -849,23 +877,27 @@ namespace jkl {
 				"the y-component deduced from the given storage traits cannot be converted to the component type");
 
 			// z-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto z() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto z() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto z() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto z() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage());
 			}
@@ -877,26 +909,30 @@ namespace jkl {
 
 			// Tuple-style accessors
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
@@ -1216,23 +1252,27 @@ namespace jkl {
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto x() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto x() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<0>(std::move(*this).storage());
 			}
@@ -1243,23 +1283,27 @@ namespace jkl {
 				"the x-component deduced from the given storage traits cannot be converted to the component type");
 
 			// y-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto y() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto y() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<1>(std::move(*this).storage());
 			}
@@ -1270,23 +1314,27 @@ namespace jkl {
 				"the y-component deduced from the given storage traits cannot be converted to the component type");
 
 			// z-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto z() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto z() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto z() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto z() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<2>(std::move(*this).storage());
 			}
@@ -1297,23 +1345,27 @@ namespace jkl {
 				"the z-component deduced from the given storage traits cannot be converted to the component type");
 
 			// w-component accessors
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) w() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto w() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<3>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<3>(storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto w() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<3>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<3>(storage());
 			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) w() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto w() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage());
 			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto w() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<3>(std::move(*this).storage());
 			}
@@ -1325,26 +1377,30 @@ namespace jkl {
 
 			// Tuple-style accessors
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() & noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() & noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() && noexcept(noexcept(
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto get() && noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
 			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() const&& noexcept(noexcept(
+			JKL_GPU_EXECUTABLE constexpr auto get() const&& noexcept(noexcept(
 				detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage())))
+				-> decltype(detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage()))
 			{
 				return detail::storage_traits_inspector<StorageTraits>::template get<I>(std::move(*this).storage());
 			}
@@ -1792,7 +1848,7 @@ namespace jkl {
 			template <no_operation_reason reason>
 			struct binary_op_impl<no_operation_tag<reason>> {
 				template <class... Args>
-				JKL_GPU_EXECUTABLE constexpr no_operation_tag<reason> operator()(Args...) const
+				JKL_GPU_EXECUTABLE constexpr no_operation_tag<reason> operator()(Args...) const noexcept
 				{
 					return{};
 				}
