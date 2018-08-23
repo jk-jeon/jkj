@@ -193,6 +193,9 @@ namespace jkl {
 			auto_locked_ptr(MovableLock&& lg, U* ptr) :
 				lg(std::forward<MovableLock>(lg)), ptr_{ ptr } {}
 
+			auto_locked_ptr(MovableLock&& lg, std::nullptr_t) :
+				lg(std::forward<MovableLock>(lg)), ptr_{ nullptr } {}
+
 			// Move only (lg prevents copy)
 			auto_locked_ptr(auto_locked_ptr&&) = default;
 			auto_locked_ptr& operator=(auto_locked_ptr&&) = default;
