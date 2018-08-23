@@ -92,7 +92,7 @@ namespace jkl {
 				mark_moved_cache_as_invalidated(std::forward<OtherCache>(that))) {}
 
 		template <typename OtherCache>
-		cache& assignment_impl(OtherCache&& that) {
+		void assignment_impl(OtherCache&& that) {
 			if( that.m_available ) {
 				m_cache = std::forward<OtherCache>(that).m_cache;
 				m_available = mark_moved_cache_as_invalidated(std::forward<OtherCache>(that));
@@ -124,15 +124,17 @@ namespace jkl {
 		}
 
 		struct update_if_return_ref {
+			template <class ThisType>
 			util::auto_locked_data<std::shared_lock<shared_mutex>, Data const&>
-				operator()(std::shared_lock<shared_mutex>&& lg, cache* me)
+				operator()(std::shared_lock<shared_mutex>&& lg, ThisType* me)
 			{
 				return{ std::move(lg), *(me->m_cache) };
 			}
 		};
 		struct update_if_return_ptr {
+			template <class ThisType>
 			util::auto_locked_ptr<std::shared_lock<shared_mutex>, Data const>
-				operator()(std::shared_lock<shared_mutex>&& lg, cache* me)
+				operator()(std::shared_lock<shared_mutex>&& lg, ThisType* me)
 			{
 				if( me->m_available )
 					return{ std::move(lg), &*(me->m_cache) };
