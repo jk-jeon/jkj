@@ -279,7 +279,7 @@ namespace jkl {
 
 					return std::make_pair(
 						min(max(int(floor(ValueType(center.x()) - dx)), 0), w),
-						min(int(ceil(ValueType(center.x()) + dx)), w));
+						min(max(int(ceil(ValueType(center.x()) + dx)), 0), w));
 				});
 
 				auto sdf = [&center, radius](math::R2_elmt<ValueType> const& p) {
