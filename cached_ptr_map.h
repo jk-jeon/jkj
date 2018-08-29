@@ -32,12 +32,12 @@ namespace jkl {
 	class cached_ptr_map {
 		using map_type = Map<Key, std::weak_ptr<Value>, AdditionalArgs...>;
 
-		jkl::shared_mutex				mtx_;
-		std::condition_variable_any		cv_;
-		bool							terminate_ = false;
-		bool							something_to_clean_ = false;
-		std::future<void>				cleaner_;
-		map_type						map_;
+		mutable jkl::shared_mutex				mtx_;
+		mutable std::condition_variable_any		cv_;
+		mutable bool							terminate_ = false;
+		mutable bool							something_to_clean_ = false;
+		std::future<void>						cleaner_;
+		map_type								map_;
 
 
 		class upgrade_lock_guard {
@@ -147,6 +147,24 @@ namespace jkl {
 				else
 					return ptr;
 			}
+		}
+
+		Map<Key, std::shared_ptr<Value>> get_all() const {
+			// Obtain read lock
+			std::shared_lock<jkl::shared_mutex> lg{ mtx_ };
+
+			// Return value
+			Map<Key, std::shared_ptr<Value>> ret;
+
+			// Iterate over the map
+			for( auto const& p : map_ ) {
+				// If the pointer is not expired, push it to the ret
+				auto ptr = p.second.lock();
+				if( ptr )
+					ret.emplace(p.first, std::move(ptr));
+			}
+
+			return ret;
 		}
 
 	private:
