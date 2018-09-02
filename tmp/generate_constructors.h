@@ -187,41 +187,51 @@ namespace jkl {
 				template <std::size_t J>
 				using get_type_t8 = typename get_type<J, TupleOfTuplesOfArgTypes, switches8...>::type;
 
+				// Another workaround for MSVC2015
+				static constexpr bool is_noexcept_v1 = is_noexcept<get_type_t1<I>...>::value;
+				static constexpr bool is_noexcept_v2 = is_noexcept<get_type_t2<I>...>::value;
+				static constexpr bool is_noexcept_v3 = is_noexcept<get_type_t3<I>...>::value;
+				static constexpr bool is_noexcept_v4 = is_noexcept<get_type_t4<I>...>::value;
+				static constexpr bool is_noexcept_v5 = is_noexcept<get_type_t5<I>...>::value;
+				static constexpr bool is_noexcept_v6 = is_noexcept<get_type_t6<I>...>::value;
+				static constexpr bool is_noexcept_v7 = is_noexcept<get_type_t7<I>...>::value;
+				static constexpr bool is_noexcept_v8 = is_noexcept<get_type_t8<I>...>::value;
+
 			public:
 				inheritance_chain() = default;
 				using base_type::base_type;
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t1<I>... args)
-					noexcept(is_noexcept<get_type_t1<I>...>::value) :
+					noexcept(is_noexcept_v1) :
 					base_type(forward_tag{}, std::forward<get_type_t1<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t2<I>... args)
-					noexcept(is_noexcept<get_type_t2<I>...>::value) :
+					noexcept(is_noexcept_v2) :
 					base_type(forward_tag{}, std::forward<get_type_t2<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(
 					typename get_type<I, TupleOfTuplesOfArgTypes, switches3...>::type... args)
-					noexcept(is_noexcept<get_type_t3<I>...>::value) :
+					noexcept(is_noexcept_v3) :
 					base_type(forward_tag{}, std::forward<get_type_t3<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t4<I>... args)
-					noexcept(is_noexcept<get_type_t4<I>...>::value) :
+					noexcept(is_noexcept_v4) :
 					base_type(forward_tag{}, std::forward<get_type_t4<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t5<I>... args)
-					noexcept(is_noexcept<get_type_t5<I>...>::value) :
+					noexcept(is_noexcept_v5) :
 					base_type(forward_tag{}, std::forward<get_type_t5<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t6<I>... args)
-					noexcept(is_noexcept<get_type_t6<I>...>::value) :
+					noexcept(is_noexcept_v6) :
 					base_type(forward_tag{}, std::forward<get_type_t6<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t7<I>... args)
-					noexcept(is_noexcept<get_type_t7<I>...>::value) :
+					noexcept(is_noexcept_v7) :
 					base_type(forward_tag{}, std::forward<get_type_t7<I>>(args)...) {}
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t8<I>... args)
-					noexcept(is_noexcept<get_type_t8<I>...>::value) :
+					noexcept(is_noexcept_v8) :
 					base_type(forward_tag{}, std::forward<get_type_t8<I>>(args)...) {}
 			};
 
@@ -243,18 +253,21 @@ namespace jkl {
 				// I had to used class template instead here...
 				template <class... Args>
 				using is_noexcept = typename base_type::template is_noexcept<Args...>;
-
+				
 				using forward_tag = typename base_type::forward_tag;
 
 				template <std::size_t J>
 				using get_type_t = typename get_type<J, TupleOfTuplesOfArgTypes, switches...>::type;
+
+				// Another workaround for MSVC2015
+				static constexpr bool is_noexcept_v = is_noexcept<get_type_t<I>...>::value;
 
 			public:
 				inheritance_chain() = default;
 				using base_type::base_type;
 
 				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t<I>... args)
-					noexcept(is_noexcept<get_type_t<I>...>::value) :
+					noexcept(is_noexcept_v) :
 					base_type(forward_tag{}, std::forward<get_type_t<I>>(args)...) {}
 			};
 
