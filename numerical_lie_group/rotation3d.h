@@ -127,12 +127,115 @@ namespace jkl {
 			using storage_type = typename base_type::storage_type;
 			using storage_traits = typename base_type::storage_traits;
 
-			using base_type::x;
-			using base_type::y;
-			using base_type::z;
-			using base_type::w;
-
 			using base_type::base_type;
+
+			// Remove mutable lvalue element accessors
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&
+				noexcept(noexcept(std::declval<base_type const&>().x()))
+			{
+				return static_cast<base_type const&>(*this).x();
+			}
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() &&
+				noexcept(noexcept(std::declval<base_type&&>().x()))
+			{
+				return static_cast<base_type&&>(*this).x();
+			}
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&&
+				noexcept(noexcept(std::declval<base_type const&&>().x()))
+			{
+				return static_cast<base_type const&&>(*this).x();
+			}
+
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&
+				noexcept(noexcept(std::declval<base_type const&>().y()))
+			{
+				return static_cast<base_type const&>(*this).y();
+			}
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() &&
+				noexcept(noexcept(std::declval<base_type&&>().y()))
+			{
+				return static_cast<base_type&&>(*this).y();
+			}
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&&
+				noexcept(noexcept(std::declval<base_type const&&>().y()))
+			{
+				return static_cast<base_type const&&>(*this).y();
+			}
+
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&
+				noexcept(noexcept(std::declval<base_type const&>().z()))
+			{
+				return static_cast<base_type const&>(*this).z();
+			}
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() &&
+				noexcept(noexcept(std::declval<base_type&&>().z()))
+			{
+				return static_cast<base_type&&>(*this).z();
+			}
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&&
+				noexcept(noexcept(std::declval<base_type const&&>().z()))
+			{
+				return static_cast<base_type const&&>(*this).z();
+			}
+
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const&
+				noexcept(noexcept(std::declval<base_type const&>().w()))
+			{
+				return static_cast<base_type const&>(*this).w();
+			}
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) w() &&
+				noexcept(noexcept(std::declval<base_type&&>().w()))
+			{
+				return static_cast<base_type&&>(*this).w();
+			}
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const&&
+				noexcept(noexcept(std::declval<base_type const&&>().w()))
+			{
+				return static_cast<base_type const&&>(*this).w();
+			}
+
+
+			template <std::size_t I>
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const&
+				noexcept(noexcept(std::declval<base_type const&>().template get<I>()))
+			{
+				return static_cast<base_type const&>(*this).template get<I>();
+			}
+			template <std::size_t I>
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() &&
+				noexcept(noexcept(std::declval<base_type&&>().template get<I>()))
+			{
+				return static_cast<base_type&&>(*this).template get<I>();
+			}
+			template <std::size_t I>
+			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const&&
+				noexcept(noexcept(std::declval<base_type const&&>().template get<I>()))
+			{
+				return static_cast<base_type const&&>(*this).template get<I>();
+			}
+
+			template <class dummy = void>
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) const&
+				noexcept(noexcept(std::declval<base_type const&>()[idx]))
+				-> decltype(std::declval<base_type const&>()[idx])
+			{
+				return static_cast<base_type const&>(*this)[idx];
+			}
+			template <class dummy = void>
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) &&
+				noexcept(noexcept(std::declval<base_type&&>()[idx]))
+				-> decltype(std::declval<base_type&&>()[idx])
+			{
+				return static_cast<base_type&&>(*this)[idx];
+			}
+			template <class dummy = void>
+			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) const&&
+				noexcept(noexcept(std::declval<base_type const&&>()[idx]))
+				-> decltype(std::declval<base_type const&&>()[idx])
+			{
+				return static_cast<base_type const&&>(*this)[idx];
+			}
+
 
 			// Take R3_elmt and a scalar (no check)
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits, class Scalar,
@@ -308,114 +411,6 @@ namespace jkl {
 				return *this;
 			}
 			
-
-			// Remove mutable lvalue element accessors
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&
-				noexcept(noexcept(std::declval<base_type const&>().x()))
-			{
-				return static_cast<base_type const&>(*this).x();
-			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) x() &&
-				noexcept(noexcept(std::declval<base_type&&>().x()))
-			{
-				return static_cast<base_type&&>(*this).x();
-			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) x() const&&
-				noexcept(noexcept(std::declval<base_type const&&>().x()))
-			{
-				return static_cast<base_type const&&>(*this).x();
-			}
-
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&
-				noexcept(noexcept(std::declval<base_type const&>().y()))
-			{
-				return static_cast<base_type const&>(*this).y();
-			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) y() &&
-				noexcept(noexcept(std::declval<base_type&&>().y()))
-			{
-				return static_cast<base_type&&>(*this).y();
-			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) y() const&&
-				noexcept(noexcept(std::declval<base_type const&&>().y()))
-			{
-				return static_cast<base_type const&&>(*this).y();
-			}
-
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&
-				noexcept(noexcept(std::declval<base_type const&>().z()))
-			{
-				return static_cast<base_type const&>(*this).z();
-			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) z() &&
-				noexcept(noexcept(std::declval<base_type&&>().z()))
-			{
-				return static_cast<base_type&&>(*this).z();
-			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) z() const&&
-				noexcept(noexcept(std::declval<base_type const&&>().z()))
-			{
-				return static_cast<base_type const&&>(*this).z();
-			}
-
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const&
-				noexcept(noexcept(std::declval<base_type const&>().w()))
-			{
-				return static_cast<base_type const&>(*this).w();
-			}
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) w() &&
-				noexcept(noexcept(std::declval<base_type&&>().w()))
-			{
-				return static_cast<base_type&&>(*this).w();
-			}
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) w() const&&
-				noexcept(noexcept(std::declval<base_type const&&>().w()))
-			{
-				return static_cast<base_type const&&>(*this).w();
-			}
-
-
-			template <std::size_t I>
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const&
-				noexcept(noexcept(std::declval<base_type const&>().template get<I>()))
-			{
-				return static_cast<base_type const&>(*this).template get<I>();
-			}
-			template <std::size_t I>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR decltype(auto) get() &&
-				noexcept(noexcept(std::declval<base_type&&>().template get<I>()))
-			{
-				return static_cast<base_type&&>(*this).template get<I>();
-			}
-			template <std::size_t I>
-			JKL_GPU_EXECUTABLE constexpr decltype(auto) get() const&&
-				noexcept(noexcept(std::declval<base_type const&&>().template get<I>()))
-			{
-				return static_cast<base_type const&&>(*this).template get<I>();
-			}
-
-			template <class dummy = void>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) const&
-				noexcept(noexcept(std::declval<base_type const&>()[idx]))
-				-> decltype(std::declval<base_type const&>()[idx])
-			{
-				return static_cast<base_type const&>(*this)[idx];
-			}
-			template <class dummy = void>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) &&
-				noexcept(noexcept(std::declval<base_type&&>()[idx]))
-				-> decltype(std::declval<base_type&&>()[idx])
-			{
-				return static_cast<base_type&&>(*this)[idx];
-			}
-			template <class dummy = void>
-			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR auto operator[](std::size_t idx) const&&
-				noexcept(noexcept(std::declval<base_type const&&>()[idx]))
-				-> decltype(std::declval<base_type const&&>()[idx])
-			{
-				return static_cast<base_type const&&>(*this)[idx];
-			}
-
 
 			JKL_GPU_EXECUTABLE constexpr decltype(auto) scalar_part() const noexcept(noexcept(w()))
 			{
