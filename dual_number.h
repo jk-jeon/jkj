@@ -705,13 +705,13 @@ namespace jkl {
 			JKL_GPU_EXECUTABLE friend dual_number erf(dual_number const& x) {
 				using std::erf;
 				using std::exp;
-				return{ erf(x.prim), x.dual * 2 / numerical<RingElmt>::sqrt_pi * exp(-x.prim * x.prim) };
+				return{ erf(x.prim), x.dual * 2 / constants<RingElmt>::sqrt_pi * exp(-x.prim * x.prim) };
 			}
 
 			JKL_GPU_EXECUTABLE friend dual_number erfc(dual_number const& x) {
 				using std::erfc;
 				using std::exp;
-				return{ erfc(x.prim), -x.dual * 2 / numerical<RingElmt>::sqrt_pi * exp(-x.prim * x.prim) };
+				return{ erfc(x.prim), -x.dual * 2 / constants<RingElmt>::sqrt_pi * exp(-x.prim * x.prim) };
 			}
 
 			
