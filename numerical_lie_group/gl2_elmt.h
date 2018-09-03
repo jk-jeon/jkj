@@ -657,20 +657,26 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr gl2_elmt zero()
-				noexcept(std::is_nothrow_constructible<gl2_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+				noexcept(noexcept(gl2_elmt{
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>() }))
 			{
 				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
 					jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() };
 			}
 
-			JKL_GPU_EXECUTABLE constexpr static GL2_elmt<ComponentType, Storage, StorageTraits> unity()
-				noexcept(std::is_nothrow_default_constructible<GL2_elmt<ComponentType, Storage, StorageTraits>>::value)
+			JKL_GPU_EXECUTABLE static constexpr GL2_elmt<ComponentType, Storage, StorageTraits> unity()
+				noexcept(noexcept(gl2_elmt{
+				jkl::math::unity<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::unity<ComponentType>() }))
 			{
-				return{};
+				return{ jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>(),
+					no_validity_check{} };
 			}
 		};
 
@@ -760,6 +766,9 @@ namespace jkl {
 				// Or even "not-very-slight-violations" might sometimes be OK as well.
 				// Adding assert() may make the class too strict.
 
+				// Default constructor; components might be filled with garbages
+				GL2_elmt_base() = default;
+
 				// No check matrix constructor
 				template <class Matrix>
 				JKL_GPU_EXECUTABLE constexpr GL2_elmt_base(forward_to_storage_tag,
@@ -838,15 +847,6 @@ namespace jkl {
 
 		public:
 			using base_type::base_type;
-
-			// Initialize to the unity
-			JKL_GPU_EXECUTABLE constexpr GL2_elmt() noexcept(noexcept(base_type{
-				jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				no_validity_check{} })) : 
-				base_type{ jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				no_validity_check{} } {}
 
 			// No check row-wise constructor
 			template <class Row0, class Row1>

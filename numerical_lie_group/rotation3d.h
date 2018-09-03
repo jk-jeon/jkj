@@ -43,6 +43,9 @@ namespace jkl {
 				}
 
 			protected:
+				// Default constructor; components might be filled with garbages
+				SU2_elmt_base() = default;
+
 				// [NOTE]
 				// I think it would be a bad idea to add assert() inside no-check constructors,
 				// because the main cause of the break of invertibility is the accumulation of
@@ -130,15 +133,6 @@ namespace jkl {
 			using base_type::w;
 
 			using base_type::base_type;
-
-			// Initialize to the unity
-			JKL_GPU_EXECUTABLE constexpr SU2_elmt() noexcept(noexcept(base_type{
-				jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>(),
-				no_validity_check{} })) :
-				base_type{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>(),
-				no_validity_check{} } {}
 
 			// Take R3_elmt and a scalar (no check)
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits, class Scalar,
@@ -670,9 +664,13 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr SU2_elmt unity()
-				noexcept(std::is_nothrow_default_constructible<SU2_elmt>::value)
+				noexcept(noexcept(R4_elmt_type{
+				jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>() }))
 			{
-				return{};
+				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>(),
+					no_validity_check{} };
 			}
 
 			// Action on R3
@@ -738,7 +736,7 @@ namespace jkl {
 			}
 
 		public:
-			// Initialize to the unity
+			// Default constructor; components might be filled with garbages
 			SO3_elmt() = default;
 
 			// No check component-wise constructor
@@ -1128,9 +1126,20 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr SO3_elmt unity()
-				noexcept(std::is_nothrow_default_constructible<SO3_elmt>::value)
+				noexcept(noexcept(GL3_elmt_type::unity()))
 			{
-				return{};
+				return{
+					jkl::math::unity<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::unity<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::unity<ComponentType>(),
+					no_validity_check{}
+				};
 			}
 
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits>

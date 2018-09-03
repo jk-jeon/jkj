@@ -36,6 +36,8 @@ namespace jkl {
 				rotation_type rot_;
 				translation_type trans_;
 
+				SE3_elmt_base() = default;
+
 				template <class...>
 				struct is_nothrow_constructible : std::false_type {};
 
@@ -130,12 +132,8 @@ namespace jkl {
 
 			using base_type::base_type;
 
-			// Initialize to the unity
-			JKL_GPU_EXECUTABLE constexpr SE3_elmt()
-				noexcept(noexcept(rotation_type{ rotation_type::unity() }) &&
-					noexcept(translation_type{ translation_type::zero() })) :
-				base_type{ detail::forward_to_storage_tag{},
-				rotation_type::unity(), translation_type::zero() } {}
+			// Default constructor; components might be filled with garbages
+			SE3_elmt() = default;
 
 			// Take SO3_elmt and R3_elmt (both are template)
 			template <class OtherComponentType, class OtherSO3Storage, class OtherSO3StorageTraits,
@@ -495,8 +493,10 @@ namespace jkl {
 				return !(*this == that);
 			}
 
-			JKL_GPU_EXECUTABLE static constexpr SE3_elmt unity() noexcept {
-				return{};
+			JKL_GPU_EXECUTABLE static constexpr SE3_elmt unity()
+				noexcept(noexcept(SE3_elmt{ rotation_type::unity(), translation_type::zero() }))
+			{
+				return{ rotation_type::unity(), translation_type::zero() };
 			}
 
 			// Action on R3

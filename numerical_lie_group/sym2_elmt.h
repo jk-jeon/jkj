@@ -782,13 +782,23 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr sym2_elmt zero()
-				noexcept(std::is_nothrow_constructible<sym2_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+				noexcept(noexcept(sym2_elmt{
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>() }))
 			{
 				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
 					jkl::math::zero<ComponentType>() };
+			}
+
+			JKL_GPU_EXECUTABLE static constexpr posdef2_elmt<ComponentType, Storage, StorageTraits> unity()
+				noexcept(noexcept(sym2_elmt{
+				jkl::math::unity<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::unity<ComponentType>() }))
+			{
+				return{ jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
+					jkl::math::unity<ComponentType>(), no_validity_check{} };
 			}
 		};
 
@@ -858,6 +868,7 @@ namespace jkl {
 			// To suppress generation of inherited constructors
 			template <class ComponentType, class Storage, class StorageTraits>
 			struct posdef2_elmt_base : sym2_elmt<ComponentType, Storage, StorageTraits> {
+				// Default constructor; components might be filled with garbages
 				posdef2_elmt_base() = default;
 
 			private:
@@ -960,13 +971,6 @@ namespace jkl {
 
 		public:
 			using base_type::base_type;
-
-			// Initialize to the unity
-			JKL_GPU_EXECUTABLE constexpr posdef2_elmt() noexcept(noexcept(base_type{
-				jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(), no_validity_check{} })) : 
-				base_type{ jkl::math::unity<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(), no_validity_check{} } {}
 			
 			// Convert from posdef2_elmt of other element type
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits,

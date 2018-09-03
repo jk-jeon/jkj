@@ -961,16 +961,16 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr gl3_elmt zero()
-				noexcept(std::is_nothrow_constructible<gl3_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+				noexcept(noexcept(gl3_elmt{
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>() }))
 			{
 				return{
 					jkl::math::zero<ComponentType>(),
@@ -986,9 +986,29 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE constexpr static GL3_elmt<ComponentType, Storage, StorageTraits> unity()
-				noexcept(std::is_nothrow_default_constructible<GL3_elmt<ComponentType, Storage, StorageTraits>>::value)
+				noexcept(noexcept(gl3_elmt{
+				jkl::math::unity<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::unity<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::zero<ComponentType>(),
+				jkl::math::unity<ComponentType>() }))
 			{
-				return{};
+				return{
+					jkl::math::unity<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::unity<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::zero<ComponentType>(),
+					jkl::math::unity<ComponentType>(),
+					no_validity_check{}
+				};
 			}
 		};
 
@@ -1066,27 +1086,8 @@ namespace jkl {
 			}
 
 		public:
-			// Initialize to the unity
-			JKL_GPU_EXECUTABLE constexpr GL3_elmt() noexcept(noexcept(gl3_elmt_type{
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>() })) :
-				gl3_elmt_type{
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>() } {}
+			// Default constructor; components might be filled with garbages
+			GL3_elmt() = default;
 
 			// No check component-wise constructor
 			template <class Arg00, class Arg01, class Arg02,
