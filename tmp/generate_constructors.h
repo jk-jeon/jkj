@@ -414,13 +414,8 @@ namespace jkl {
 		struct generate_constructors :
 			detail::generate_constructors_impl<BaseWithCatchAll, ForwardTag, TuplesOfTuplesOfArgTypes...>
 		{
-		private:
-			using base_type = detail::generate_constructors_impl<BaseWithCatchAll,
-				ForwardTag, TuplesOfTuplesOfArgTypes...>;
-			using ultimate_base_type = BaseWithCatchAll;
-
-		public:
-			using base_type::base_type;
+			using detail::generate_constructors_impl<BaseWithCatchAll,
+				ForwardTag, TuplesOfTuplesOfArgTypes...>::generate_constructors_impl;
 		};
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
