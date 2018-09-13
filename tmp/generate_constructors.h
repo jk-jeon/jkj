@@ -47,7 +47,7 @@ namespace jkl {
 		template <class BaseWithCatchAll, class ForwardTag, class... TuplesOfTuplesOfArgTypes>
 		struct generate_constructors;
 
-		namespace detail {
+		namespace generate_constructors_detail {
 			template <std::size_t new_switch, class IndexSequence>
 			struct add_to_index_sequence;
 
@@ -78,7 +78,7 @@ namespace jkl {
 			};
 
 			// If this is too small, the compiler may suffer from excessively many recursive type definitions
-			static constexpr std::size_t generate_constructor_loop_step = 8;
+			static constexpr std::size_t loop_steps = 8;
 
 			template <class BaseType, class TupleOfTuplesOfArgTypes,
 				std::size_t depth, class IndexSequence, class... SwitchSequences>
@@ -100,10 +100,10 @@ namespace jkl {
 					calculate_max_depth<number_of_arguments - 1, TupleOfTuplesOfArgTypes>::value;
 
 
-				template <std::size_t depth, bool is_tail_case = (depth <= generate_constructor_loop_step), class = void>
+				template <std::size_t depth, bool is_tail_case = (depth <= loop_steps), class = void>
 				struct get_base_type {
 					using type = inheritance_chain<BaseType, TupleOfTuplesOfArgTypes,
-						depth - generate_constructor_loop_step, std::make_index_sequence<number_of_arguments>,
+						depth - loop_steps, std::make_index_sequence<number_of_arguments>,
 						typename generate_switch_sequence<number_of_arguments - 1, TupleOfTuplesOfArgTypes, depth - 1>::type,
 						typename generate_switch_sequence<number_of_arguments - 1, TupleOfTuplesOfArgTypes, depth - 2>::type,
 						typename generate_switch_sequence<number_of_arguments - 1, TupleOfTuplesOfArgTypes, depth - 3>::type,
@@ -155,7 +155,7 @@ namespace jkl {
 			> : inheritance_chain_helper<BaseType, TupleOfTuplesOfArgTypes>::template base_type<depth> {
 			private:
 				template <class, class, class...>
-				friend struct generate_constructors_impl;
+				friend struct impl;
 
 				template <class, class, std::size_t, class, class...>
 				friend struct inheritance_chain;
@@ -171,68 +171,67 @@ namespace jkl {
 				using forward_tag = typename base_type::forward_tag;
 
 				template <std::size_t J>
-				using get_type_t1 = typename get_type<J, TupleOfTuplesOfArgTypes, switches1...>::type;
+				struct get_type_workaround1 : get_type<J, TupleOfTuplesOfArgTypes, switches1...> {};
 				template <std::size_t J>
-				using get_type_t2 = typename get_type<J, TupleOfTuplesOfArgTypes, switches2...>::type;
+				struct get_type_workaround2 : get_type<J, TupleOfTuplesOfArgTypes, switches2...> {};
 				template <std::size_t J>
-				using get_type_t3 = typename get_type<J, TupleOfTuplesOfArgTypes, switches3...>::type;
+				struct get_type_workaround3 : get_type<J, TupleOfTuplesOfArgTypes, switches3...> {};
 				template <std::size_t J>
-				using get_type_t4 = typename get_type<J, TupleOfTuplesOfArgTypes, switches4...>::type;
+				struct get_type_workaround4 : get_type<J, TupleOfTuplesOfArgTypes, switches4...> {};
 				template <std::size_t J>
-				using get_type_t5 = typename get_type<J, TupleOfTuplesOfArgTypes, switches5...>::type;
+				struct get_type_workaround5 : get_type<J, TupleOfTuplesOfArgTypes, switches5...> {};
 				template <std::size_t J>
-				using get_type_t6 = typename get_type<J, TupleOfTuplesOfArgTypes, switches6...>::type;
+				struct get_type_workaround6 : get_type<J, TupleOfTuplesOfArgTypes, switches6...> {};
 				template <std::size_t J>
-				using get_type_t7 = typename get_type<J, TupleOfTuplesOfArgTypes, switches7...>::type;
+				struct get_type_workaround7 : get_type<J, TupleOfTuplesOfArgTypes, switches7...> {};
 				template <std::size_t J>
-				using get_type_t8 = typename get_type<J, TupleOfTuplesOfArgTypes, switches8...>::type;
+				struct get_type_workaround8 : get_type<J, TupleOfTuplesOfArgTypes, switches8...> {};
 
 				// Another workaround for MSVC2015
-				static constexpr bool is_noexcept_v1 = is_noexcept<get_type_t1<I>...>::value;
-				static constexpr bool is_noexcept_v2 = is_noexcept<get_type_t2<I>...>::value;
-				static constexpr bool is_noexcept_v3 = is_noexcept<get_type_t3<I>...>::value;
-				static constexpr bool is_noexcept_v4 = is_noexcept<get_type_t4<I>...>::value;
-				static constexpr bool is_noexcept_v5 = is_noexcept<get_type_t5<I>...>::value;
-				static constexpr bool is_noexcept_v6 = is_noexcept<get_type_t6<I>...>::value;
-				static constexpr bool is_noexcept_v7 = is_noexcept<get_type_t7<I>...>::value;
-				static constexpr bool is_noexcept_v8 = is_noexcept<get_type_t8<I>...>::value;
+				static constexpr bool is_noexcept_v1 = is_noexcept<typename get_type_workaround1<I>::type...>::value;
+				static constexpr bool is_noexcept_v2 = is_noexcept<typename get_type_workaround2<I>::type...>::value;
+				static constexpr bool is_noexcept_v3 = is_noexcept<typename get_type_workaround3<I>::type...>::value;
+				static constexpr bool is_noexcept_v4 = is_noexcept<typename get_type_workaround4<I>::type...>::value;
+				static constexpr bool is_noexcept_v5 = is_noexcept<typename get_type_workaround5<I>::type...>::value;
+				static constexpr bool is_noexcept_v6 = is_noexcept<typename get_type_workaround6<I>::type...>::value;
+				static constexpr bool is_noexcept_v7 = is_noexcept<typename get_type_workaround7<I>::type...>::value;
+				static constexpr bool is_noexcept_v8 = is_noexcept<typename get_type_workaround8<I>::type...>::value;
 
 			public:
 				inheritance_chain() = default;
 				using base_type::base_type;
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t1<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround1<I>::type... args)
 					noexcept(is_noexcept_v1) :
-					base_type(forward_tag{}, std::forward<get_type_t1<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround1<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t2<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround2<I>::type... args)
 					noexcept(is_noexcept_v2) :
-					base_type(forward_tag{}, std::forward<get_type_t2<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround2<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(
-					typename get_type<I, TupleOfTuplesOfArgTypes, switches3...>::type... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround3<I>::type... args)
 					noexcept(is_noexcept_v3) :
-					base_type(forward_tag{}, std::forward<get_type_t3<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround3<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t4<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround4<I>::type... args)
 					noexcept(is_noexcept_v4) :
-					base_type(forward_tag{}, std::forward<get_type_t4<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround4<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t5<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround5<I>::type... args)
 					noexcept(is_noexcept_v5) :
-					base_type(forward_tag{}, std::forward<get_type_t5<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround5<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t6<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround6<I>::type... args)
 					noexcept(is_noexcept_v6) :
-					base_type(forward_tag{}, std::forward<get_type_t6<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround6<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t7<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround7<I>::type... args)
 					noexcept(is_noexcept_v7) :
-					base_type(forward_tag{}, std::forward<get_type_t7<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround7<I>::type>(args)...) {}
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t8<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround8<I>::type... args)
 					noexcept(is_noexcept_v8) :
-					base_type(forward_tag{}, std::forward<get_type_t8<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround8<I>::type>(args)...) {}
 			};
 
 			template <class BaseType, class TupleOfTuplesOfArgTypes, std::size_t depth, std::size_t... I, std::size_t... switches>
@@ -241,7 +240,7 @@ namespace jkl {
 				inheritance_chain_helper<BaseType, TupleOfTuplesOfArgTypes>::template base_type<depth> {
 			private:
 				template <class, class, class...>
-				friend struct generate_constructors_impl;
+				friend struct impl;
 
 				template <class, class, std::size_t, class, class...>
 				friend struct inheritance_chain;
@@ -256,30 +255,31 @@ namespace jkl {
 				
 				using forward_tag = typename base_type::forward_tag;
 
+				// Stupid MSVC2015...
 				template <std::size_t J>
-				using get_type_t = typename get_type<J, TupleOfTuplesOfArgTypes, switches...>::type;
+				struct get_type_workaround : generate_constructors_detail::get_type<J, TupleOfTuplesOfArgTypes, switches...> {};
 
 				// Another workaround for MSVC2015
-				static constexpr bool is_noexcept_v = is_noexcept<get_type_t<I>...>::value;
+				static constexpr bool is_noexcept_v = is_noexcept<typename get_type_workaround<I>::type...>::value;
 
 			public:
 				inheritance_chain() = default;
 				using base_type::base_type;
 
-				JKL_GPU_EXECUTABLE constexpr inheritance_chain(get_type_t<I>... args)
+				JKL_GPU_EXECUTABLE constexpr inheritance_chain(typename get_type_workaround<I>::type... args)
 					noexcept(is_noexcept_v) :
-					base_type(forward_tag{}, std::forward<get_type_t<I>>(args)...) {}
+					base_type(forward_tag{}, std::forward<typename get_type_workaround<I>::type>(args)...) {}
 			};
 
 			template <class BaseWithCatchAll, class ForwardTag, class... TuplesOfTuplesOfArgTypes>
-			struct generate_constructors_impl;
+			struct impl;
 
 			template <class BaseWithCatchAll, class ForwardTag,
 				class FirstTupleOfTuplesOfArgTypes, class... RemainingTuplesOfTuplesOfArgTypes>
-			struct generate_constructors_impl<BaseWithCatchAll, ForwardTag,
+			struct impl<BaseWithCatchAll, ForwardTag,
 				FirstTupleOfTuplesOfArgTypes, RemainingTuplesOfTuplesOfArgTypes...> :
-				detail::inheritance_chain_helper<
-				generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+				generate_constructors_detail::inheritance_chain_helper<
+				impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 				FirstTupleOfTuplesOfArgTypes>::initial_base_type
 			{
 			private:
@@ -287,14 +287,14 @@ namespace jkl {
 				friend struct generate_constructors;
 
 				template <class, class, class...>
-				friend struct generate_constructors_impl;
+				friend struct impl;
 
 				template <class, class, std::size_t, class, class...>
 				friend struct inheritance_chain;
 
 			#ifndef __NVCC__
-				using base_type = typename detail::inheritance_chain_helper<
-					generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+				using base_type = typename generate_constructors_detail::inheritance_chain_helper<
+					impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 					FirstTupleOfTuplesOfArgTypes>::initial_base_type;
 
 				// Due to incomplete support of variable template of MSVC2015,
@@ -305,7 +305,7 @@ namespace jkl {
 				using forward_tag = typename base_type::forward_tag;
 
 				template <class... Args>
-				JKL_GPU_EXECUTABLE constexpr generate_constructors_impl(forward_tag tag, Args&&... args)
+				JKL_GPU_EXECUTABLE constexpr impl(forward_tag tag, Args&&... args)
 					noexcept(is_noexcept<Args...>::value) :
 					base_type(tag, std::forward<Args>(args)...) {}
 
@@ -313,32 +313,32 @@ namespace jkl {
 			#else
 				// NVCC 9.2.148 fails to compile this file if base_type exists
 				template <class... Args>
-				using is_noexcept = typename detail::inheritance_chain_helper<
-					generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+				using is_noexcept = typename generate_constructors_detail::inheritance_chain_helper<
+					impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 					FirstTupleOfTuplesOfArgTypes>::initial_base_type::template is_noexcept<Args...>;
 
-				using forward_tag = typename detail::inheritance_chain_helper<
-					generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+				using forward_tag = typename generate_constructors_detail::inheritance_chain_helper<
+					impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 					FirstTupleOfTuplesOfArgTypes>::initial_base_type::forward_tag;
 
 				template <class... Args>
-				JKL_GPU_EXECUTABLE constexpr generate_constructors_impl(forward_tag tag, Args&&... args)
+				JKL_GPU_EXECUTABLE constexpr impl(forward_tag tag, Args&&... args)
 					noexcept(is_noexcept<Args...>::value) :
-					detail::inheritance_chain_helper<
-					generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+					generate_constructors_detail::inheritance_chain_helper<
+					impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 					FirstTupleOfTuplesOfArgTypes>::initial_base_type(tag, std::forward<Args>(args)...) {}
 
-				using detail::inheritance_chain_helper<
-					generate_constructors_impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
+				using generate_constructors_detail::inheritance_chain_helper<
+					impl<BaseWithCatchAll, ForwardTag, RemainingTuplesOfTuplesOfArgTypes...>,
 					FirstTupleOfTuplesOfArgTypes>::initial_base_type::initial_base_type;
 			#endif
 
 			public:
-				generate_constructors_impl() = default;
+				impl() = default;
 			};
 
 			template <class BaseWithCatchAll, class ForwardTag>
-			struct generate_constructors_impl<BaseWithCatchAll, ForwardTag> : 
+			struct impl<BaseWithCatchAll, ForwardTag> : 
 				BaseWithCatchAll
 			{
 			private:
@@ -346,7 +346,7 @@ namespace jkl {
 				friend struct generate_constructors;
 
 				template <class, class, class...>
-				friend struct generate_constructors_impl;
+				friend struct impl;
 
 				template <class, class, std::size_t, class, class...>
 				friend struct inheritance_chain;
@@ -370,12 +370,12 @@ namespace jkl {
 				
 				struct forward_tag {};
 				template <class... Args>
-				JKL_GPU_EXECUTABLE constexpr generate_constructors_impl(forward_tag, Args&&... args)
+				JKL_GPU_EXECUTABLE constexpr impl(forward_tag, Args&&... args)
 					noexcept(is_noexcept<Args...>::value) :
 					BaseWithCatchAll(ForwardTag{}, std::forward<Args>(args)...) {}
 
 			public:
-				generate_constructors_impl() = default;
+				impl() = default;
 				using BaseWithCatchAll::BaseWithCatchAll;
 			};
 		}
@@ -412,10 +412,10 @@ namespace jkl {
 		
 		template <class BaseWithCatchAll, class ForwardTag, class... TuplesOfTuplesOfArgTypes>
 		struct generate_constructors :
-			detail::generate_constructors_impl<BaseWithCatchAll, ForwardTag, TuplesOfTuplesOfArgTypes...>
+			generate_constructors_detail::impl<BaseWithCatchAll, ForwardTag, TuplesOfTuplesOfArgTypes...>
 		{
-			using detail::generate_constructors_impl<BaseWithCatchAll,
-				ForwardTag, TuplesOfTuplesOfArgTypes...>::generate_constructors_impl;
+			using generate_constructors_detail::impl<BaseWithCatchAll,
+				ForwardTag, TuplesOfTuplesOfArgTypes...>::impl;
 		};
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +423,7 @@ namespace jkl {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// (T, N) -> std::tuple<T, T, ... T> (N times repetition)
-		namespace detail {
+		namespace generate_constructors_detail {
 			template <class T, class IndexSequence>
 			struct type_power_impl;
 
@@ -436,15 +436,30 @@ namespace jkl {
 			};
 		}
 		template <class T, std::size_t N>
-		using type_power = typename detail::type_power_impl<T, std::make_index_sequence<N>>::type;
+		using type_power = typename generate_constructors_detail::type_power_impl<T, std::make_index_sequence<N>>::type;
 
 		// (T1, ..., Tn) -> std::tuple<std::tuple<T1 const&, T1&&>, ... , std::tuple<Tn const&, Tn&&>>
-		namespace detail {
+		namespace generate_constructors_detail {
 			template <class IndexSequence, class... T>
 			struct copy_or_move_impl;
 
 			template <std::size_t... I, class... T>
 			struct copy_or_move_impl<std::index_sequence<I...>, T...> {
+#if defined(_MSC_VER) && _MSC_VER <= 1900
+				// I don't know why the original code don't work for VS2015...
+				// Anyway, here is a workaround
+				using tuple_type = std::tuple<T...>;
+
+				template <std::size_t J>
+				struct get_pair {
+					using type = std::tuple<
+						std::tuple_element_t<J, tuple_type> const&,
+						std::tuple_element_t<J, tuple_type>&&
+					>;
+				};
+
+				using type = std::tuple<typename get_pair<I>::type...>;
+#else
 				template <std::size_t J>
 				using get_type = std::tuple_element_t<J, std::tuple<T...>>;
 
@@ -452,10 +467,11 @@ namespace jkl {
 				using get_pair = std::tuple<get_type<J> const&, get_type<J>&&>;
 
 				using type = std::tuple<get_pair<I>...>;
+#endif
 			};
 		}
 		template <class... T>
-		using copy_or_move = typename detail::copy_or_move_impl<
+		using copy_or_move = typename generate_constructors_detail::copy_or_move_impl<
 			std::make_index_sequence<sizeof...(T)>, T...>::type;
 
 		// (T, N) -> std::tuple<std::tuple<T const&, T&&>, ... std::tuple<T const&, T&&>> (N times repetition)
