@@ -41,7 +41,7 @@ namespace jkl {
 		}
 		
 		// Member access operator
-		constexpr decltype(auto) operator->() noexcept {
+		NONCONST_CONSTEXPR decltype(auto) operator->() noexcept {
 			return &value;
 		}
 	};
