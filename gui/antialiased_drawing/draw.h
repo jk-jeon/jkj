@@ -84,6 +84,16 @@ namespace jkl {
 			// most of implementations of various drawings, besides some extreme cases,
 			// can be in turn end up with implementing the range iterator and the SDF function,
 			// and occasionally the blender in addition.
+			namespace draw_impl_detail {
+				// Interior: sdf < -w/2
+				// Boundary: sdf in [-w/2, w/2]
+				// Exterior: sdf > w/2
+				enum class region : unsigned char { intr = 0, bdy = 1, extr = 2 };
+
+				constexpr unsigned int aggregate(region r0, region r1, region r2, region r3) {
+					return (unsigned(r0)) | (unsigned(r1) << 2) | (unsigned(r2) << 4) | (unsigned(r3) << 6);
+				};
+			}
 			template <class ValueType, class PixelBuffer, class RegionIterator, class SdfType, class BlenderType>
 			void draw_impl(PixelBuffer& g, RegionIterator first, RegionIterator last, SdfType&& sdf,
 				ValueType const& border_width, BlenderType&& blender, std::size_t subdivision)
@@ -93,13 +103,8 @@ namespace jkl {
 				auto calculate_intersection_ratio = [&sdf, half_width = border_width / 2]
 				(ValueType const(&sdf_values)[4], math::R2_elmt<ValueType> const& center)
 				{
-					// Interior: sdf < -w/2
-					// Boundary: sdf in [-w/2, w/2]
-					// Exterior: sdf > w/2
-					enum class region : unsigned char { intr = 0, bdy = 1, extr = 2 };
-					auto aggregate = [](region r0, region r1, region r2, region r3) {
-						return (unsigned(r0)) | (unsigned(r1) << 2) | (unsigned(r2) << 4) | (unsigned(r3) << 6);
-					};
+					using region = draw_impl_detail::region;
+					using draw_impl_detail::aggregate;
 
 					region classifications[4];
 					for( auto q = 0; q < 4; ++q ) {
