@@ -237,6 +237,10 @@ namespace jkl {
 			}
 
 
+			// Default constructor; components might be filled with garbages
+			SU2_elmt() = default;
+
+
 			// Take R3_elmt and a scalar (no check)
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits, class Scalar,
 				class = std::enable_if_t<std::is_convertible<OtherComponentType, ComponentType>::value &&
