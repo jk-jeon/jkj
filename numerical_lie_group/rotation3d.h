@@ -1164,6 +1164,10 @@ namespace jkl {
 			template <class ReturnType, class ThisType>
 			JKL_GPU_EXECUTABLE static ReturnType log_impl(ThisType&& m)
 			{
+				using std::acos;
+				using std::sqrt;
+				using std::sin;
+
 				// Take antisymmetric part
 				auto x = (std::forward<ThisType>(m).template get<2, 1>()
 					- std::forward<ThisType>(m).template get<1, 2>()) / 2;
@@ -1224,6 +1228,10 @@ namespace jkl {
 			template <class OtherStorage = ComponentType[3],
 				class OtherStorageTraits = default_storage_traits>
 			JKL_GPU_EXECUTABLE R3_elmt<ComponentType, OtherStorage, OtherStorageTraits> euler_angles() const {
+				using std::asin;
+				using std::atan2;
+				using std::cos;
+
 				ComponentType theta_x, theta_y, theta_z;
 				if( close_to(get<2, 0>(), jkl::math::unity<ComponentType>()) ) {
 					theta_z = 0;
