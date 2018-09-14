@@ -121,6 +121,9 @@ namespace jkl {
 			using R4_elmt_type = R4_elmt<ComponentType, Storage, StorageTraits>;
 
 		public:
+			template <class, class, class>
+			friend class SU2_elmt;
+
 			using component_type = ComponentType;
 			static constexpr std::size_t components = 4;
 
