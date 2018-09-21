@@ -31,8 +31,8 @@ namespace jkl {
 	//   2. If there is a thread waiting to write while there already are reading threads,
 	//      any other threads attempting to read should wait until the waiting writer to complete;
 	//      that is, "readers do not starve writers."
-	//   3. If there is a thread waiting to read while there already is a writing thread,
-	//      any other threads attempting to write should wait until the waiting reader to complete;
+	//   3. If there are threads waiting to read while there already is a writing thread,
+	//      any other threads attempting to write should wait until the waiting readers to complete;
 	//      that is, "writers do not starve readers."
 	//   4. Read-lock (shared ownership) is recursive; that is, without any problems
 	//      (e.g., a deadlock), a thread can acquire a shared ownership while it already has one.
