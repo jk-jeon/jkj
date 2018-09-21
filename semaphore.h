@@ -37,16 +37,20 @@ namespace jkl {
 		}
 
 		void signal() {
-			std::lock_guard<std::mutex> lg{ mtx_ };
-			assert(counter_ <= std::numeric_limits<decltype(counter_)>::max() - 1);
-			++counter_;
+			{
+				std::lock_guard<std::mutex> lg{ mtx_ };
+				assert(counter_ <= std::numeric_limits<decltype(counter_)>::max() - 1);
+				++counter_;
+			}
 			cv_.notify_one();
 		}
 
 		void signal(unsigned int count) {
-			std::lock_guard<std::mutex> lg{ mtx_ };
-			assert(counter_ <= std::numeric_limits<decltype(counter_)>::max() - count);
-			counter_ += count;
+			{
+				std::lock_guard<std::mutex> lg{ mtx_ };
+				assert(counter_ <= std::numeric_limits<decltype(counter_)>::max() - count);
+				counter_ += count;
+			}
 			cv_.notify_all();
 		}
 	};
