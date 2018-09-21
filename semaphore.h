@@ -21,6 +21,25 @@
 #include <condition_variable>
 
 namespace jkl {
+	// [Notes on exception safety]
+	// According to https://en.cppreference.com/w/cpp/named_req/Mutex,
+	// std::mutex::lock() can fail (and throws an exception) only on following situations:
+	//  1. The thread does not have a sufficient privillege; in this case,
+	//     std::system_error with std::errc::operation_not_permitted is thrown, or
+	//  2. The implementation detects that this operation would lead to deadlock; in this case,
+	//     std::system_error with std::errc::resource_deadlock_would_occur is thrown, or
+	//  3. The thread already owns the mutex; in this case, the behavior is undefined.
+	// Since member functions of this semaphore class (wait() and signal()) contains
+	// complete transaction of the critical section, the second and the third cases
+	// are guaranteed not to occur. According to the same webpage, std::mutex::unlock()
+	// should not throw, and in addition, according to
+	// https://en.cppreference.com/w/cpp/thread/condition_variable,
+	// std::condition_variable::notify_one/all() are noexcept while
+	// std::condition_variable::wait() in the wait() member function
+	// can throw only when std::mutex::lock() fails. As a consequence,
+	// member functions of semaphore can throw only when the calling thread does not
+	// have a sufficient privillege.
+	
 	class semaphore {
 		std::mutex				mtx_;
 		std::condition_variable	cv_;
