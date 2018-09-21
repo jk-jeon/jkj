@@ -121,6 +121,9 @@ namespace jkl {
 			using R4_elmt_type = R4_elmt<ComponentType, Storage, StorageTraits>;
 
 		public:
+			template <class, class, class>
+			friend class SU2_elmt;
+
 			using component_type = ComponentType;
 			static constexpr std::size_t components = 4;
 
@@ -400,7 +403,7 @@ namespace jkl {
 				R4_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !close_to_one(that.normsq()) )
-					throw input_validity_error<SU2_elmt>{ "jkl::math: the vectir is not normalized" };
+					throw input_validity_error<SU2_elmt>{ "jkl::math: the vector is not normalized" };
 				static_cast<R4_elmt_type&>(*this) = that;
 				return *this;
 			}
@@ -410,7 +413,7 @@ namespace jkl {
 				R4_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !close_to_one(that.normsq()) )
-					throw input_validity_error<SU2_elmt>{ "jkl::math: the vectir is not normalized" };
+					throw input_validity_error<SU2_elmt>{ "jkl::math: the vector is not normalized" };
 				static_cast<R4_elmt_type&>(*this) = std::move(that);
 				return *this;
 			}
