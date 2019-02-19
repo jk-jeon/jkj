@@ -72,11 +72,11 @@ namespace jkl {
 			// The main drawing implementation with anti-aliasing feature.
 			// For each pixel in the region, classify each 4 corner of the pixel
 			// as one of interior, boundary, and exterior.
-			// Using that information and linearly interpolation, the inner region of the pixel
-			// is divided into those three classes (interior, boundary, and exterior),rnl
-			// and the portion of interior and boundary regions are calculated.
-			// The portion of interior region is called the "intersection ratio," while
-			// the portion of boundary region is called the "border intersection ratio."
+			// Using that information and linear interpolation, the inner region of the pixel
+			// is divided into those three classes (interior, boundary, and exterior),
+			// and the each portion of the interior and the boundary regions is calculated.
+			// The portion of the interior region is called the "intersection ratio," while
+			// the portion of the boundary region is called the "border intersection ratio."
 			// These values are passed into the blender object, then the blender object
 			// accordingly calculates the color for that pixel.
 			//
@@ -94,8 +94,10 @@ namespace jkl {
 					return (unsigned(r0)) | (unsigned(r1) << 2) | (unsigned(r2) << 4) | (unsigned(r3) << 6);
 				};
 			}
-			template <class ValueType, class PixelBuffer, class RegionIterator, class SdfType, class BlenderType>
-			void draw_impl(PixelBuffer& g, RegionIterator first, RegionIterator last, SdfType&& sdf,
+			template <class ValueType, class PixelBuffer,
+				class RegionIterator, class RegionSentinel,
+				class SdfType, class BlenderType>
+				void draw_impl(PixelBuffer& g, RegionIterator first, RegionSentinel last, SdfType&& sdf,
 				ValueType const& border_width, BlenderType&& blender, std::size_t subdivision)
 			{
 				assert(border_width >= 0);
@@ -958,22 +960,24 @@ namespace jkl {
 		}
 
 		template <class ValueType = double, class PixelBuffer,
-			class RegionIterator, class SdfType, class BorderWidth, class BlenderType>
-			void draw(PixelBuffer& g, RegionIterator first, RegionIterator last, SdfType&& sdf,
+			class RegionIterator, class RegionSentinel, class SdfType, class BorderWidth, class BlenderType>
+			void draw(PixelBuffer& g, RegionIterator first, RegionSentinel last, SdfType&& sdf,
 				BorderWidth border_width, BlenderType&& blender, std::size_t subdivision = 1)
 		{
 			draw_detail::draw_impl(g, std::move(first), std::move(last),
-				std::forward<SdfType>(sdf), ValueType(border_width), std::forward<BlenderType>(blender),
-				subdivision);
+				std::forward<SdfType>(sdf), ValueType(border_width),
+				std::forward<BlenderType>(blender), subdivision);
 		}
 
-		template <class ValueType = double, class PixelBuffer, class RegionIterator, class SdfType, class BorderWidth>
-		void draw(PixelBuffer& g, RegionIterator first, RegionIterator last, SdfType const& sdf,
+		template <class ValueType = double, class PixelBuffer,
+			class RegionIterator, class RegionSentinel, class SdfType, class BorderWidth>
+			void draw(PixelBuffer& g, RegionIterator first, RegionSentinel last, SdfType&& sdf,
 			BorderWidth border_width, nana::color const& color, nana::color const& border_color,
 			std::size_t subdivision = 1)
 		{
 			draw_detail::draw_impl(g, std::move(first), std::move(last),
-				sdf, ValueType(border_width), color_blender{ color, border_color }, subdivision);
+				std::forward<SdfType>(sdf), ValueType(border_width),
+				color_blender{ color, border_color }, subdivision);
 		}
 	}
 }

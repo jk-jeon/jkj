@@ -35,7 +35,7 @@ namespace jkl {
 				using std::sqrt;
 				using std::acos;
 
-				// First, find the pixel the center belongs to
+				// First, find the pixel containing the center
 				auto center_pixel_x = int(floor(center.x()));
 				auto center_pixel_y = int(floor(center.y()));
 
@@ -53,7 +53,7 @@ namespace jkl {
 				sign_flags[3] = is_in_circle({ ValueType(center_pixel_x + 1), ValueType(center_pixel_y) });
 
 				// Not like general drawing using SDF, distance to the corners are not so useful.
-				// Instead, the following values are used for calculating intersection ratios.
+				// Instead, the following values are used for calculating the intersection ratios.
 				ValueType edge_margins[] = {
 					ValueType(center.x()) + radius - ValueType(center_pixel_x + 1),
 					ValueType(center.y()) + radius - ValueType(center_pixel_y + 1),
@@ -332,17 +332,6 @@ namespace jkl {
 			draw_detail::draw_circle_impl<ValueType>(g, center, ValueType(radius), color);
 		}
 
-		template <class ValueType = double, class PixelBuffer,
-			class Integer, class Radius, class = std::enable_if_t<std::is_integral_v<Integer>>>
-		void draw_circle(PixelBuffer& g, math::R2_elmt<Integer> const& center,
-			Radius radius, nana::color const& color)
-		{
-			draw_circle<ValueType>(g,
-				math::R2_elmt<ValueType>{ ValueType(center.x()) + ValueType(0.5),
-				ValueType(center.y()) + ValueType(0.5) },
-				radius, color);
-		}
-
 		template <class ValueType = double, class PixelBuffer, class Point, class Radius, class BorderWidth>
 		void draw_circle(PixelBuffer& g, Point const& center,
 			Radius radius, BorderWidth border_width, nana::color const& color, nana::color const& border_color)
@@ -351,16 +340,6 @@ namespace jkl {
 			assert(border_width >= 0);
 			draw_detail::draw_circle_impl<ValueType>(g, center,
 				ValueType(radius), ValueType(border_width), color, border_color);
-		}
-
-		template <class ValueType = double, class PixelBuffer,
-			class Integer, class Radius, class BorderWidth, class = std::enable_if_t<std::is_integral_v<Integer>>>
-		void draw_circle(PixelBuffer& g, math::R2_elmt<Integer> const& center,
-			Radius radius, BorderWidth border_width, nana::color const& color, nana::color const& border_color)
-		{
-			draw_circle<ValueType>(g,
-				math::R2_elmt<ValueType>{ ValueType(center.x()) + ValueType(0.5), ValueType(center.y()) + ValueType(0.5) },
-				radius, border_width, color, border_color);
 		}
 	}
 }

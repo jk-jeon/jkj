@@ -366,17 +366,5 @@ namespace jkl {
 				math::R2_elmt<ValueType>{ to },
 				ValueType(linewidth), line_color);
 		}
-
-		template <class ValueType = double, class PixelBuffer,
-			class Integer, class BorderWidth, class = std::enable_if_t<std::is_integral_v<Integer>>>
-		void draw_line(PixelBuffer& g,
-			math::R2_elmt<Integer> const& from, math::R2_elmt<Integer> const& to,
-			BorderWidth linewidth, nana::color const& line_color)
-		{
-			draw_line<ValueType, PixelBuffer, math::R2_elmt<ValueType>>(g,
-				{ ValueType(from.x()) + ValueType(0.5), ValueType(from.y()) + ValueType(0.5) },
-				{ ValueType(to.x()) + ValueType(0.5), ValueType(to.y()) + ValueType(0.5) },
-				linewidth, line_color);
-		}
 	}
 }

@@ -45,7 +45,7 @@ namespace jkl {
 			using difference_type = std::ptrdiff_t;
 			using value_type = math::R2_elmt<int>;
 			using pointer = math::R2_elmt<int> const*;
-			using reference = math::R2_elmt<int>;
+			using reference = math::R2_elmt<int> const&;
 
 			row_connected_region_iterator() = default;
 
@@ -121,7 +121,7 @@ namespace jkl {
 			using difference_type = std::ptrdiff_t;
 			using value_type = math::R2_elmt<int>;
 			using pointer = math::R2_elmt<int> const*;
-			using reference = math::R2_elmt<int>;
+			using reference = math::R2_elmt<int> const&;
 
 			rectangular_region_iterator() = default;
 			rectangular_region_iterator(int y,
