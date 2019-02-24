@@ -325,7 +325,7 @@ namespace jkl {
 			}
 
 			template <class Generator, class OutputIterator>
-			void operator()(Generator& g, UIntType k, OutputIterator itr) const {
+			void operator()(Generator& g, UIntType k, OutputIterator itr) {
 				if( m_size < k )
 					throw std::invalid_argument{ "permutation_sampler: k should be smaller than or equal to n" };
 
