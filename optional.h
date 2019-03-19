@@ -229,12 +229,10 @@ namespace jkl {
 			}
 		}
 	};
-}
 
-namespace std {
-	// Specialization of swap for jkl::util::optional
+	// ADL swap for jkl::util::optional
 	template <typename T>
-	void swap(::jkl::optional<T>& x, ::jkl::optional<T>& y) noexcept(noexcept(x.swap(y))) {
+	void swap(optional<T>& x, optional<T>& y) noexcept(noexcept(x.swap(y))) {
 		x.swap(y);
 	}
 }
