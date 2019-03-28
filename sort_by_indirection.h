@@ -26,9 +26,12 @@ namespace jkl {
 	// When sorting a vector of items, std::sort somewhat performs very poorly
 	// if move or swap is slow. In this case, it is often much faster to perform
 	// sorting on a vector of pointers, and then reflect the result back to the original vector.
-	// For a typical struct with about thirty std::string members and more,
-	// sort_by_indirection_t's performance is about 10x faster than that of std::sort.
-	// [CAUTION] There is no exception guarantee, IF move constructor/assignment might throw.
+	// For array of typical struct with about thirty std::string members and more,
+	// sort_by_indirection_t's performance is about 10x faster than that of std::sort,
+	// when the length is about 1300.
+	// This functionality was suggested by Jae-Hun Kim.
+	// [CAUTION] There is no exception guarantee, if the comparator and/or
+	// move constructor/assignment might throw.
 	template <class RandomAccessIterator, class Allocator = std::allocator<RandomAccessIterator>>
 	class sort_by_indirection_t {
 		std::vector<RandomAccessIterator, Allocator>	buffer;
