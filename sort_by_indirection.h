@@ -30,8 +30,8 @@ namespace jkl {
 	// sort_by_indirection_t's performance is about 10x faster than that of std::sort,
 	// when the length is about 1300.
 	// This feature was suggested by Jae-Hun Kim.
-	// [CAUTION] There is no exception guarantee, if the comparator and/or
-	// move constructor/assignment might throw.
+	// [CAUTION] There is no exception guarantee, if move constructor/assignment might throw.
+	// However, unlike std::sort, it is okay (we have strong guarantee) to take throwing comparators.
 	template <class RandomAccessIterator, class Allocator = std::allocator<RandomAccessIterator>>
 	class sort_by_indirection_t {
 		std::vector<RandomAccessIterator, Allocator>	buffer;
