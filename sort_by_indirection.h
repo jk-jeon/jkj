@@ -29,7 +29,7 @@ namespace jkl {
 	// For array of typical struct with about thirty std::string members and more,
 	// sort_by_indirection_t's performance is about 10x faster than that of std::sort,
 	// when the length is about 1300.
-	// This functionality was suggested by Jae-Hun Kim.
+	// This feature was suggested by Jae-Hun Kim.
 	// [CAUTION] There is no exception guarantee, if the comparator and/or
 	// move constructor/assignment might throw.
 	template <class RandomAccessIterator, class Allocator = std::allocator<RandomAccessIterator>>
