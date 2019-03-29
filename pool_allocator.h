@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Copyright (c) 2017 Junekey Jeon                                                                   ///
+/// Copyright (c) 2019 Junekey Jeon                                                                   ///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy of this software     ///
 /// and associated documentation files(the "Software"), to deal in the Software without restriction,  ///
 /// including without limitation the rights to use, copy, modify, merge, publish, distribute,         ///
@@ -27,7 +27,7 @@ namespace jkl {
 		namespace detail {
 			// The minimal cell of data
 			template <std::size_t size>
-			struct cell {
+			struct alignas(std::max_align_t) cell {
 				union {
 					std::uint8_t	data[size];
 					cell*			next;
@@ -217,71 +217,40 @@ namespace jkl {
 		};
 		template <typename T, std::size_t maximum_alloc_count_ = 64, std::size_t cells_per_chunk = 8192, class LargeAlloc = default_large_alloc>
 		class pool_allocator {
-			using aligned_storage_t = std::aligned_storage_t<sizeof(T), alignof(T)>;
-
-			// Number of pools needed
-			static constexpr std::size_t number_of_allocs =
-				(sizeof(T) * maximum_alloc_count_ + sizeof(aligned_storage_t) - 1) / sizeof(aligned_storage_t);
-			// Maximum size of cell
-			// If requested size of allocation is larger than this, pool_allocator just refers to the default large memory chunk allocator
-			static constexpr std::size_t maximum_alloc_count = number_of_allocs * sizeof(aligned_storage_t) / sizeof(T);
-
-			// Convert requested allocation size to pool index
-			static std::size_t count_to_index(std::size_t count) noexcept {
-				return (sizeof(T) * count + sizeof(aligned_storage_t) - 1) / sizeof(aligned_storage_t) - 1;
-			}
+			template <class U>
+			using rebind = pool_allocator<U, maximum_alloc_count_, cells_per_chunk, LargeAlloc>;
 
 			// The underlying type of the ith pool
 			template <std::size_t index>
-			using pool_type = pool<sizeof(aligned_storage_t) * (index + 1), cells_per_chunk>;
+			using pool_type = pool<sizeof(T) * (index + 1), cells_per_chunk>;
+
+			// Generate the tuple type of pool_type's
+			template <class IndexSequence>
+			struct pools_type_impl;
+
+			template <std::size_t... I>
+			struct pools_type_impl<std::index_sequence<I...>> {
+				using type = std::tuple<pool_type<I>...>;
+			};
+
+			using pools_type = typename pools_type_impl<
+				std::make_index_sequence<maximum_alloc_count_>>::type;
 
 			// Call allocate() from the ith pool
 			struct call_allocate {
 				// May throw std::bad_alloc
 				template <std::size_t index>
-				void* operator()(void* pools_ptr) const {
-					return reinterpret_cast<pool_type<index>*>(pools_ptr)->allocate();
+				void* operator()(pools_type& pools) const {
+					return std::get<index>(pools).allocate();
 				}
 			};
 
 			// Call deallocate() from the ith pool
 			struct call_deallocate {
 				template <std::size_t index>
-				void operator()(void* pools_ptr, void* ptr) const noexcept {
-					reinterpret_cast<pool_type<index>*>(pools_ptr)->deallocate(ptr);
+				void operator()(pools_type& pools, void* ptr) const noexcept {
+					std::get<index>(pools).deallocate(ptr);
 				}
-			};
-
-			// Call the destructor of the ith pool
-			struct call_destructor {
-				template <std::size_t index>
-				void operator()(void* pools_ptr) const noexcept {
-					reinterpret_cast<pool_type<index>*>(pools_ptr)->~pool_type<index>();
-				}
-			};
-
-			// Array of pools with different allocation size
-			// Since each pool is of different type, a type-erasure mechanism must be applied
-			class pools_type {
-			public:
-				void*& operator[](std::size_t index) noexcept {
-					assert(index < number_of_allocs);
-					return m_pools[index];
-				}
-
-				pools_type() noexcept {
-					std::memset(m_pools, 0, sizeof(void*) * number_of_allocs);
-				}
-
-				// Calls the destructor of the each pool at destruction
-				~pools_type() {
-					for( std::size_t i = 0; i < number_of_allocs; ++i ) {
-						tmp::call_by_index<number_of_allocs>(call_destructor{}, i, &m_pools[i]);
-					}
-				}
-
-			private:
-				void* m_pools[number_of_allocs];
 			};
 
 			// Each thread owns a separate instance of pool array
@@ -290,28 +259,26 @@ namespace jkl {
 		public:
 			// May throw std::bad_alloc
 			T* allocate(std::size_t count) {
-				// If the requested size is too big, refer to the defalut allocator
-				if( count > maximum_alloc_count ) {
+				// If the requested size is too big, refer to LargeAlloc
+				if( count <= maximum_alloc_count_ && count != 0 ) {
+					return reinterpret_cast<T*>(
+						tmp::call_by_index<maximum_alloc_count_>(call_allocate{}, count - 1, m_pools));
+				}
+				else {
 					auto* ptr = reinterpret_cast<T*>(LargeAlloc::malloc(sizeof(T) * count));
 					if( ptr == nullptr )
 						throw std::bad_alloc{};
 					return ptr;
 				}
-
-				// Forward to the minimum-sized pool that can allocate a memory chunk of the given size
-				auto index = count_to_index(count);
-				return reinterpret_cast<T*>(tmp::call_by_index<number_of_allocs>(call_allocate{}, index, &m_pools[index]));
 			}
 
 			void deallocate(T* ptr, std::size_t count) noexcept {
-				// If the requested size is too big, refer to the defalut allocator
-				if( count > maximum_alloc_count )
-					LargeAlloc::free(ptr);
-
-				// Forward to the minimum-sized pool that can deallocate a memory chunk of the given size
+				// If the requested size is too big, refer to LargeAlloc
+				if( count <= maximum_alloc_count_ && count != 0 ) {
+					tmp::call_by_index<maximum_alloc_count_>(call_deallocate{}, count - 1, m_pools, ptr);
+				}
 				else {
-					auto index = count_to_index(count);
-					tmp::call_by_index<number_of_allocs>(call_deallocate{}, index, &m_pools[index], ptr);
+					LargeAlloc::free(ptr);
 				}
 			}
 		};
