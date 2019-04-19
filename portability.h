@@ -167,11 +167,11 @@ void UNUSED(...) {}
 #elif defined(_MSC_VER) && _MSC_VER >= 1900
 #define VOID_T ::std::void_t
 #else
-namespace jkl {
+namespace jkj {
 	template <class...>
 	using void_t = void;
 }
-#define VOID_T ::jkl::void_t
+#define VOID_T ::jkj::void_t
 #endif
 
 

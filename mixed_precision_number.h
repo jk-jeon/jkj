@@ -18,7 +18,7 @@
 #pragma once
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// Here is a union-like class template providing a unified way to treat integral type and floating-point type data.

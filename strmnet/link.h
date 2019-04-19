@@ -18,7 +18,7 @@
 #pragma once
 #include "static_list.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// Link
 		/// Provide an interface between two nodes
@@ -170,13 +170,13 @@ namespace jkl {
 			struct get_source_target_impl<link_category_t::index_index> {
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_source(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<LinkSpecifier::source_idx>(std::forward<NodeList>(nl));
 				}
 
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_target(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<LinkSpecifier::target_idx>(std::forward<NodeList>(nl));
 				}
 			};
@@ -185,13 +185,13 @@ namespace jkl {
 			struct get_source_target_impl<link_category_t::index_type> {
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_source(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<LinkSpecifier::source_idx>(std::forward<NodeList>(nl));
 				}
 
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_target(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<typename LinkSpecifier::target_type>(std::forward<NodeList>(nl));
 				}
 			};
@@ -200,13 +200,13 @@ namespace jkl {
 			struct get_source_target_impl<link_category_t::type_index> {
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_source(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<typename LinkSpecifier::source_type>(std::forward<NodeList>(nl));
 				}
 
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_target(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<LinkSpecifier::target_idx>(std::forward<NodeList>(nl));
 				}
 			};
@@ -215,13 +215,13 @@ namespace jkl {
 			struct get_source_target_impl<link_category_t::type_type> {
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_source(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<typename LinkSpecifier::source_type>(std::forward<NodeList>(nl));
 				}
 
 				template <class LinkSpecifier, class NodeList>
 				static auto&& get_target(NodeList&& nl) noexcept {
-					using jkl::strmnet::get;
+					using jkj::strmnet::get;
 					return get<typename LinkSpecifier::target_type>(std::forward<NodeList>(nl));
 				}
 			};

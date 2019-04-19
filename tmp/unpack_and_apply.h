@@ -24,7 +24,7 @@
 #include "is_tuple.h"
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// If the std::decay_t<Arg> is a tuple (that is, is_tuple evaluates to true), then unpack it and 

@@ -22,7 +22,7 @@
 #include <utility>
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// When taking a constructor argument to initialize a member object of type T, the parameter type is
@@ -59,7 +59,7 @@ namespace jkl {
 			template <std::size_t I, class TupleOfTuplesOfArgTypes, std::size_t depth>
 			struct generate_switch_sequence {
 				static constexpr std::size_t choices = std::tuple_size<std::tuple_element_t<I, TupleOfTuplesOfArgTypes>>::value;
-				static_assert(choices != 0, "jkl::tmp: empty tuple is not allowed");
+				static_assert(choices != 0, "jkj::tmp: empty tuple is not allowed");
 				using type = typename add_to_index_sequence<depth % choices,
 					typename generate_switch_sequence<I - 1, TupleOfTuplesOfArgTypes, depth / choices>::type>::type;
 			};

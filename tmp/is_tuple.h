@@ -21,7 +21,7 @@
 #include "remove_cvref.h"
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Check if a type supports std::tuple_element and std::tuple_size
@@ -31,9 +31,9 @@ namespace jkl {
 		// Note that even if there is not "get", is_tuple concludes that T is indeed tuple-like,
 		// if std::tuple_element and std::tuple are both specialized.
 		// If real tuple-like access is neccessary, the static member which_get should be inspected.
-		// Or, you can use jkl::tmp::get() function that does that for you.
-		// Be carefult that jkl::tmp::get() will not work if the given tuple-like class is defined inside
-		// the namespace jkl::tmp and is relying on ADL.
+		// Or, you can use jkj::tmp::get() function that does that for you.
+		// Be carefult that jkj::tmp::get() will not work if the given tuple-like class is defined inside
+		// the namespace jkj::tmp and is relying on ADL.
 		enum class which_get_t { none, member, adl };
 
 		template <typename T>

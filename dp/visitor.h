@@ -39,7 +39,7 @@
 //  class Triangle;
 //  class Rectangle;
 //  class Ellipse;
-//  using ShapeVisitor = jkl::dp::const_visitor<void, Triangle, Rectangle, Ellipse>;
+//  using ShapeVisitor = jkj::dp::const_visitor<void, Triangle, Rectangle, Ellipse>;
 //
 // The acceptor classes (i.e., Triangle, Rectangle, Ellipse in the above example)
 // must be forward declared before the declaration of the visitor class
@@ -58,16 +58,16 @@
 // (i.e., ShapeVisitor in the above example). 
 // Hence, the definition of Shape class should be look like:
 //
-//   struct Shape : jkl::dp::const_acceptor_base<ShapeVisitor> {
+//   struct Shape : jkj::dp::const_acceptor_base<ShapeVisitor> {
 //     // Some methods that are not addressed using visitor
 //   };
 //
 // In fact, the base acceptor Shape is not strictly necessary;
 // the class Shape can be omitted completely if not necessary. In this case,
-// the class jkl::dp::const_acceptor_base<ShapeVisitor> will replace the role of Shape.
+// the class jkj::dp::const_acceptor_base<ShapeVisitor> will replace the role of Shape.
 // One may let for example
 //
-//   using Shape = jkl::dp::const_acceptor_base<ShapeVisitor>;
+//   using Shape = jkj::dp::const_acceptor_base<ShapeVisitor>;
 //
 // for convenience in this case.
 //
@@ -86,20 +86,20 @@
 // acceptor_base (or const_acceptor_base) replaces that role.
 // The definitions of the acceptor classes Triangle, Rectangle, Ellipse should look like:
 //
-//   class Triangle : public jkl::dp::const_acceptor<Triangle, ShapeVisitor, Shape> {
+//   class Triangle : public jkj::dp::const_acceptor<Triangle, ShapeVisitor, Shape> {
 //     ...
 //   };
 //
-//   class Rectangle : public jkl::dp::const_acceptor<Rectangle, ShapeVisitor, Shape> {
+//   class Rectangle : public jkj::dp::const_acceptor<Rectangle, ShapeVisitor, Shape> {
 //     ...
 //   };
 //
-//   class Ellipse : public jkl::dp::const_acceptor<Ellipse, ShapeVisitor, Shape> {
+//   class Ellipse : public jkj::dp::const_acceptor<Ellipse, ShapeVisitor, Shape> {
 //     ...
 //   };
 //
 // Then these classes automatically become subtypes of Shape, which should be
-// a subtype of jkl::dp::const_acceptor_base<ShapeVisitor>,
+// a subtype of jkj::dp::const_acceptor_base<ShapeVisitor>,
 // where the pure virtual method accept() is defined.
 //
 // Some examples of visitor implementations are given:
@@ -148,7 +148,7 @@
 // The file structure may look like the following:
 //
 //   ShapeVisitor.h:
-//     includes jkl/dp/visitor.h, forward declares Triangle, Rectangle, and Ellipse,
+//     includes jkj/dp/visitor.h, forward declares Triangle, Rectangle, and Ellipse,
 //     and defines ShapeVisitor alias. Optionally defines the interface Shape.
 //   Triangle.h / Triangle.cpp:
 //     includes ShapeVisitor.h, defines the class Triangle.
@@ -176,7 +176,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	// Design Pattern namespace
 	namespace dp {
 		namespace detail {

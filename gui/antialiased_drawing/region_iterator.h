@@ -19,7 +19,7 @@
 #include <iterator>
 #include "../../numerical_lie_group/Rn_elmt.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// Iterate over a 2D region in row-major order.
 		// For given y, it is assumed that the corresponding row

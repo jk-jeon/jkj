@@ -21,7 +21,7 @@
 #include "../bit_twiddling.h"
 #include "../numerical_lie_group.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		/// Rotational octahedral symmetry group
 		/// This is the group of rotational symmetry of cube (or equivalently, octahedron).
@@ -90,8 +90,8 @@ namespace jkl {
 
 				// Runtime calculation of endpoints
 				JKL_GPU_EXECUTABLE constexpr vertex calculate_first_end() const noexcept {
-					using jkl::util::bit_at;
-					return jkl::util::bits(
+					using jkj::util::bit_at;
+					return jkj::util::bits(
 						// first bit
 						(bit_at(internal_value, 2) && bit_at(internal_value, 1)) ||
 						(bit_at(internal_value, 3) && bit_at(internal_value, 0)),
@@ -103,8 +103,8 @@ namespace jkl {
 						(bit_at(internal_value, 2) && bit_at(internal_value, 0)));
 				}
 				JKL_GPU_EXECUTABLE constexpr vertex calculate_second_end() const noexcept {
-					using jkl::util::bit_at;
-					return jkl::util::bits(
+					using jkj::util::bit_at;
+					return jkj::util::bits(
 						// First bit
 						(bit_at(internal_value, 2) && bit_at(internal_value, 1)) ||
 						(bit_at(internal_value, 3) && bit_at(internal_value, 0)) ||
@@ -155,18 +155,18 @@ namespace jkl {
 			};
 
 			JKL_GPU_EXECUTABLE constexpr bool along_x(vertex v, vertex w) noexcept {
-				return bool(jkl::util::bit_at(v, 0) ^ jkl::util::bit_at(w, 0));
+				return bool(jkj::util::bit_at(v, 0) ^ jkj::util::bit_at(w, 0));
 			}
 			JKL_GPU_EXECUTABLE constexpr bool along_y(vertex v, vertex w) noexcept {
-				return bool(jkl::util::bit_at(v, 1) ^ jkl::util::bit_at(w, 1));
+				return bool(jkj::util::bit_at(v, 1) ^ jkj::util::bit_at(w, 1));
 			}
 			JKL_GPU_EXECUTABLE constexpr bool along_z(vertex v, vertex w) noexcept {
-				return bool(jkl::util::bit_at(v, 2) ^ jkl::util::bit_at(w, 2));
+				return bool(jkj::util::bit_at(v, 2) ^ jkj::util::bit_at(w, 2));
 			}
 
 			JKL_GPU_EXECUTABLE constexpr edge join(vertex v, vertex w) noexcept {
-				using jkl::util::bit_at;
-				return jkl::util::bits(
+				using jkj::util::bit_at;
+				return jkj::util::bits(
 					// First bit
 					(along_x(v, w) && bit_at(v, 1)) ||
 					(along_y(v, w) && bit_at(v, 2)) ||
@@ -207,8 +207,8 @@ namespace jkl {
 				// - 101 means the composition (100)(001); that is, (y z)(x y) = (x z y)
 				// The order of composition was of course an arbitrary choice.
 			private:
-				using int_vector = jkl::math::R3_elmt<int>;
-				using int_matrix = jkl::math::gl3_elmt<int>;
+				using int_vector = jkj::math::R3_elmt<int>;
+				using int_matrix = jkj::math::gl3_elmt<int>;
 				
 			public:
 				using internal_type = std::uint8_t;
@@ -220,14 +220,14 @@ namespace jkl {
 					return internal_value;
 				}
 
-				using representation_type = jkl::math::SO3_elmt<int>;
+				using representation_type = jkj::math::SO3_elmt<int>;
 				JKL_GPU_EXECUTABLE constexpr representation_type calculate_representation() const noexcept {
 					return{ permute_coordinates(get_axis_permutation(),
 						int_matrix{
 						x_parity(), 0, 0,
 						0, y_parity(), 0,
 						0, 0, z_parity() }),
-						jkl::math::no_validity_check{}
+						jkj::math::no_validity_check{}
 					};
 				}
 
@@ -243,7 +243,7 @@ namespace jkl {
 					representation_type const& r) noexcept {
 					// MSVC's built-in array is somewhat buggy.
 					// I guess that's why the operator[] doesn't evaluate as constexpr here...
-					using jkl::util::bits;
+					using jkj::util::bits;
 					/*return
 						r[0][0] != 0 && r[1][1] != 0 ? bits(r[0][0] < 0, r[1][1] < 0, 0, 0, 0) :	// 0 ~ 3
 						r[0][0] != 0 && r[2][1] != 0 ? bits(r[0][0] < 0, r[2][1] < 0, 1, 0, 0) :	// 4 ~ 7
@@ -279,7 +279,7 @@ namespace jkl {
 				JKL_GPU_EXECUTABLE static constexpr int_matrix permute_coordinates(std::uint8_t axis_permutation, 
 					int_matrix const& m) noexcept
 				{
-					using jkl::util::bits;
+					using jkj::util::bits;
 				#if !defined(HAS_GENERALIZED_CONSTEXPR)
 					return axis_permutation == bits(0, 0, 0) ?
 						m :
@@ -334,25 +334,25 @@ namespace jkl {
 				}
 
 				JKL_GPU_EXECUTABLE constexpr int x_parity() const noexcept {
-					return jkl::util::bit_at(internal_value, 0) ? -1 : 1;
+					return jkj::util::bit_at(internal_value, 0) ? -1 : 1;
 				}
 				JKL_GPU_EXECUTABLE constexpr int y_parity() const noexcept {
-					return jkl::util::bit_at(internal_value, 1) ? -1 : 1;
+					return jkj::util::bit_at(internal_value, 1) ? -1 : 1;
 				}
 				JKL_GPU_EXECUTABLE constexpr int z_parity() const noexcept {
-					return jkl::util::number_of_ones(internal_value) % 2 ? -1 : 1;
+					return jkj::util::number_of_ones(internal_value) % 2 ? -1 : 1;
 				}
 
 				JKL_GPU_EXECUTABLE static constexpr int_vector vertex_to_vector(vertex v) noexcept {
 					return{
-						jkl::util::bit_at(v, 0) ? 1 : -1,
-						jkl::util::bit_at(v, 1) ? 1 : -1,
-						jkl::util::bit_at(v, 2) ? 1 : -1
+						jkj::util::bit_at(v, 0) ? 1 : -1,
+						jkj::util::bit_at(v, 1) ? 1 : -1,
+						jkj::util::bit_at(v, 2) ? 1 : -1
 					};
 				}
 
 				JKL_GPU_EXECUTABLE static constexpr vertex vector_to_vertex(int_vector const& v) noexcept {
-					return jkl::util::bits(v.x() > 0, v.y() > 0, v.z() > 0);
+					return jkj::util::bits(v.x() > 0, v.y() > 0, v.z() > 0);
 				}
 			};
 

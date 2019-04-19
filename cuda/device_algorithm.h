@@ -21,7 +21,7 @@
 #include <type_traits>
 #include <thrust/functional.h>
 
-namespace jkl {
+namespace jkj {
 	namespace cuda {
 		/// Binary search
 		/// Returns an iterator in a sorted range such that the range is still sorted

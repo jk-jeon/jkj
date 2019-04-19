@@ -20,7 +20,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// List of types
@@ -180,14 +180,14 @@ namespace jkl {
 
 namespace std {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Specializations of std::tuple_element and std::tuple_length for jkl::tmp::typelist
+	// Specializations of std::tuple_element and std::tuple_length for jkj::tmp::typelist
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	template <std::size_t index, typename... Types>
-	struct tuple_element<index, jkl::tmp::typelist<Types...>> {
-		using type = tuple_element_t<index, typename jkl::tmp::typelist<Types...>::tuple_type>;
+	struct tuple_element<index, jkj::tmp::typelist<Types...>> {
+		using type = tuple_element_t<index, typename jkj::tmp::typelist<Types...>::tuple_type>;
 	};
 
 	template <typename... Types>
-	struct tuple_size<jkl::tmp::typelist<Types...>> : integral_constant<std::size_t, sizeof...(Types)> {};
+	struct tuple_size<jkj::tmp::typelist<Types...>> : integral_constant<std::size_t, sizeof...(Types)> {};
 }

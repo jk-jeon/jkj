@@ -15,7 +15,7 @@
 /// Rather, each query point finds its position inside the sorted data points using binary search.
 /// This has a further advantage that multiple queries can be requested without re-sorting the data points.
 
-namespace jkl {
+namespace jkj {
 	/// 3D space filling curve encodings
 	/// Input: three 21-bit integers
 	/// Output: 63-bit Morton/Hilbert code
@@ -245,7 +245,7 @@ namespace jkl {
 					if( should_proceed ) {
 						auto current_result_value = thrust::make_transform_iterator(current_results,
 							neighbor_to_value<Neighbor, DistanceType>{});
-						loc = jkl::cuda::binary_search_n(current_result_value, k, new_candidate.value)
+						loc = jkj::cuda::binary_search_n(current_result_value, k, new_candidate.value)
 							- current_result_value;
 					}
 
@@ -364,12 +364,12 @@ namespace jkl {
 				{
 					// Precalculate optimal block sizes
 					int device_id;
-					jkl::cuda::check_error(cudaGetDevice(&device_id));
+					jkj::cuda::check_error(cudaGetDevice(&device_id));
 					cudaDeviceProp device_prop;
-					jkl::cuda::check_error(cudaGetDeviceProperties(&device_prop, device_id));
+					jkj::cuda::check_error(cudaGetDeviceProperties(&device_prop, device_id));
 					max_threads_per_block = unsigned int(device_prop.maxThreadsPerBlock);
 					// max_threads_per_block must be power of 2
-					auto log2 = jkl::math::ilog2(max_threads_per_block);
+					auto log2 = jkj::math::ilog2(max_threads_per_block);
 					max_threads_per_block = 1u << log2;
 				}
 
@@ -427,12 +427,12 @@ namespace jkl {
 					}
 
 					// rounded_k is the smallest power of 2 that is larger than or equal to k
-					auto rounded_k = 1u << jkl::math::ilog2(2 * k - 1);
+					auto rounded_k = 1u << jkj::math::ilog2(2 * k - 1);
 					assert(rounded_k <= max_threads_per_block);
 
 					// Load phase
 					auto shared_memory_size = (sizeof(neighbor) + sizeof(bool)) * max_threads_per_block;
-					auto grid_size = jkl::cuda::get_optimal_grid_size(
+					auto grid_size = jkj::cuda::get_optimal_grid_size(
 						load_kernel<point_type, distance_type, neighbor,
 						DataPointIterator, std::decay_t<QueryPointIterator>, std::decay_t<OutputIterator>>,
 						2 * rounded_k * number_of_query_points, max_threads_per_block, shared_memory_size);
@@ -445,13 +445,13 @@ namespace jkl {
 					// Merge phase
 					shared_memory_size = sizeof(unsigned int) * max_threads_per_block
 						+ sizeof(neighbor) * (max_threads_per_block / 2);
-					grid_size = jkl::cuda::get_optimal_grid_size(
+					grid_size = jkj::cuda::get_optimal_grid_size(
 						merge_kernel<point_type, distance_type, neighbor,
 						DataPointIterator, std::decay_t<QueryPointIterator>, std::decay_t<OutputIterator>>,
 						2 * rounded_k * number_of_query_points, max_threads_per_block, shared_memory_size);
 
 					auto sorting_shared_memory_size = (sizeof(neighbor) + sizeof(bool)) * max_threads_per_block;
-					auto sorting_grid_size = jkl::cuda::get_optimal_grid_size(
+					auto sorting_grid_size = jkj::cuda::get_optimal_grid_size(
 						blockwise_sorting_kernel<neighbor, std::decay_t<OutputIterator>>,
 						rounded_k * number_of_query_points, max_threads_per_block, sorting_shared_memory_size);
 
@@ -470,7 +470,7 @@ namespace jkl {
 				unsigned int										max_threads_per_block;
 
 				template <class T>
-				using device_vector = thrust::device_vector<T, jkl::cuda::uninitialized_allocator<T>>;
+				using device_vector = thrust::device_vector<T, jkj::cuda::uninitialized_allocator<T>>;
 
 				DataPointIterator									data_points;
 				SpaceFilling3D										encoder;
@@ -482,8 +482,8 @@ namespace jkl {
 				std::array<device_vector<unsigned int>, 5>			query_indices;
 				device_vector<neighbor>								kann_load_buffer;
 
-				jkl::cuda::stream_fork								child_streams;
-				std::array<jkl::cuda::cached_allocator<8192>, 5>	allocs;
+				jkj::cuda::stream_fork								child_streams;
+				std::array<jkj::cuda::cached_allocator<8192>, 5>	allocs;
 
 				static __device__ std::uint64_t encode(SpaceFilling3D const& encoder, point_type pt,
 					point_type const& base_point, point_type const& scale, distance_type shift)
@@ -537,7 +537,7 @@ namespace jkl {
 						// It seems that the problem is related to "explicit" specifier,
 						// but I don't know the exact reason. Perhaps another bug of NVCC?
 						auto code = encode(encoder, (point_type const&)query_points[idx], base_point, scale, shift);
-						query_indices_ptr[idx] = jkl::cuda::binary_search_n(codes_ptr, number_of_data_points, code) - codes_ptr;
+						query_indices_ptr[idx] = jkj::cuda::binary_search_n(codes_ptr, number_of_data_points, code) - codes_ptr;
 					}
 				};
 			};

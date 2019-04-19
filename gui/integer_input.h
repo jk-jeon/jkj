@@ -22,7 +22,7 @@
 #include <nana/gui/widgets/spinbox.hpp>
 #include "../cache.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// Input panel for integers
 		// [label]: [spinbox]

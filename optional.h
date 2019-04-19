@@ -21,7 +21,7 @@
 #include <utility>
 #include "tmp/forward.h"
 
-namespace jkl {
+namespace jkj {
 	/// A minimal variant of std::optional of C++17
 	/// This template will be deprecated after std::optional becomes available
 	class bad_optional_access : public std::logic_error {
@@ -70,7 +70,7 @@ namespace jkl {
 		}
 
 		// Perfect forwarding constructor for single argument
-		template <class Arg, class = ::jkl::tmp::prevent_too_perfect_fwd<optional, Arg>>
+		template <class Arg, class = ::jkj::tmp::prevent_too_perfect_fwd<optional, Arg>>
 		optional(Arg&& arg) noexcept(std::is_nothrow_constructible<T, Arg&&>::value)
 		{
 			new(this) T(std::forward<Arg>(arg));
@@ -230,7 +230,7 @@ namespace jkl {
 		}
 	};
 
-	// ADL swap for jkl::util::optional
+	// ADL swap for jkj::util::optional
 	template <typename T>
 	void swap(optional<T>& x, optional<T>& y) noexcept(noexcept(x.swap(y))) {
 		x.swap(y);

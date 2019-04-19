@@ -23,7 +23,7 @@
 #include "../numerical_lie_group.h"
 #include "../cache.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// Input panel for 2-dimensional coordinates
 		// [label]: ([textbox],[textbox])

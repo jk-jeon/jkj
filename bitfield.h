@@ -26,7 +26,7 @@
 #include "portability.h"
 #include "tmp/forward.h"
 
-namespace jkl {
+namespace jkj {
 	template <class UnderlyingType, std::size_t... field_lengths>
 	class bitfield;
 
@@ -38,7 +38,7 @@ namespace jkl {
 		class bitfield_base {
 		public:
 			static_assert(std::is_unsigned<UnderlyingType>::value,
-				"jkl::bitfield can be only instantiated with unsigned integer types");
+				"jkj::bitfield can be only instantiated with unsigned integer types");
 
 			using underlying_type = UnderlyingType;
 			static constexpr std::size_t underlying_bits = sizeof(underlying_type) * 8;
@@ -345,7 +345,7 @@ namespace jkl {
 
 			JKL_GPU_EXECUTABLE bitfield_value_container() = default;
 			
-			template <class T, class = jkl::tmp::prevent_too_perfect_fwd<bitfield_value_container, T>>
+			template <class T, class = jkj::tmp::prevent_too_perfect_fwd<bitfield_value_container, T>>
 			JKL_GPU_EXECUTABLE bitfield_value_container(T&& v)
 				noexcept(std::is_nothrow_constructible<UnderlyingType, T>::value) :
 				value(std::forward<T>(v)) {}
@@ -402,14 +402,14 @@ namespace jkl {
 		// Get offsets of elements
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE static constexpr std::size_t offset() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return get_offset_and_length<idx>::offset;
 		}
 
 		// Get field lengths of elements
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE static constexpr std::size_t field_length() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return get_offset_and_length<idx>::field_length;
 		}
 
@@ -430,7 +430,7 @@ namespace jkl {
 	public:
 		static constexpr std::size_t total_bits = get_offset_and_length<number_of_fields>::offset;
 		static_assert(total_bits <= underlying_bits,
-			"jkl::bitfield: the specified type cannot hold the bitfield; too many bits are requested!");
+			"jkj::bitfield: the specified type cannot hold the bitfield; too many bits are requested!");
 
 		// Default constructor : random initial value
 		JKL_GPU_EXECUTABLE bitfield() = default;
@@ -447,7 +447,7 @@ namespace jkl {
 		// Standard constructor: initialize the first element, when there is only one element
 		template <class FirstElementType, class = std::enable_if_t<
 			number_of_fields == 1 && !std::is_convertible<FirstElementType, bitpack_tag>::value>,
-			class = jkl::tmp::prevent_too_perfect_fwd<bitfield, FirstElementType>>
+			class = jkj::tmp::prevent_too_perfect_fwd<bitfield, FirstElementType>>
 		JKL_GPU_EXECUTABLE explicit constexpr bitfield(FirstElementType&& first_elmt)
 			noexcept(std::is_nothrow_constructible<underlying_type, FirstElementType>::value) :
 			value_container{ std::forward<FirstElementType>(first_elmt) } {}
@@ -475,19 +475,19 @@ namespace jkl {
 		// Get maximum possible values of elements
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE static constexpr underlying_type maximum() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return reference<idx>::maximum;
 		}
 
 		// Get element
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE constexpr reference<idx> get() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return{ value };
 		}
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE constexpr const_reference<idx> get() const noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return{ value };
 		}
 
@@ -580,19 +580,19 @@ namespace jkl {
 		// Get maximum possible values of elements
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE static constexpr underlying_type maximum() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return reference<idx>::maximum;
 		}
 
 		// Get element
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE constexpr reference<idx> get() noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return{ value };
 		}
 		template <std::size_t idx>
 		JKL_GPU_EXECUTABLE constexpr const_reference<idx> get() const noexcept {
-			static_assert(idx < number_of_fields, "jkl::bitfield: index out of range!");
+			static_assert(idx < number_of_fields, "jkj::bitfield: index out of range!");
 			return{ value };
 		}
 
@@ -690,27 +690,27 @@ namespace jkl {
 
 // Specializations of std::tuple_size and std::tuple_element
 template <class UnderlyingType, std::size_t... field_lengths>
-class std::tuple_size<jkl::bitfield<UnderlyingType, field_lengths...>> :
+class std::tuple_size<jkj::bitfield<UnderlyingType, field_lengths...>> :
 	public std::integral_constant<std::size_t, sizeof...(field_lengths)> {};
 
 template <std::size_t I, class UnderlyingType, std::size_t... field_lengths>
-struct std::tuple_element<I, jkl::bitfield<UnderlyingType, field_lengths...>> {
-	using type = typename jkl::bitfield<UnderlyingType, field_lengths...>::template reference<I>;
+struct std::tuple_element<I, jkj::bitfield<UnderlyingType, field_lengths...>> {
+	using type = typename jkj::bitfield<UnderlyingType, field_lengths...>::template reference<I>;
 };
 template <std::size_t I, class UnderlyingType, std::size_t... field_lengths>
-struct std::tuple_element<I, jkl::bitfield<UnderlyingType, field_lengths...> const> {
-	using type = typename jkl::bitfield<UnderlyingType, field_lengths...>::template const_reference<I>;
+struct std::tuple_element<I, jkj::bitfield<UnderlyingType, field_lengths...> const> {
+	using type = typename jkj::bitfield<UnderlyingType, field_lengths...>::template const_reference<I>;
 };
 
 template <class UnderlyingType, std::size_t... field_lengths>
-class std::tuple_size<jkl::bitfield_view<UnderlyingType, field_lengths...>> :
+class std::tuple_size<jkj::bitfield_view<UnderlyingType, field_lengths...>> :
 	public std::integral_constant<std::size_t, sizeof...(field_lengths)> {};
 
 template <std::size_t I, class UnderlyingType, std::size_t... field_lengths>
-struct std::tuple_element<I, jkl::bitfield_view<UnderlyingType, field_lengths...>> {
-	using type = typename jkl::bitfield<UnderlyingType, field_lengths...>::template reference<I>;
+struct std::tuple_element<I, jkj::bitfield_view<UnderlyingType, field_lengths...>> {
+	using type = typename jkj::bitfield<UnderlyingType, field_lengths...>::template reference<I>;
 };
 template <std::size_t I, class UnderlyingType, std::size_t... field_lengths>
-struct std::tuple_element<I, jkl::bitfield_view<UnderlyingType, field_lengths...> const> {
-	using type = typename jkl::bitfield<UnderlyingType, field_lengths...>::template const_reference<I>;
+struct std::tuple_element<I, jkj::bitfield_view<UnderlyingType, field_lengths...> const> {
+	using type = typename jkj::bitfield<UnderlyingType, field_lengths...>::template const_reference<I>;
 };

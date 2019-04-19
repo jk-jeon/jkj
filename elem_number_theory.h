@@ -21,7 +21,7 @@
 #include <type_traits>
 #include "portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		/// Calculate integer square root using Newton's method
 		/// Note that for most of the cases this is much slower than UIntType(std::sqrt(n)).

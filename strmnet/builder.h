@@ -20,7 +20,7 @@
 #include <future>
 #include "network.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// Add new nodes or links to a network
 		/// Added items will be pushed to the end of the lists.

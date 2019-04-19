@@ -18,7 +18,7 @@
 #pragma once
 #include "network.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// Convenient interfaces for linear networks
 		namespace detail {

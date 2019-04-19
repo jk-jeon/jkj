@@ -21,7 +21,7 @@
 #include "../../dual_number.h"
 #include "../../pseudo_ptr.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// NOTE: here the range is inclusive; last is NOT excluded!
 		template <class ValueType = double, class PixelBuffer, class ControlPointIterator, class BorderWidth>
@@ -166,13 +166,13 @@ namespace jkl {
 			std::size_t counter;
 			ValueType t;
 			ValueType ds;
-			jkl::math::R2_elmt<ValueType> point;
-			jkl::math::R2_elmt<ValueType> tangent_vector;
+			jkj::math::R2_elmt<ValueType> point;
+			jkj::math::R2_elmt<ValueType> tangent_vector;
 			ParameterizedCurve curve;
 			ValueType t_final;
 
 			void evaluate() {
-				auto combined_calc = curve(jkl::math::dual_number<ValueType>{ t, ValueType(1) });
+				auto combined_calc = curve(jkj::math::dual_number<ValueType>{ t, ValueType(1) });
 				point = { combined_calc.x().prim, combined_calc.y().prim };
 				tangent_vector = { combined_calc.x().dual, combined_calc.y().dual };
 			}
@@ -180,7 +180,7 @@ namespace jkl {
 		public:
 			using iterator_category = std::input_iterator_tag;
 			using difference_type = std::ptrdiff_t;
-			using value_type = jkl::math::R2_elmt<ValueType>;
+			using value_type = jkj::math::R2_elmt<ValueType>;
 			using reference = value_type const&;
 			using pointer = value_type const*;
 
@@ -253,15 +253,15 @@ namespace jkl {
 			std::size_t counter;
 			ValueType t;
 			ValueType dtheta;
-			jkl::math::R2_elmt<ValueType> point;
-			jkl::math::R2_elmt<ValueType> tangent_vector;
-			jkl::math::R2_elmt<ValueType> second_derivative;
+			jkj::math::R2_elmt<ValueType> point;
+			jkj::math::R2_elmt<ValueType> tangent_vector;
+			jkj::math::R2_elmt<ValueType> second_derivative;
 			ParameterizedCurve curve;
 			ValueType t_final;
 
 			void evaluate() {
-				using dual_number_type = jkl::math::dual_number<ValueType>;
-				using double_dual_number_type = jkl::math::dual_number<dual_number_type>;
+				using dual_number_type = jkj::math::dual_number<ValueType>;
+				using double_dual_number_type = jkj::math::dual_number<dual_number_type>;
 
 				auto combined_calc = curve(
 					double_dual_number_type{ { t, ValueType(1) }, { ValueType(1), ValueType(0) } });
@@ -274,7 +274,7 @@ namespace jkl {
 		public:
 			using iterator_category = std::input_iterator_tag;
 			using difference_type = std::ptrdiff_t;
-			using value_type = jkl::math::R2_elmt<ValueType>;
+			using value_type = jkj::math::R2_elmt<ValueType>;
 			using reference = value_type const&;
 			using pointer = value_type const*;
 

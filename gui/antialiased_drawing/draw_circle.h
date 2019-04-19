@@ -22,7 +22,7 @@
 #include "draw.h"
 #include "region_iterator.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		namespace draw_detail {
 			// For radius <= 1

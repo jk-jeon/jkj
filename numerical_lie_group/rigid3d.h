@@ -19,7 +19,7 @@
 #include "../tmp/assert_helper.h"
 #include "rotation3d.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		// 3-dimensional rigid transform
 		namespace detail {
@@ -342,7 +342,7 @@ namespace jkl {
 				auto rot = rotation_type::exp(exponent.rotation_part());
 				auto const angle = exponent.rotation_part().norm();
 				ComponentType alpha, beta;
-				if( almost_smaller(angle, jkl::math::zero<ComponentType>()) ) {
+				if( almost_smaller(angle, jkj::math::zero<ComponentType>()) ) {
 					alpha = ComponentType(1) / 2 - angle*angle / 24;
 					beta = ComponentType(1) / 6 - angle*angle / 120;
 				}
@@ -437,7 +437,7 @@ namespace jkl {
 				auto rotation_part = std::forward<ThisType>(q).rotation_q().log();
 				auto const angle = rotation_part.norm();
 				ComponentType beta;
-				if( almost_smaller(angle, jkl::math::zero<ComponentType>()) )
+				if( almost_smaller(angle, jkj::math::zero<ComponentType>()) )
 					beta = ComponentType(1) / 12 + angle / 360;
 				else
 					beta = (ComponentType(1) - (angle / 2) / tan(angle / 2)) / (angle * angle);
@@ -879,10 +879,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot multiply two SE3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot multiply two SE3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply two SE3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply two SE3_elmt's; failed to deduce the resulting storage type");
 
 			return{
 				s.rotation_q() * std::forward<RightOperand>(t).rotation_q(),
@@ -901,10 +901,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot divide two SE3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot divide two SE3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide two SE3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide two SE3_elmt's; failed to deduce the resulting storage type");
 
 			return std::forward<LeftOperand>(p) * std::forward<RightOperand>(q).inv();
 		}
@@ -921,10 +921,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute SE3 interpolation; failed to deduce the resulting component type");
+				"jkj::math: cannot compute SE3 interpolation; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute SE3 interpolation; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute SE3 interpolation; failed to deduce the resulting storage type");
 
 			return std::forward<LeftOperand>(p) * result_type::exp(
 				(p.inv() * std::forward<RightOperand>(q)).log() * std::forward<Parameter>(t));
@@ -945,10 +945,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot add two se3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot add two se3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot add two se3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot add two se3_elmt's; failed to deduce the resulting storage type");
 
 			return{
 				std::forward<LeftOperand>(s).rotation_part() +
@@ -972,10 +972,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot subtract two se3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot subtract two se3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot subtract two se3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot subtract two se3_elmt's; failed to deduce the resulting storage type");
 
 			return{
 				std::forward<LeftOperand>(s).rotation_part() -
@@ -998,10 +998,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute commutator of se3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot compute commutator of se3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute commutator of se3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute commutator of se3_elmt's; failed to deduce the resulting storage type");
 
 			return{
 				cross(s.rotation_part(), t.rotation_part()),
@@ -1023,7 +1023,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply se3_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply se3_elmt with a scalar; failed to deduce the resulting storage type");
 
 			return{
 				std::forward<Vector>(v).rotation_part() * k,
@@ -1043,7 +1043,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply se3_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply se3_elmt with a scalar; failed to deduce the resulting storage type");
 
 			return{
 				k * std::forward<Vector>(v).rotation_part(),
@@ -1063,7 +1063,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide se3_elmt by a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide se3_elmt by a scalar; failed to deduce the resulting storage type");
 
 			return{
 				std::forward<Vector>(v).rotation_part() / k,

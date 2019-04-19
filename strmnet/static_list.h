@@ -20,7 +20,7 @@
 #include "../tmp/forward.h"
 #include "../tmp/is_complete.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// Static list
 		/// static_list is basically a std::tuple with some more features.
@@ -49,8 +49,8 @@ namespace jkl {
 		namespace detail {
 			template <class Descriptor>
 			struct has_alias : std::integral_constant<bool,
-				jkl::tmp::is_complete<std::tuple_element<0, Descriptor>>::value &&
-				jkl::tmp::is_complete<std::tuple_element<1, Descriptor>>::value> {};
+				jkj::tmp::is_complete<std::tuple_element<0, Descriptor>>::value &&
+				jkj::tmp::is_complete<std::tuple_element<1, Descriptor>>::value> {};
 
 			template <class Descriptor>
 			struct item_alias_type_impl {
@@ -84,8 +84,8 @@ namespace jkl {
 		class static_list<> {
 			template <std::size_t idx>
 			struct element_type_impl {
-				static_assert(jkl::tmp::assert_helper<std::integral_constant<std::size_t, idx>>::value,
-					"jkl::strmnet::static_list: element_type index out of range");
+				static_assert(jkj::tmp::assert_helper<std::integral_constant<std::size_t, idx>>::value,
+					"jkj::strmnet::static_list: element_type index out of range");
 				using type = void;
 			};
 
@@ -122,7 +122,7 @@ namespace jkl {
 
 			template <std::size_t idx>
 			struct element_type_impl {
-				static_assert(idx == 0, "jkl::strmnet::static_list: element_type index out of range");
+				static_assert(idx == 0, "jkj::strmnet::static_list: element_type index out of range");
 				using type = first_item_type;
 			};
 
@@ -142,7 +142,7 @@ namespace jkl {
 			static_list() {}
 
 			/// Unpack and forward arguments packed in a tuple
-			template <class Tuple, class = jkl::tmp::prevent_too_perfect_fwd<static_list, Tuple>>
+			template <class Tuple, class = jkj::tmp::prevent_too_perfect_fwd<static_list, Tuple>>
 			explicit static_list(Tuple&& arg_pack)
 				: static_list(std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{},
 					std::forward<Tuple>(arg_pack)) {}
@@ -225,7 +225,7 @@ namespace jkl {
 				static constexpr bool nonunique_directly = type_to_index_impl<QueryType>::nonunique_directly;
 				static constexpr std::size_t direct_idx = type_to_index_impl<QueryType>::direct_idx;
 
-				static_assert(type_to_index_impl<QueryType>::found, "jkl::strmnet::static_list: cannot find the requested item");
+				static_assert(type_to_index_impl<QueryType>::found, "jkj::strmnet::static_list: cannot find the requested item");
 
 				static constexpr std::size_t value = found_as_alias ? alias_idx : direct_idx;
 			};
@@ -239,7 +239,7 @@ namespace jkl {
 			/// Access an item by index implementation
 			template <std::size_t idx, class = void>
 			struct item_by_idx {
-				static_assert(idx == 0, "jkl::strmnet::static_list: item access index out of range");
+				static_assert(idx == 0, "jkj::strmnet::static_list: item access index out of range");
 			};
 
 			template <class dummy>
@@ -295,7 +295,7 @@ namespace jkl {
 			template <std::size_t idx, class = void>
 			struct element_type_impl {
 				static_assert(idx <= sizeof...(RemainingDescriptors),
-					"jkl::strmnet::static_list: element_type index out of range");
+					"jkj::strmnet::static_list: element_type index out of range");
 				using type = typename static_list<RemainingDescriptors...>::template element_type<idx - 1>;
 			};
 
@@ -325,7 +325,7 @@ namespace jkl {
 
 			/// Unpack and forward arguments packed in tuples
 			template <class FirstTuple, class... OtherTuples,
-				class = jkl::tmp::prevent_too_perfect_fwd<static_list, FirstTuple>,
+				class = jkj::tmp::prevent_too_perfect_fwd<static_list, FirstTuple>,
 				class = std::enable_if_t<!std::is_same<FirstTuple, tuple_unpack_tag>::value>>
 			explicit static_list(FirstTuple&& first_arg_pack, OtherTuples&&... remaining_arg_packs)
 				: static_list(tuple_unpack_tag{},
@@ -414,15 +414,15 @@ namespace jkl {
 				static constexpr std::size_t direct_idx = type_to_index_impl<QueryType>::direct_idx;
 
 				// Error case #1 - non-unique alias
-				static_assert(!nonunique_as_alias, "jkl::strmnet::static_list: "
+				static_assert(!nonunique_as_alias, "jkj::strmnet::static_list: "
 					"there are multiple items having the requested type as their aliases");
 
 				// Error case #2 - not found as alias & non-unique item class
-				static_assert(found_as_alias || !nonunique_directly, "jkl::strmnet::static_list: "
+				static_assert(found_as_alias || !nonunique_directly, "jkj::strmnet::static_list: "
 					"the requested type is not an alias, but there are multiple items of that type");
 
 				// Error case #3 - no such an item
-				static_assert(found_as_alias || found_directly, "jkl::strmnet::static_list: "
+				static_assert(found_as_alias || found_directly, "jkj::strmnet::static_list: "
 					"cannot find the requested item");
 
 				static constexpr std::size_t value = found_as_alias ? alias_idx : direct_idx;
@@ -439,7 +439,7 @@ namespace jkl {
 			/// Access an item by index implementation
 			template <std::size_t idx, class = void>
 			struct item_by_idx {
-				static_assert(idx < number_of_items, "jkl::strmnet::static_list: item access index out of range");
+				static_assert(idx < number_of_items, "jkj::strmnet::static_list: item access index out of range");
 				template <class StaticList>
 				static auto& get(StaticList* t) noexcept {
 					return t->remaining_items_.template get<idx - 1>();
@@ -579,20 +579,20 @@ namespace jkl {
 	}
 }
 
-/// Specialization of std::tuple_size and std::tuple_elment_t for jkl::strmnet::static_list
+/// Specialization of std::tuple_size and std::tuple_elment_t for jkj::strmnet::static_list
 namespace std {
 	template <class... Descriptors>
-	class tuple_size<jkl::strmnet::static_list<Descriptors...>>
+	class tuple_size<jkj::strmnet::static_list<Descriptors...>>
 		: public std::integral_constant<std::size_t, sizeof...(Descriptors)> {};
 
 	template <std::size_t idx, class... Descriptors>
-	struct tuple_element<idx, jkl::strmnet::static_list<Descriptors...>> {
-		using type = typename jkl::strmnet::static_list<Descriptors...>::template element_type<idx>;
+	struct tuple_element<idx, jkj::strmnet::static_list<Descriptors...>> {
+		using type = typename jkj::strmnet::static_list<Descriptors...>::template element_type<idx>;
 	};
 }
 
 /// Tempalte utilities both for implementation & interface
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		namespace detail {
 			template <class Type, class TypeContainer>

@@ -22,7 +22,7 @@
 #include <stdexcept>
 #include "tmp.h"
 
-namespace jkl {
+namespace jkj {
 	namespace memory {
 		namespace detail {
 			// The minimal cell of data

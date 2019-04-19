@@ -26,7 +26,7 @@
 // Ex) copy_qual_t<int const* volatile, float> = float volatile
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		template <class From, class To>
 		struct copy_const {

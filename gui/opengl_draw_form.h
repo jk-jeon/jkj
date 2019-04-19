@@ -35,7 +35,7 @@
 //
 //
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 #ifdef JKL_USE_CUDA
 		struct gpu_input_tag {
@@ -122,7 +122,7 @@ namespace jkl {
 				buffer_wrapper() : refs{ vertices, indices }
 				{
 #ifdef JKL_USE_CUDA
-					jkl::cuda::check_error(cudaGetDevice(&current_gpu_id));
+					jkj::cuda::check_error(cudaGetDevice(&current_gpu_id));
 #endif
 				}
 

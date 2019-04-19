@@ -20,7 +20,7 @@
 #include <nana/basic_types.hpp>
 #include "../../numerical_lie_group/Rn_elmt.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// Blender is an object that calculates color to be set at a given position,
 		// given background and the pre-calculated ratio of intersection of that pixel

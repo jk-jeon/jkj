@@ -19,17 +19,17 @@
 #include "node.h"
 #include "link.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// The whole stream network
-		/// NodeList must be an instance of jkl::strmnet::static_list,
+		/// NodeList must be an instance of jkj::strmnet::static_list,
 		/// but LinkSpecifierList can be any std::tuple-like class, including
-		/// std::tuple, std::pair, std::array, and jkl::strmnet::static_list.
+		/// std::tuple, std::pair, std::array, and jkj::strmnet::static_list.
 		/// Note that while NodeList is instantiated as a member variable,
 		/// LinkSpecifierList is only a type information; it is never instantiated.
 		/// Rather, a concrete type of links are inferred from it and then instantiated.
 		/// The initialization of nodes is guaranteed to be in-order, because NodeList
-		/// must be a jkl::strmnnet::static_list.
+		/// must be a jkj::strmnnet::static_list.
 		/// This is not the case for links. Regardless of the actual type of LinkSpecifierList,
 		/// actual link list will be instantiated as an std::tuple, whose initialization order
 		/// is not guaranteed (the order is usually backward).
@@ -79,7 +79,7 @@ namespace jkl {
 			network() : m_link_list{ make_link_list(m_node_list, std::make_index_sequence<number_of_links>{}) } {}
 
 			/// Constructor with one argument
-			template <class Arg, class = jkl::tmp::prevent_too_perfect_fwd<network, Arg>,
+			template <class Arg, class = jkj::tmp::prevent_too_perfect_fwd<network, Arg>,
 				class = std::enable_if_t<std::is_constructible<NodeList, Arg>::value>>
 			network(Arg&& arg) : m_node_list{ std::forward<Arg>(arg) },
 				m_link_list{ make_link_list(m_node_list, std::make_index_sequence<number_of_links>{}) } {}
@@ -107,36 +107,36 @@ namespace jkl {
 			/// Access node by index
 			template <std::size_t node_idx>
 			auto& node() {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<node_idx>(m_node_list);
 			}
 			template <std::size_t node_idx>
 			auto& node() const {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<node_idx>(m_node_list);
 			}
 			
 			/// Access node by type
 			template <class QueryType>
 			auto& node() {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<QueryType>(m_node_list);
 			}
 			template <class QueryType>
 			auto& node() const {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<QueryType>(m_node_list);
 			}
 
 			/// Access link by index
 			template <std::size_t link_idx>
 			auto& link() {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<link_idx>(m_link_list);
 			}
 			template <std::size_t link_idx>
 			auto& link() const {
-				using jkl::strmnet::get;
+				using jkj::strmnet::get;
 				return get<link_idx>(m_link_list);
 			}
 
@@ -362,8 +362,8 @@ namespace jkl {
 				static constexpr bool not_unique = impl<0>::not_unique;
 				static constexpr std::size_t value = impl<0>::value;
 
-				static_assert(found, "jkl::strmnet::network: there is no link connecting the specified nodes");
-				static_assert(!not_unique, "jkl::strmnet::network: there are multiple links connecting the specified nodes");
+				static_assert(found, "jkj::strmnet::network: there is no link connecting the specified nodes");
+				static_assert(!not_unique, "jkj::strmnet::network: there are multiple links connecting the specified nodes");
 			};
 
 			/// in_links/out_links implementation

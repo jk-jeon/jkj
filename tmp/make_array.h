@@ -20,7 +20,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace jkl {
+namespace jkj {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// std::make_array of C++20 (brought from http://en.cppreference.com/w/cpp/experimental/make_array)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ namespace jkl {
 			std::common_type<FirstType, RemainingTypes...> {
 			static constexpr bool check = !is_ref_wrapper<FirstType>::value &&
 				return_type_helper<void, RemainingTypes...>::check;
-			static_assert(check, "jkl::tmp: Types cannot contain reference_wrappers when D is void");
+			static_assert(check, "jkj::tmp: Types cannot contain reference_wrappers when D is void");
 		};
 		template <>
 		struct return_type_helper<void> {

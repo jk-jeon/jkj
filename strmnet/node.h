@@ -27,7 +27,7 @@
 #include "../tmp/unpack_and_apply.h"
 #include "../utilities.h"
 
-namespace jkl {
+namespace jkj {
 	namespace strmnet {
 		/// Proceed to the process phase as often as possible
 		template <class Node>
@@ -332,7 +332,7 @@ namespace jkl {
 				template <class dummy>
 				struct impl<false, false, dummy> {
 					static auto get(Node* p, Args&&... args) {
-						return jkl::util::make_auto_locked_data(std::unique_lock<std::mutex>{ p->output_mutex() },
+						return jkj::util::make_auto_locked_data(std::unique_lock<std::mutex>{ p->output_mutex() },
 							p->call_output(std::forward<Args>(args)...));
 					}
 				};
@@ -395,8 +395,8 @@ namespace jkl {
 			/// Default: generates a compile error
 			template <class dummy = void>
 			void input(...) {
-				static_assert(jkl::tmp::assert_helper<dummy>::value,
-					"jkl::strmnet::node: input() is not implemented");
+				static_assert(jkj::tmp::assert_helper<dummy>::value,
+					"jkj::strmnet::node: input() is not implemented");
 			}
 			
 			/// Process data
@@ -412,13 +412,13 @@ namespace jkl {
 			/// This function is supposed to be very simple; e.g., returns a tuple of references.
 			template <class dummy = void>
 			void output(...) const noexcept {
-				static_assert(jkl::tmp::assert_helper<dummy>::value,
-					"jkl::strmnet::node: output() is not implemented");
+				static_assert(jkj::tmp::assert_helper<dummy>::value,
+					"jkj::strmnet::node: output() is not implemented");
 			}
 			template <class dummy = void>
 			void output(...) noexcept {
-				static_assert(jkl::tmp::assert_helper<dummy>::value,
-					"jkl::strmnet::node: output() is not implemented");
+				static_assert(jkj::tmp::assert_helper<dummy>::value,
+					"jkj::strmnet::node: output() is not implemented");
 			}
 
 			/// Initialize/Cleanup routines
@@ -520,11 +520,11 @@ namespace jkl {
 			template <class... Args>
 			auto feed(Args&&... args) {
 				using result_type = decltype(static_cast<Impl*>(this)->input(std::forward<Args>(args)...));
-				jkl::tmp::result_holder<result_type> result;
+				jkj::tmp::result_holder<result_type> result;
 				{
 					std::lock_guard<std::mutex> process_lg{ m_process_mutex };
 					std::lock_guard<std::mutex> input_lg{ m_input_mutex };
-					result = jkl::tmp::hold_result([this](auto&&... args) {
+					result = jkj::tmp::hold_result([this](auto&&... args) {
 						return static_cast<Impl*>(this)->input(std::forward<decltype(args)>(args)...);
 					}, std::forward<Args>(args)...);
 
@@ -572,9 +572,9 @@ namespace jkl {
 			}
 
 			// Get the output with a proper synchronization
-			// If output() returns void, the return value is jkl::auto_locked_tuple with an empty tuple; otherwise,
-			// If output() returns a tuple, the return value is jkl::auto_locked_tuple; otherwise,
-			// The return value is jkl::auto_locked_data.
+			// If output() returns void, the return value is jkj::auto_locked_tuple with an empty tuple; otherwise,
+			// If output() returns a tuple, the return value is jkj::auto_locked_tuple; otherwise,
+			// The return value is jkj::auto_locked_data.
 			// Hence, the output locking is automatically released when the lifetime of the return value ends.
 			template <class... Args>
 			auto get(Args&&... args) const {
@@ -612,7 +612,7 @@ namespace jkl {
 					input_forwarder_impl(InitArgs&&... args) : args_tuple{ std::forward_as_tuple(std::forward<InitArgs>(args)...) } {}
 
 					void consume_input(node& n) override {
-						jkl::tmp::unpack_and_apply([&](auto&&... args) {
+						jkj::tmp::unpack_and_apply([&](auto&&... args) {
 							static_cast<Impl&>(n).input(std::forward<decltype(args)>(args)...);
 						}, std::move(args_tuple));
 					}
@@ -674,8 +674,8 @@ namespace jkl {
 				m_worker_thread = std::async(std::launch::async,
 					&node::worker_proc<InLinks, OutLinks>,
 					this, std::ref(success_flag), std::ref(mtx), std::ref(cv),
-					jkl::tmp::ref_if_lvalue(std::forward<InLinks>(in_links)),
-					jkl::tmp::ref_if_lvalue(std::forward<OutLinks>(out_links)));
+					jkj::tmp::ref_if_lvalue(std::forward<InLinks>(in_links)),
+					jkj::tmp::ref_if_lvalue(std::forward<OutLinks>(out_links)));
 
 				// Wait for before_work() function to return
 				cv.wait(lg, [&success_flag] { return success_flag != launch_status::not_finished; });
@@ -754,17 +754,17 @@ namespace jkl {
 								// See if a new data is available.
 								while( !m_terminate.load(std::memory_order_relaxed) ) {
 									// Read data from incoming nodes
-									jkl::tmp::static_for_each(in_links, [this](auto& link) {
+									jkj::tmp::static_for_each(in_links, [this](auto& link) {
 										// If there is a new data, read the data
 										if( link.has_new_data() ) {
 											// Lock output mutex of the incoming link
 											std::lock_guard<std::mutex> lg{ link.output_mutex() };
 											// First, apply input_params() to output() of the link, and then
 											// apply the result to input().
-											jkl::tmp::chain_call([this](auto&&... outputs) {
+											jkj::tmp::chain_call([this](auto&&... outputs) {
 												return static_cast<Impl*>(this)->input(std::forward<decltype(outputs)>(outputs)...);
 											}, [this, &link]() {
-												return jkl::tmp::chain_call([&link](auto&&... input_args) {
+												return jkj::tmp::chain_call([&link](auto&&... input_args) {
 													return link.output(std::forward<decltype(input_args)>(input_args)...);
 												}, [this, &link]() { return static_cast<Impl*>(this)->input_params(link); });
 											});
@@ -829,7 +829,7 @@ namespace jkl {
 
 
 						/// Broadcast phase
-						jkl::tmp::static_for_each(out_links, [this](auto& link) {
+						jkj::tmp::static_for_each(out_links, [this](auto& link) {
 							// Notify to each outcoming link there is a new data
 							link.notify();
 						});
@@ -877,8 +877,8 @@ namespace jkl {
 			/// Default: generates a compile error
 			template <class... Args>
 			void input(Args&&...) {
-				static_assert(jkl::tmp::assert_helper<Args...>::value,
-					"jkl::strmnet::node: input() is not implemented");
+				static_assert(jkj::tmp::assert_helper<Args...>::value,
+					"jkj::strmnet::node: input() is not implemented");
 			}
 
 			/// Process data
@@ -894,8 +894,8 @@ namespace jkl {
 			/// This function is supposed to be very simple; e.g., returns a tuple of references.
 			template <class... Args>
 			void output(Args&&...) const noexcept {
-				static_assert(jkl::tmp::assert_helper<Args...>::value,
-					"jkl::strmnet::node: output() is not implemented");
+				static_assert(jkj::tmp::assert_helper<Args...>::value,
+					"jkj::strmnet::node: output() is not implemented");
 			}
 
 			/// Initialize/Cleanup routines
@@ -942,7 +942,7 @@ namespace jkl {
 			template <class... Args>
 			auto feed(Args&&... args) {
 				// Input
-				auto input_result = jkl::tmp::hold_result([this](auto&&... args) {
+				auto input_result = jkj::tmp::hold_result([this](auto&&... args) {
 					return static_cast<Impl*>(this)->input(std::forward<decltype(args)>(args)...);
 				}, std::forward<Args>(args)...);
 
@@ -966,9 +966,9 @@ namespace jkl {
 			// There is no feed_async(), notify(), and notify_after()
 
 			// Get the output with a proper synchronization
-			// If output() returns void, the return value is jkl::auto_locked_tuple with an empty tuple; otherwise,
-			// If output() returns a tuple, the return value is jkl::auto_locked_tuple; otherwise,
-			// The return value is jkl::auto_locked_data.
+			// If output() returns void, the return value is jkj::auto_locked_tuple with an empty tuple; otherwise,
+			// If output() returns a tuple, the return value is jkj::auto_locked_tuple; otherwise,
+			// The return value is jkj::auto_locked_data.
 			// Hence, the output locking is automatically released when the lifetime of the return value ends.
 			template <class... Args>
 			auto get(Args&&... args) const {
@@ -1010,7 +1010,7 @@ namespace jkl {
 			struct output_notifier_functor {
 				OutLinks out_links;
 				void operator()() {
-					jkl::tmp::static_for_each(out_links, [](auto& link) {
+					jkj::tmp::static_for_each(out_links, [](auto& link) {
 						// Notify to each outcoming link there is a new data
 						link.notify();
 					});

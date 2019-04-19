@@ -24,7 +24,7 @@
 #include <type_traits>
 #include "portability.h"
 
-namespace jkl {
+namespace jkj {
 	// rvalue_ptr is a pointer that is dereferenced to an rvalue reference
 	// There is no special treatment for array types
 	// T should not be a reference
@@ -196,7 +196,7 @@ namespace jkl {
 }
 
 template <class T>
-struct std::iterator_traits<jkl::rvalue_ptr<T>> {
+struct std::iterator_traits<jkj::rvalue_ptr<T>> {
 	using difference_type = std::ptrdiff_t;
 	using value_type = std::remove_cv_t<T>;
 	using pointer = T*;

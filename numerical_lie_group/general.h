@@ -28,7 +28,7 @@
 #include "../tmp/is_convertible.h"
 #include "storage_traits.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		//// Get the additive identity of the given type
 		namespace detail {
@@ -90,7 +90,7 @@ namespace jkl {
 
 		//// Get the multiplicative inverse
 		// The name "general_inverse" is somewhat ugly, but I think the name "inv" can be potentially dangerous,
-		// since there can be other functions with the same name in jkl::math.
+		// since there can be other functions with the same name in jkj::math.
 		// Universal reference is too greedy to define the default fallback behavior.
 		namespace detail {
 			template <class T, class = void>
@@ -212,7 +212,7 @@ namespace jkl {
 					!std::is_integral<U>::value &&
 					!std::is_floating_point<U>::value>>
 				JKL_GPU_EXECUTABLE static constexpr auto check(U&&) {
-					using ::jkl::math::is_invertible;
+					using ::jkj::math::is_invertible;
 					return wrapper<decltype(is_invertible(std::declval<U>())),
 						noexcept(is_invertible(std::declval<U>()))>{};
 				}
@@ -285,11 +285,11 @@ namespace jkl {
 		}
 		template <class Float>
 		JKL_GPU_EXECUTABLE constexpr bool close_to_zero(Float const& x) noexcept {
-			return close_to(x, jkl::math::zero<Float>());
+			return close_to(x, jkj::math::zero<Float>());
 		}
 		template <class Float>
 		JKL_GPU_EXECUTABLE constexpr bool close_to_one(Float const& x) noexcept {
-			return close_to(x, jkl::math::unity<Float>());
+			return close_to(x, jkj::math::unity<Float>());
 		}
 		template <class Float1, class Float2>
 		JKL_GPU_EXECUTABLE constexpr bool slightly_larger(Float1 const& x, Float2 const& y) noexcept {
@@ -2171,22 +2171,22 @@ namespace std {
 	template <std::size_t N,
 		class LeftComponentType, class LeftStorage, class LeftStorageTraits,
 		class RightComponentType, class RightStorage, class RightStorageTraits>
-	struct common_type<jkl::math::Rn_elmt<N, LeftComponentType, LeftStorage, LeftStorageTraits>,
-		jkl::math::Rn_elmt<N, RightComponentType, RightStorage, RightStorageTraits>> :
-		jkl::math::detail::Rn_elmt_common_type_base<N,
+	struct common_type<jkj::math::Rn_elmt<N, LeftComponentType, LeftStorage, LeftStorageTraits>,
+		jkj::math::Rn_elmt<N, RightComponentType, RightStorage, RightStorageTraits>> :
+		jkj::math::detail::Rn_elmt_common_type_base<N,
 		LeftComponentType, LeftStorage, LeftStorageTraits,
 		RightComponentType, RightStorage, RightStorageTraits> {};
 
 	template <class LeftComponentType, class LeftStorage, class LeftStorageTraits,
 		class RightComponentType, class RightStorage, class RightStorageTraits>
-	struct common_type<jkl::math::gl2_elmt<LeftComponentType, LeftStorage, LeftStorageTraits>,
-		jkl::math::gl2_elmt<RightComponentType, RightStorage, RightStorageTraits>> :
-		jkl::math::detail::gl2_elmt_common_type_base<
+	struct common_type<jkj::math::gl2_elmt<LeftComponentType, LeftStorage, LeftStorageTraits>,
+		jkj::math::gl2_elmt<RightComponentType, RightStorage, RightStorageTraits>> :
+		jkj::math::detail::gl2_elmt_common_type_base<
 		LeftComponentType, LeftStorage, LeftStorageTraits,
 		RightComponentType, RightStorage, RightStorageTraits> {};
 }
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		//// Since CUDA doesn't support std::tuple, we need an alternative for std::tuple.
 		//// This will be used only internally, and is not meant to be exposed to users.
@@ -2371,22 +2371,22 @@ namespace jkl {
 				template <std::size_t I>
 				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr
 					std::tuple_element_t<I, tuple<Rows&&...>>& get(tuple<Rows&&...>& s) noexcept {
-					return ::jkl::math::detail::get<I>(s);
+					return ::jkj::math::detail::get<I>(s);
 				}
 				template <std::size_t I>
 				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr
 					std::tuple_element_t<I, tuple<Rows&&...>>& get(tuple<Rows&&...> const& s) noexcept {
-					return ::jkl::math::detail::get<I>(s);
+					return ::jkj::math::detail::get<I>(s);
 				}
 				template <std::size_t I>
 				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr
 					std::tuple_element_t<I, tuple<Rows&&...>> get(tuple<Rows&&...>&& s) noexcept {
-					return ::jkl::math::detail::get<I>(std::move(s));
+					return ::jkj::math::detail::get<I>(std::move(s));
 				}
 				template <std::size_t I>
 				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr
 					std::tuple_element_t<I, tuple<Rows&&...>> get(tuple<Rows&&...> const&& s) noexcept {
-					return ::jkl::math::detail::get<I>(std::move(s));
+					return ::jkj::math::detail::get<I>(std::move(s));
 				}
 
 				// For other types, use StorageTraits
@@ -2430,14 +2430,14 @@ namespace jkl {
 
 namespace std {
 	template <class... T>
-	struct tuple_size<jkl::math::detail::tuple<T...>> {
+	struct tuple_size<jkj::math::detail::tuple<T...>> {
 		static constexpr std::size_t value = sizeof...(T);
 	};
 
 	template <std::size_t I, class... T>
-	struct tuple_element<I, jkl::math::detail::tuple<T...>> {
-		static_assert(I < tuple_size<jkl::math::detail::tuple<T...>>::value,
-			"jkl::math: index out of range");
-		using type = typename jkl::math::detail::tuple_element_impl<I, T...>::type;
+	struct tuple_element<I, jkj::math::detail::tuple<T...>> {
+		static_assert(I < tuple_size<jkj::math::detail::tuple<T...>>::value,
+			"jkj::math: index out of range");
+		using type = typename jkj::math::detail::tuple_element_impl<I, T...>::type;
 	};
 }

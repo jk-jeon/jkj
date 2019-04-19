@@ -21,7 +21,7 @@
 #include <type_traits>
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Boost::Hana-style compile-time integer

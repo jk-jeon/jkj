@@ -21,7 +21,7 @@
 #include "semaphore.h"
 #include "bitfield.h"
 
-namespace jkl {
+namespace jkj {
 	// A modification of https://github.com/preshing/cpp11-on-multicore/blob/master/common/rwlock.h
 	// This RW-lock has following properties:
 	//   1. There is no locking at all if there is no contention, especially, when either
@@ -43,9 +43,9 @@ namespace jkl {
 	//           while it already has a shared ownership. Use unlock_shared_and_lock() instead.
 	//       (3) A thread attempts to acquire an exclusive ownership while it already has one.
 	// Things modified from the original source code:
-	//   1. Platform-specific semaphores were replaced with jkl::semaphore.
-	//      Note that jkl::semaphore might be slower than platform-specific semaphores.
-	//   2. Bitfields were replaced with jkl::bitfield, and
+	//   1. Platform-specific semaphores were replaced with jkj::semaphore.
+	//      Note that jkj::semaphore might be slower than platform-specific semaphores.
+	//   2. Bitfields were replaced with jkj::bitfield, and
 	//      the default reader_bits was increased from 10 to 11.
 	//   3. Some more assert's were added.
 	//   4. Member function names were changed to make them usable along with
@@ -75,7 +75,7 @@ namespace jkl {
 		semaphore					writer_semaphore;
 
 		static constexpr std::size_t total_bits = sizeof(CounterType) * 8;
-		static_assert(reader_bits * 2 < total_bits, "jkl::basic_shared_mutex: you have allocated "
+		static_assert(reader_bits * 2 < total_bits, "jkj::basic_shared_mutex: you have allocated "
 			"too many bits for reader-counters");
 		static constexpr std::size_t writer_bits = total_bits - 2 * reader_bits;
 
@@ -83,15 +83,15 @@ namespace jkl {
 		using bitfield_ref = bitfield_view<CounterType, reader_bits, reader_bits, writer_bits>;
 
 		static constexpr decltype(auto) readers(CounterType& x) noexcept {
-			using jkl::get;
+			using jkj::get;
 			return get<0>(bitfield_ref{ x });
 		}
 		static constexpr decltype(auto) waiting_readers(CounterType& x) noexcept {
-			using jkl::get;
+			using jkj::get;
 			return get<1>(bitfield_ref{ x });
 		}
 		static constexpr decltype(auto) writers(CounterType& x) noexcept {
-			using jkl::get;
+			using jkj::get;
 			return get<2>(bitfield_ref{ x });
 		}
 

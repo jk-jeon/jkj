@@ -42,7 +42,7 @@
 #include "tmp/unpack_and_apply.h"
 #include "shared_mutex.h"
 
-namespace jkl {
+namespace jkj {
 	/// A thread-safe data cache
 	/// Data cannot be a reference type
 
@@ -60,7 +60,7 @@ namespace jkl {
 	class cache {
 	#ifdef USE_JKL_OPTIONAL
 		template <typename Data>
-		using optional = jkl::optional<Data>;
+		using optional = jkj::optional<Data>;
 	#else
 		template <typename Data>
 		using optional = std::optional<Data>;
@@ -148,13 +148,13 @@ namespace jkl {
 		cache() : m_available{ false } {}
 
 		// Perfect forwarding constructor for single argument (implicit)
-		template <typename Arg, typename = ::jkl::tmp::prevent_too_perfect_fwd<cache, Arg>,
+		template <typename Arg, typename = ::jkj::tmp::prevent_too_perfect_fwd<cache, Arg>,
 			typename = std::enable_if_t<std::is_constructible<optional<Data>, Arg>::value &&
 			std::is_convertible<Arg, optional<Data>>::value>>
 		cache(Arg&& arg) : m_available{ true }, m_cache(std::forward<Arg>(arg)) {}
 
 		// Perfect forwarding constructor for single argument (explicit)
-		template <typename Arg, typename = ::jkl::tmp::prevent_too_perfect_fwd<cache, Arg>,
+		template <typename Arg, typename = ::jkj::tmp::prevent_too_perfect_fwd<cache, Arg>,
 			typename = std::enable_if_t<std::is_constructible<optional<Data>, Arg>::value &&
 			!std::is_convertible<Arg, optional<Data>>::value>, class = void>
 		explicit cache(Arg&& arg) : m_available{ true }, m_cache(std::forward<Arg>(arg)) {}
@@ -163,7 +163,7 @@ namespace jkl {
 		template <typename FirstArg, typename SecondArg, typename... RemainingArgs,
 			typename = std::enable_if_t<
 			std::is_constructible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value &&
-			jkl::tmp::is_convertible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value>>
+			jkj::tmp::is_convertible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value>>
 		cache(FirstArg&& first_arg, SecondArg&& second_arg, RemainingArgs&&... remaining_args)
 			: m_available{ true }, m_cache(std::forward<FirstArg>(first_arg),
 			std::forward<SecondArg>(second_arg), std::forward<RemainingArgs>(remaining_args)...) {}
@@ -172,7 +172,7 @@ namespace jkl {
 		template <typename FirstArg, typename SecondArg, typename... RemainingArgs,
 			typename = void, typename = std::enable_if_t<
 			std::is_constructible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value &&
-			!jkl::tmp::is_convertible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value>>
+			!jkj::tmp::is_convertible<optional<Data>, FirstArg, SecondArg, RemainingArgs...>::value>>
 		explicit cache(FirstArg&& first_arg, SecondArg&& second_arg, RemainingArgs&&... remaining_args)
 			: m_available{ true }, m_cache(std::forward<FirstArg>(first_arg),
 			std::forward<SecondArg>(second_arg), std::forward<RemainingArgs>(remaining_args)...) {}
@@ -270,7 +270,7 @@ namespace jkl {
 		void update(update_cache_as_arg_t<InitArgs...> init_args_pack, Updator&& updator, Args&&... args) {
 			std::lock_guard<shared_mutex> lg{ m_mutex };
 			if( !m_cache ) {
-				jkl::tmp::unpack_and_apply([this](auto&&... init_args) {
+				jkj::tmp::unpack_and_apply([this](auto&&... init_args) {
 					new(&m_cache) optional<Data>(std::forward<decltype(init_args)>(init_args)...);
 				}, static_cast<std::tuple<InitArgs...>&&>(init_args_pack));
 			}
@@ -307,7 +307,7 @@ namespace jkl {
 		{
 			std::unique_lock<shared_mutex> lg{ m_mutex };
 			if( !m_cache ) {
-				jkl::tmp::unpack_and_apply([this](auto&&... init_args) {
+				jkj::tmp::unpack_and_apply([this](auto&&... init_args) {
 					new(&m_cache) optional<Data>(std::forward<decltype(init_args)>(init_args)...);
 				}, static_cast<std::tuple<InitArgs...>&&>(init_args_pack));
 			}
@@ -349,7 +349,7 @@ namespace jkl {
 			return update_if_impl(update_if_return_ptr{}, [](auto&&) { return false; },
 				[this, &updator, &init_args_pack](Args&&... args) {
 				if( !m_cache ) {
-					jkl::tmp::unpack_and_apply([this, &init_args_pack](auto&&... init_args) {
+					jkj::tmp::unpack_and_apply([this, &init_args_pack](auto&&... init_args) {
 						new(&m_cache) optional<Data>(std::forward<decltype(init_args)>(init_args)...);
 					}, static_cast<std::tuple<InitArgs...>&&>(init_args_pack));
 				}
@@ -380,7 +380,7 @@ namespace jkl {
 			return update_if_impl(update_if_return_ptr{}, std::forward<Predicate>(pred),
 				[this, &updator, &init_args_pack](Args&&... args) {
 				if( !m_cache ) {
-					jkl::tmp::unpack_and_apply([this, &init_args_pack](auto&&... init_args) {
+					jkj::tmp::unpack_and_apply([this, &init_args_pack](auto&&... init_args) {
 						new(&m_cache) optional<Data>(std::forward<decltype(init_args)>(init_args)...);
 					}, static_cast<std::tuple<InitArgs...>&&>(init_args_pack));
 				}

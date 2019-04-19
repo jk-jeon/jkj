@@ -19,7 +19,7 @@
 #include "gl2_elmt.h"
 #include "gl3_elmt.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		// Compute sqrt(A^T A) for 2x2 matrix A
 		template <class ComponentType,

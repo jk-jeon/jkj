@@ -18,7 +18,7 @@
 #pragma once
 #include "typelist.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// A proxy class inheriting from a list of base classes;

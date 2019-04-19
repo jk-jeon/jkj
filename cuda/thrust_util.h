@@ -23,7 +23,7 @@
 #include <thrust/detail/allocator/allocator_traits.h>
 #include <thrust/detail/contiguous_storage.h>
 
-namespace jkl {
+namespace jkj {
 	namespace cuda {
 		// cached_allocator: a simple allocator for caching allocation requests
 		// This is a modification of the code brought from:
@@ -217,10 +217,10 @@ namespace thrust {
 	namespace detail {
 		template<typename T, typename Pointer, typename Size>
 		__host__ __device__ void destroy_range(
-			jkl::cuda::uninitialized_allocator<T> &a, Pointer p, Size n) {}
+			jkj::cuda::uninitialized_allocator<T> &a, Pointer p, Size n) {}
 
 		template<typename T, typename Pointer, typename Size>
 		__host__ __device__ void default_construct_range(
-			jkl::cuda::uninitialized_allocator<T> &a, Pointer p, Size n) {}
+			jkj::cuda::uninitialized_allocator<T> &a, Pointer p, Size n) {}
 	}
 }

@@ -23,7 +23,7 @@
 #include "../tmp/assert_helper.h"
 #include "../tmp/is_tuple.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		struct default_storage_traits {
 		//private:
@@ -35,13 +35,13 @@ namespace jkl {
 			//    (even if that member object is of callable type.).
 			// 3. Otherwise, if there is no member ftn/obj called x, y, z, or w,
 			//   - if the storage type is tuple-like, call an appropriate
-			//     tuple access function (jkl::tmp::get);
+			//     tuple access function (jkj::tmp::get);
 			//   - otherwise, try to call operator[] instead; if there is no operator[] neither,
 			//     generate a compile error.
 
 			template <class Storage>
 			struct is_tuple_like : std::integral_constant<bool,
-				jkl::tmp::is_tuple<tmp::remove_cvref_t<Storage>>::value> {};
+				jkj::tmp::is_tuple<tmp::remove_cvref_t<Storage>>::value> {};
 
 			template <class Storage, class Index = std::size_t, class = void>
 			struct has_array_operator : std::false_type {};
@@ -179,9 +179,9 @@ namespace jkl {
 			template <class Storage, std::size_t I>
 			struct call_appropriate<Storage, I, method_category::tuple_like> {
 				FORCEINLINE JKL_GPU_EXECUTABLE static constexpr decltype(auto) get(Storage&& s)
-					noexcept(noexcept(jkl::tmp::get<I>(std::forward<Storage>(s))))
+					noexcept(noexcept(jkj::tmp::get<I>(std::forward<Storage>(s))))
 				{
-					return jkl::tmp::get<I>(std::forward<Storage>(s));
+					return jkj::tmp::get<I>(std::forward<Storage>(s));
 				}
 
 				// This type should be "needed" only when Storage is not a reference type,
@@ -518,8 +518,8 @@ namespace jkl {
 
 				template <std::size_t I, class Storage, storage_access_method mc = choose_appropriate<I, Storage>()>
 				struct call_appropriate {
-					static_assert(jkl::tmp::assert_helper<Storage>::value,
-						"jkl::math: can't find any way to access to the storage");
+					static_assert(jkj::tmp::assert_helper<Storage>::value,
+						"jkj::math: can't find any way to access to the storage");
 				};
 
 				template <std::size_t I, class Storage>

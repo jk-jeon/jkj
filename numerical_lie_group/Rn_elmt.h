@@ -21,7 +21,7 @@
 #include "../tmp/is_braces_constructible.h"
 #include "general.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		namespace detail {
 			template <std::size_t N, class ComponentType, class Storage, class StorageTraits>
@@ -98,7 +98,7 @@ namespace jkl {
 			// Rn_elmt requires array operator access
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_index<storage_type const&, std::size_t>::value,
-				"jkl::math: Rn_elmt requires array-like access to the storage; "
+				"jkj::math: Rn_elmt requires array-like access to the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// Tuple-style accessors
@@ -159,7 +159,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::array_operator(std::declval<Storage const&>(), 0)),
-				ComponentType const&>::value, "jkl::math: Rn_elmt requires array-like access to the storage; "
+				ComponentType const&>::value, "jkj::math: Rn_elmt requires array-like access to the storage; "
 				"the array-like access deduced from the given storage traits cannot be converted to the component type");
 
 			// Default constructor; components might be filled with garbages
@@ -243,10 +243,10 @@ namespace jkl {
 
 
 			JKL_GPU_EXECUTABLE GENERALIZED_CONSTEXPR ComponentType normsq() const
-				noexcept(noexcept(jkl::math::zero<ComponentType>()) &&
+				noexcept(noexcept(jkj::math::zero<ComponentType>()) &&
 					noexcept(std::declval<ComponentType&>() += (*this)[0] * (*this)[0]))
 			{
-				auto sum = jkl::math::zero<ComponentType>();
+				auto sum = jkj::math::zero<ComponentType>();
 				for( std::size_t i = 0; i < N; ++i )
 					sum += (*this)[i] * (*this)[i];
 				return sum;
@@ -374,11 +374,11 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static GENERALIZED_CONSTEXPR Rn_elmt zero()
-				noexcept(noexcept(std::declval<Rn_elmt&>()[0] = jkl::math::zero<ComponentType>()))
+				noexcept(noexcept(std::declval<Rn_elmt&>()[0] = jkj::math::zero<ComponentType>()))
 			{
 				Rn_elmt ret;
 				for( std::size_t i = 0; i < N; ++i )
-					ret[i] = jkl::math::zero<ComponentType>();
+					ret[i] = jkj::math::zero<ComponentType>();
 				return ret;
 			}
 		};
@@ -427,11 +427,11 @@ namespace jkl {
 			// R2_elmt requires x & y component access
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<0, Storage const&>::value,
-				"jkl::math: R2_elmt requires access to the x-component from the storage; "
+				"jkj::math: R2_elmt requires access to the x-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<1, Storage const&>::value,
-				"jkl::math: R2_elmt requires access to the y-component from the storage; "
+				"jkj::math: R2_elmt requires access to the y-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
@@ -462,7 +462,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R2_elmt requires access to the x-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R2_elmt requires access to the x-component from the storage; "
 				"the x-component deduced from the given storage traits cannot be converted to the given component type");
 
 			// y-component accessors
@@ -493,7 +493,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R2_elmt requires access to the y-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R2_elmt requires access to the y-component from the storage; "
 				"the y-component deduced from the given storage traits cannot be converted to the given component type");
 
 			// Tuple-style accessors
@@ -751,10 +751,10 @@ namespace jkl {
 
 			JKL_GPU_EXECUTABLE static constexpr Rn_elmt zero()
 				noexcept(std::is_nothrow_constructible<Rn_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>())>::value)
 			{
-				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() };
+				return{ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>() };
 			}
 		};
 
@@ -803,15 +803,15 @@ namespace jkl {
 			// R3_elmt requires x & y & z component access
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<0, Storage const&>::value,
-				"jkl::math: R3_elmt requires access to the x-component from the storage; "
+				"jkj::math: R3_elmt requires access to the x-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<1, Storage const&>::value,
-				"jkl::math: R3_elmt requires access to the y-component from the storage; "
+				"jkj::math: R3_elmt requires access to the y-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<2, Storage const&>::value,
-				"jkl::math: R3_elmt requires access to the z-component from the storage; "
+				"jkj::math: R3_elmt requires access to the z-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
@@ -842,7 +842,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R3_elmt requires access to the x-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R3_elmt requires access to the x-component from the storage; "
 				"the x-component deduced from the given storage traits cannot be converted to the component type");
 
 			// y-component accessors
@@ -873,7 +873,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R3_elmt requires access to the y-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R3_elmt requires access to the y-component from the storage; "
 				"the y-component deduced from the given storage traits cannot be converted to the component type");
 
 			// z-component accessors
@@ -904,7 +904,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R3_elmt requires access to the z-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R3_elmt requires access to the z-component from the storage; "
 				"the z-component deduced from the given storage traits cannot be converted to the component type");
 
 			// Tuple-style accessors
@@ -1183,11 +1183,11 @@ namespace jkl {
 
 			JKL_GPU_EXECUTABLE static constexpr Rn_elmt zero()
 				noexcept(std::is_nothrow_constructible<Rn_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>())>::value)
 			{
-				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() };
+				return{ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>() };
 			}
 		};
 
@@ -1236,19 +1236,19 @@ namespace jkl {
 			// R4_elmt requires x & y & z & w component access
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<0, Storage const&>::value,
-				"jkl::math: R4_elmt requires access to the x-component from the storage; "
+				"jkj::math: R4_elmt requires access to the x-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<1, Storage const&>::value,
-				"jkl::math: R4_elmt requires access to the y-component from the storage; "
+				"jkj::math: R4_elmt requires access to the y-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<2, Storage const&>::value,
-				"jkl::math: R4_elmt requires access to the z-component from the storage; "
+				"jkj::math: R4_elmt requires access to the z-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<3, Storage const&>::value,
-				"jkl::math: R4_elmt requires access to the w-component from the storage; "
+				"jkj::math: R4_elmt requires access to the w-component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// x-component accessors
@@ -1279,7 +1279,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R4_elmt requires access to the x-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R4_elmt requires access to the x-component from the storage; "
 				"the x-component deduced from the given storage traits cannot be converted to the component type");
 
 			// y-component accessors
@@ -1310,7 +1310,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R4_elmt requires access to the y-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R4_elmt requires access to the y-component from the storage; "
 				"the y-component deduced from the given storage traits cannot be converted to the component type");
 
 			// z-component accessors
@@ -1341,7 +1341,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R4_elmt requires access to the z-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R4_elmt requires access to the z-component from the storage; "
 				"the z-component deduced from the given storage traits cannot be converted to the component type");
 
 			// w-component accessors
@@ -1372,7 +1372,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: R4_elmt requires access to the w-component from the storage; "
+				ComponentType const&>::value, "jkj::math: R4_elmt requires access to the w-component from the storage; "
 				"the w-component deduced from the given storage traits cannot be converted to the component type");
 
 			// Tuple-style accessors
@@ -1670,13 +1670,13 @@ namespace jkl {
 
 			JKL_GPU_EXECUTABLE static constexpr Rn_elmt zero()
 				noexcept(std::is_nothrow_constructible<Rn_elmt,
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>()),
-					decltype(jkl::math::zero<ComponentType>())>::value)
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>()),
+					decltype(jkj::math::zero<ComponentType>())>::value)
 			{
-				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() };
+				return{ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>() };
 			}
 		};
 
@@ -1766,16 +1766,16 @@ namespace jkl {
 
 namespace std {
 	template <std::size_t I, std::size_t N, class ComponentType, class Storage, class StorageTraits>
-	struct tuple_element<I, jkl::math::Rn_elmt<N, ComponentType, Storage, StorageTraits>> {
+	struct tuple_element<I, jkj::math::Rn_elmt<N, ComponentType, Storage, StorageTraits>> {
 		using type = typename StorageTraits::template tuple_element<I, Storage>::type;
 	};
 
 	template <std::size_t N, class ComponentType, class Storage, class StorageTraits>
-	struct tuple_size<jkl::math::Rn_elmt<N, ComponentType, Storage, StorageTraits>> :
+	struct tuple_size<jkj::math::Rn_elmt<N, ComponentType, Storage, StorageTraits>> :
 		std::integral_constant<std::size_t, N> {};
 }
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		//// Binary operations between Rn_elmt's, or between an Rn_elmt and a scalar
 
@@ -2145,10 +2145,10 @@ namespace jkl {
 			
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot add two Rn_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot add two Rn_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot add two Rn_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot add two Rn_elmt's; failed to deduce the resulting storage type");
 
 			return detail::binary_op_impl<result_type>{}(detail::sum_kernel{},
 				std::forward<LeftOperand>(v), std::forward<RightOperand>(w));
@@ -2166,10 +2166,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot subtract two Rn_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot subtract two Rn_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot subtract two Rn_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot subtract two Rn_elmt's; failed to deduce the resulting storage type");
 
 			return detail::binary_op_impl<result_type>{}(detail::diff_kernel{},
 				std::forward<LeftOperand>(v), std::forward<RightOperand>(w));
@@ -2187,7 +2187,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply Rn_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply Rn_elmt with a scalar; failed to deduce the resulting storage type");
 
 			return detail::binary_op_impl<result_type>{}(detail::mult_kernel{},
 				std::forward<Vector>(v), detail::wrap_scalar(k));
@@ -2205,7 +2205,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply Rn_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply Rn_elmt with a scalar; failed to deduce the resulting storage type");
 
 			return detail::binary_op_impl<result_type>{}(detail::mult_kernel{},
 				detail::wrap_scalar(k), std::forward<Vector>(v));
@@ -2223,7 +2223,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide Rn_elmt by a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide Rn_elmt by a scalar; failed to deduce the resulting storage type");
 
 			return detail::binary_op_impl<result_type>{}(detail::div_kernel{},
 				std::forward<Vector>(v), detail::wrap_scalar(k));
@@ -2309,10 +2309,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute cross product; failed to deduce the resulting component type");
+				"jkj::math: cannot compute cross product; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute cross product; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute cross product; failed to deduce the resulting storage type");
 			
 			return{
 				v.y() * w.z() - v.z() * w.y(),
@@ -2332,10 +2332,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute outer product; failed to deduce the resulting component type");
+				"jkj::math: cannot compute outer product; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute outer product; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute outer product; failed to deduce the resulting storage type");
 
 			return{
 				v.x() * w.x(), v.x() * w.y(),
@@ -2356,10 +2356,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute outer product; failed to deduce the resulting component type");
+				"jkj::math: cannot compute outer product; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute outer product; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute outer product; failed to deduce the resulting storage type");
 
 			return{
 				v.x() * w.x(), v.x() * w.y(), v.x() * w.z(),
@@ -2383,7 +2383,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot act gl2_elmt on R2_elmt; failed to deduce the resulting storage type");
+				"jkj::math: cannot act gl2_elmt on R2_elmt; failed to deduce the resulting storage type");
 
 			return {
 				std::forward<Matrix>(m).template get<0, 0>() * v.x() +
@@ -2413,7 +2413,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot act gl3_elmt on R3_elmt; failed to deduce the resulting storage type");
+				"jkj::math: cannot act gl3_elmt on R3_elmt; failed to deduce the resulting storage type");
 
 			return {
 				std::forward<Matrix>(m).template get<0, 0>() * v.x() +

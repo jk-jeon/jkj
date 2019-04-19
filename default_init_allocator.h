@@ -19,7 +19,7 @@
 #include <memory>
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	// Removed all members deprecated in C++17
 	template <class T, class BaseAllocator = std::allocator<T>>
 	class default_init_allocator : public BaseAllocator {
@@ -30,7 +30,7 @@ namespace jkl {
 
 namespace std {
 	template <class T, class BaseAllocator>
-	class allocator_traits<jkl::default_init_allocator<T, BaseAllocator>>
+	class allocator_traits<jkj::default_init_allocator<T, BaseAllocator>>
 		: public allocator_traits<BaseAllocator>
 	{
 		using base_traits = allocator_traits<BaseAllocator>;
@@ -39,7 +39,7 @@ namespace std {
 		using allocator_type = typename base_traits::allocator_type;
 
 		template <class U>
-		using rebind_alloc = jkl::default_init_allocator<U,
+		using rebind_alloc = jkj::default_init_allocator<U,
 			typename base_traits::template rebind_alloc<U>>;
 
 		template <class U>

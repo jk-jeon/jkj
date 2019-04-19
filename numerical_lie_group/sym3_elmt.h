@@ -18,7 +18,7 @@
 #pragma once
 #include "polar_decomposition.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		namespace detail {
 			template <class ComponentType, class Storage, class StorageTraits>
@@ -69,27 +69,27 @@ namespace jkl {
 			// Component access requirements
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<0, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the first component from the storage; "
+				"jkj::math: sym3_elmt requires access to the first component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<1, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the second component from the storage; "
+				"jkj::math: sym3_elmt requires access to the second component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<2, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the third component from the storage; "
+				"jkj::math: sym3_elmt requires access to the third component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<3, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the fourth component from the storage; "
+				"jkj::math: sym3_elmt requires access to the fourth component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<4, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the fifth component from the storage; "
+				"jkj::math: sym3_elmt requires access to the fifth component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 			static_assert(detail::storage_traits_inspector<StorageTraits>::
 				template can_get<5, Storage const&>::value,
-				"jkl::math: sym3_elmt requires access to the sixth component from the storage; "
+				"jkj::math: sym3_elmt requires access to the sixth component from the storage; "
 				"the given storage traits cannot find any way to make such an access from the given storage");
 
 			// xx-component accessors
@@ -120,7 +120,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<0>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the first component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the first component from the storage; "
 				"the first component deduced from the given storage traits cannot be converted to the component type");
 
 			// xy-component accessors
@@ -151,7 +151,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<1>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the second component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the second component from the storage; "
 				"the second component deduced from the given storage traits cannot be converted to the component type");
 
 			// yx-component accessors
@@ -200,7 +200,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<2>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the third component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the third component from the storage; "
 				"the third component deduced from the given storage traits cannot be converted to the component type");
 
 			// zx-component accessors
@@ -249,7 +249,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<3>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the fourth component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the fourth component from the storage; "
 				"the fourth component deduced from the given storage traits cannot be converted to the component type");
 
 			// yz-component accessors
@@ -280,7 +280,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<4>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the fifth component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the fifth component from the storage; "
 				"the fifth component deduced from the given storage traits cannot be converted to the component type");
 
 			// zy-component accessors
@@ -329,7 +329,7 @@ namespace jkl {
 
 			static_assert(std::is_convertible<
 				decltype(detail::storage_traits_inspector<StorageTraits>::template get<5>(std::declval<Storage const&>())),
-				ComponentType const&>::value, "jkl::math: sym3_elmt requires access to the sixth component from the storage; "
+				ComponentType const&>::value, "jkj::math: sym3_elmt requires access to the sixth component from the storage; "
 				"the sixth component deduced from the given storage traits cannot be converted to the component type");
 
 
@@ -692,7 +692,7 @@ namespace jkl {
 					std::forward<Matrix>(m).template get<0, 1>(), std::forward<Matrix>(m).template get<0, 2>(),
 					std::forward<Matrix>(m).template get<1, 1>(), std::forward<Matrix>(m).template get<1, 2>(),
 					std::forward<Matrix>(m).template get<2, 2>() } :
-					throw input_validity_error<sym3_elmt>{ "jkl::math: the matrix is not symmetric" };
+					throw input_validity_error<sym3_elmt>{ "jkj::math: the matrix is not symmetric" };
 			}
 
 		public:
@@ -842,7 +842,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !that.is_symmetric() )
-					throw input_validity_error<sym3_elmt>{ "jkl::math: the matrix is not symmetric" };
+					throw input_validity_error<sym3_elmt>{ "jkj::math: the matrix is not symmetric" };
 				return assign_no_check(that);
 			}
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits,
@@ -851,7 +851,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !that.is_symmetric() )
-					throw input_validity_error<sym3_elmt>{ "jkl::math: the matrix is not symmetric" };
+					throw input_validity_error<sym3_elmt>{ "jkj::math: the matrix is not symmetric" };
 				return assign_no_check(std::move(that));
 			}			
 
@@ -1140,14 +1140,14 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE constexpr bool is_invertible() const&
-				noexcept(noexcept(jkl::math::is_invertible(det())))
+				noexcept(noexcept(jkj::math::is_invertible(det())))
 			{
-				return jkl::math::is_invertible(det());
+				return jkj::math::is_invertible(det());
 			}
 			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR bool is_invertible() &&
-				noexcept(noexcept(jkl::math::is_invertible(std::move(*this).det())))
+				noexcept(noexcept(jkj::math::is_invertible(std::move(*this).det())))
 			{
-				return jkl::math::is_invertible(std::move(*this).det());
+				return jkj::math::is_invertible(std::move(*this).det());
 			}
 
 			JKL_GPU_EXECUTABLE constexpr bool is_orthogonal() const noexcept(noexcept(
@@ -1168,9 +1168,9 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE constexpr bool is_special_orthogonal() const
-				noexcept(noexcept(det() > jkl::math::zero<ComponentType>() && is_orthogonal()))
+				noexcept(noexcept(det() > jkj::math::zero<ComponentType>() && is_orthogonal()))
 			{
-				return det() > jkl::math::zero<ComponentType>() && is_orthogonal();
+				return det() > jkj::math::zero<ComponentType>() && is_orthogonal();
 			}
 
 			JKL_GPU_EXECUTABLE constexpr bool is_symmetric() const noexcept
@@ -1179,47 +1179,47 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE constexpr bool is_positive_definite() const
-				noexcept(noexcept(xx() > jkl::math::zero<ComponentType>() &&
+				noexcept(noexcept(xx() > jkj::math::zero<ComponentType>() &&
 					xx() * yy() > xy() * xy() &&
-					det() > jkl::math::zero<ComponentType>()))
+					det() > jkj::math::zero<ComponentType>()))
 			{
-				return xx() > jkl::math::zero<ComponentType>() &&
+				return xx() > jkj::math::zero<ComponentType>() &&
 					xx() * yy() > xy() * xy() &&
-					det() > jkl::math::zero<ComponentType>();
+					det() > jkj::math::zero<ComponentType>();
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr sym3_elmt zero()
 				noexcept(noexcept(sym3_elmt{
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>() }))
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>() }))
 			{
-				return{ jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>() };
+				return{ jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>() };
 			}
 
 			JKL_GPU_EXECUTABLE static constexpr posdef3_elmt<ComponentType, Storage, StorageTraits> unity()
 				noexcept(noexcept(sym3_elmt{
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>(),
-				jkl::math::zero<ComponentType>(),
-				jkl::math::unity<ComponentType>() }))
+				jkj::math::unity<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::unity<ComponentType>(),
+				jkj::math::zero<ComponentType>(),
+				jkj::math::unity<ComponentType>() }))
 			{
-				return{ jkl::math::unity<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::unity<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::unity<ComponentType>(),
+				return{ jkj::math::unity<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::unity<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::unity<ComponentType>(),
 					no_validity_check{} };
 			}
 		};
@@ -1300,13 +1300,13 @@ namespace jkl {
 				template <class Matrix>
 				static constexpr base_type sym3_check_and_forward(Matrix&& m) {
 					return m.is_positive_definite() ? std::forward<Matrix>(m) :
-						throw input_validity_error<target_type>{ "jkl::math: the matrix is not positive-definite" };
+						throw input_validity_error<target_type>{ "jkj::math: the matrix is not positive-definite" };
 				}
 
 				template <class Matrix>
 				static constexpr base_type gl3_check_and_forward(Matrix&& m) {
 					return m.is_positive_definite() ? base_type{ std::forward<Matrix>(m), no_validity_check{} } :
-						throw input_validity_error<target_type>{ "jkl::math: the matrix is not positive-definite" };
+						throw input_validity_error<target_type>{ "jkj::math: the matrix is not positive-definite" };
 				}
 
 			protected:
@@ -1561,7 +1561,7 @@ namespace jkl {
 				sym3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !that.is_positive_definite() )
-					throw input_validity_error<posdef3_elmt>{ "jkl::math: the matrix is not positive-definite" };
+					throw input_validity_error<posdef3_elmt>{ "jkj::math: the matrix is not positive-definite" };
 				static_cast<sym3_elmt_type&>(*this) = that;
 				return *this;
 			}
@@ -1571,7 +1571,7 @@ namespace jkl {
 				sym3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !that.is_positive_definite() )
-					throw input_validity_error<posdef3_elmt>{ "jkl::math: the matrix is not positive-definite" };
+					throw input_validity_error<posdef3_elmt>{ "jkj::math: the matrix is not positive-definite" };
 				static_cast<sym3_elmt_type&>(*this) = std::move(that);
 				return *this;
 			}
@@ -1603,7 +1603,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !that.is_positive_definite() )
-					throw input_validity_error<posdef3_elmt>{ "jkl::math: the matrix is not positive-definite" };
+					throw input_validity_error<posdef3_elmt>{ "jkj::math: the matrix is not positive-definite" };
 				return assign_no_check(that);
 			}
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits,
@@ -1612,7 +1612,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !that.is_positive_definite() )
-					throw input_validity_error<posdef3_elmt>{ "jkl::math: the matrix is not positive-definite" };
+					throw input_validity_error<posdef3_elmt>{ "jkj::math: the matrix is not positive-definite" };
 				return assign_no_check(std::move(that));
 			}
 
@@ -1850,7 +1850,7 @@ namespace jkl {
 			JKL_GPU_EXECUTABLE GENERALIZED_CONSTEXPR posdef3_elmt& operator*=(OtherComponentType const& k)
 				noexcept(noexcept(static_cast<sym3_elmt_type&>(*this) *= k))
 			{
-				assert(k > jkl::math::zero<ComponentType>());
+				assert(k > jkj::math::zero<ComponentType>());
 				static_cast<sym3_elmt_type&>(*this) *= k;
 				return *this;
 			}
@@ -1860,7 +1860,7 @@ namespace jkl {
 			JKL_GPU_EXECUTABLE GENERALIZED_CONSTEXPR posdef3_elmt& operator/=(OtherComponentType const& k)
 				noexcept(noexcept(static_cast<sym3_elmt_type&>(*this) /= k))
 			{
-				assert(k > jkl::math::zero<ComponentType>());
+				assert(k > jkj::math::zero<ComponentType>());
 				static_cast<sym3_elmt_type&>(*this) /= k;
 				return *this;
 			}
@@ -2496,10 +2496,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot add two sym3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot add two sym3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot add two sym3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot add two sym3_elmt's; failed to deduce the resulting storage type");
 
 			return detail::sym3_add_impl<result_type>::op(
 				std::forward<LeftOperand>(a), std::forward<RightOperand>(b));
@@ -2516,10 +2516,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot subtract two sym3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot subtract two sym3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot subtract two sym3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot subtract two sym3_elmt's; failed to deduce the resulting storage type");
 
 			return detail::sym3_sub_impl<detail::get_sym3_elmt_sub_result<LeftOperand, RightOperand>>::op(
 				std::forward<LeftOperand>(a), std::forward<RightOperand>(b));
@@ -2566,10 +2566,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot multiply two sym3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot multiply two sym3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply two sym3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply two sym3_elmt's; failed to deduce the resulting storage type");
 			
 			return detail::call_unchecking<result_type>::make(
 				// First row
@@ -2615,10 +2615,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot divide two sym3_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot divide two sym3_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide two sym3_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide two sym3_elmt's; failed to deduce the resulting storage type");
 
 			return std::forward<LeftOperand>(a) * std::forward<RightOperand>(b).inv();
 		}
@@ -2641,7 +2641,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting storage type");
 			
 			using component_type = typename result_type::component_type;
 			assert(!detail::get_posdef3_elmt<result_type>::value || component_type(k) > zero<component_type>());
@@ -2672,10 +2672,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting component type");
+				"jkj::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply sym3_elmt with a scalar; failed to deduce the resulting storage type");
 
 			using component_type = typename result_type::component_type;
 			assert(!detail::get_posdef3_elmt<result_type>::value || component_type(k) > zero<component_type>());
@@ -2706,7 +2706,7 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide sym3_elmt by a scalar; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide sym3_elmt by a scalar; failed to deduce the resulting storage type");
 
 			using component_type = typename result_type::component_type;
 			assert(!detail::get_posdef3_elmt<result_type>::value || component_type(k) > zero<component_type>());

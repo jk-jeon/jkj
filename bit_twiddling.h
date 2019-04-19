@@ -21,7 +21,7 @@
 
 // Many functions in this header file will be deprecated since the C++20 header <bit>
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		/// Calculate the 2-based logarithm of an integer n
 		/// The result is the largest nonnegative integer e such that 2^e <= n

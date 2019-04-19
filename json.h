@@ -29,7 +29,7 @@
 #include "mixed_precision_number.h"
 #include "unicode.h"
 
-namespace jkl {
+namespace jkj {
 	namespace json {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// To specify rules for generating string from JSON entries, following types are defined
@@ -201,7 +201,7 @@ namespace jkl {
 
 				template <class OstreamType>
 				OstreamType& to_stream(OstreamType& out, std::size_t, text_format) const {
-					static_assert(jkl::tmp::assert_helper<Policy>::value, 
+					static_assert(jkj::tmp::assert_helper<Policy>::value, 
 						"The specified JSON policy class does not support stream output.");
 					return out;
 				}
@@ -358,7 +358,7 @@ namespace jkl {
 			BEGIN_TYPE_ASSOCIATION();
 			ASSOCIATE_JSON_TYPE(null, void);
 			ASSOCIATE_JSON_TYPE(boolean, bool);
-			ASSOCIATE_JSON_TYPE(number, jkl::math::mixed_precision_number<long long, long double>);
+			ASSOCIATE_JSON_TYPE(number, jkj::math::mixed_precision_number<long long, long double>);
 			ASSOCIATE_JSON_TYPE(string, std::string);
 			ASSOCIATE_JSON_TYPE(array, std::vector<entry_pointer>);
 			ASSOCIATE_JSON_TYPE(object, std::map<std::string, entry_pointer>);
@@ -416,48 +416,48 @@ namespace jkl {
 
 				unsigned char value1, value2, value3, value4;
 				value1 = (unsigned char)(*itr);
-				if( jkl::util::upper_bits(value1, 1) == 0 )			// U+0000 - U+007F
+				if( jkj::util::upper_bits(value1, 1) == 0 )			// U+0000 - U+007F
 					return value1;
-				if( jkl::util::upper_bits(value1, 3) == 0xC0 ) {	// U+0080 - U+07FF
+				if( jkj::util::upper_bits(value1, 3) == 0xC0 ) {	// U+0080 - U+07FF
 					if( ++itr == end )
 						unexpected_termination();
 					value2 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value2, 2) != 0x80 )
+					if( jkj::util::upper_bits(value2, 2) != 0x80 )
 						invalid_second_byte();
-					return ((std::uint32_t)jkl::util::lower_bits(value1, 5) << 6) + jkl::util::lower_bits(value2, 6);
+					return ((std::uint32_t)jkj::util::lower_bits(value1, 5) << 6) + jkj::util::lower_bits(value2, 6);
 				}
-				if( jkl::util::upper_bits(value1, 4) == 0xE0 ) {	// U+0800 - U+FFFF
+				if( jkj::util::upper_bits(value1, 4) == 0xE0 ) {	// U+0800 - U+FFFF
 					if( ++itr == end )
 						unexpected_termination();
 					value2 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value2, 2) != 0x80 )
+					if( jkj::util::upper_bits(value2, 2) != 0x80 )
 						invalid_second_byte();
 					if( ++itr == end )
 						unexpected_termination();
 					value3 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value3, 2) != 0x80 )
+					if( jkj::util::upper_bits(value3, 2) != 0x80 )
 						invalid_third_byte();
-					return ((std::uint32_t)jkl::util::lower_bits(value1, 4) << 12) +
-						((std::uint32_t)jkl::util::lower_bits(value2, 6) << 6) + jkl::util::lower_bits(value3, 6);
+					return ((std::uint32_t)jkj::util::lower_bits(value1, 4) << 12) +
+						((std::uint32_t)jkj::util::lower_bits(value2, 6) << 6) + jkj::util::lower_bits(value3, 6);
 				}
-				if( jkl::util::upper_bits(value1, 5) == 0xF0 ) {	// U+10000 - U+1FFFFF
+				if( jkj::util::upper_bits(value1, 5) == 0xF0 ) {	// U+10000 - U+1FFFFF
 					if( ++itr == end )
 						unexpected_termination();
 					value2 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value2, 2) != 0x80 )
+					if( jkj::util::upper_bits(value2, 2) != 0x80 )
 						invalid_second_byte();
 					if( ++itr == end )
 						unexpected_termination();
 					value3 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value3, 2) != 0x80 )
+					if( jkj::util::upper_bits(value3, 2) != 0x80 )
 						invalid_third_byte();
 					if( ++itr == end )
 						unexpected_termination();
 					value4 = (unsigned char)(*itr);
-					if( jkl::util::upper_bits(value4, 2) != 0x80 )
+					if( jkj::util::upper_bits(value4, 2) != 0x80 )
 						invalid_fourth_byte();
-					return ((std::uint32_t)jkl::util::lower_bits(value1, 3) << 18) + ((std::uint32_t)jkl::util::lower_bits(value2, 6) << 12) +
-						((std::uint32_t)jkl::util::lower_bits(value3, 6) << 6) + jkl::util::lower_bits(value4, 6);
+					return ((std::uint32_t)jkj::util::lower_bits(value1, 3) << 18) + ((std::uint32_t)jkj::util::lower_bits(value2, 6) << 12) +
+						((std::uint32_t)jkj::util::lower_bits(value3, 6) << 6) + jkj::util::lower_bits(value4, 6);
 				}
 
 				throw text_parsing_error("Out of the range specified by RFC 3629!",
@@ -470,17 +470,17 @@ namespace jkl {
 				if( code_point < 0x0080 )
 					return{ (char)code_point };
 				else if( code_point < 0x800 )
-					return{ (char)(unsigned char)(0xC0 + (jkl::util::upper_bits(code_point, 26) >> 6)),
-					(char)(unsigned char)(0x80 + jkl::util::lower_bits(code_point, 6)) };
+					return{ (char)(unsigned char)(0xC0 + (jkj::util::upper_bits(code_point, 26) >> 6)),
+					(char)(unsigned char)(0x80 + jkj::util::lower_bits(code_point, 6)) };
 				else if( code_point < 0x10000 )
-					return{ (char)(unsigned char)(0xE0 + (jkl::util::upper_bits(code_point, 20) >> 12)),
-					(char)(unsigned char)(0x80 + (jkl::util::middle_bits(code_point, 20, 6) >> 6)),
-					(char)(unsigned char)(0x80 + jkl::util::lower_bits(code_point, 6)) };
+					return{ (char)(unsigned char)(0xE0 + (jkj::util::upper_bits(code_point, 20) >> 12)),
+					(char)(unsigned char)(0x80 + (jkj::util::middle_bits(code_point, 20, 6) >> 6)),
+					(char)(unsigned char)(0x80 + jkj::util::lower_bits(code_point, 6)) };
 				else
-					return{ (char)(unsigned char)(0xF0 + (jkl::util::upper_bits(code_point, 14) >> 18)),
-					(char)(unsigned char)(0x80 + (jkl::util::middle_bits(code_point, 14, 12) >> 12)),
-					(char)(unsigned char)(0x80 + (jkl::util::middle_bits(code_point, 20, 6) >> 6)),
-					(char)(unsigned char)(0x80 + jkl::util::lower_bits(code_point, 6)) };
+					return{ (char)(unsigned char)(0xF0 + (jkj::util::upper_bits(code_point, 14) >> 18)),
+					(char)(unsigned char)(0x80 + (jkj::util::middle_bits(code_point, 14, 12) >> 12)),
+					(char)(unsigned char)(0x80 + (jkj::util::middle_bits(code_point, 20, 6) >> 6)),
+					(char)(unsigned char)(0x80 + jkj::util::lower_bits(code_point, 6)) };
 			}
 
 			// End-of-line string
@@ -633,7 +633,7 @@ namespace jkl {
 								str += 'u';
 								auto code_point = Policy::to_code_point(itr, data.cend());
 								// If to_code_point do not return a valid code point, behaviour is undefined
-								auto sp = *jkl::unicode::get_utf16_pair(code_point);
+								auto sp = *jkj::unicode::get_utf16_pair(code_point);
 								if( sp.first != 0 ) {
 									str += to_hex_string(sp.first, format.hex);
 									str += '\\';
@@ -660,7 +660,7 @@ namespace jkl {
 			// Default contructor (if any)
 			json_entry() = default;
 			// Perfect forwarding constructors
-			template <typename Arg, class = jkl::tmp::prevent_too_perfect_fwd<json_entry, Arg>>
+			template <typename Arg, class = jkj::tmp::prevent_too_perfect_fwd<json_entry, Arg>>
 			explicit json_entry(Arg&& arg) : data_(std::forward<Arg>(arg)) {}
 			template <typename FirstArg, typename SecondArg, typename... RemainingArgs>
 			json_entry(FirstArg&& first_arg, SecondArg&& second_arg, RemainingArgs&&... remaining_args) 
@@ -747,7 +747,7 @@ namespace jkl {
 				// Initializer list constructor
 				array_object_crtp(std::initializer_list<typename data_type::value_type> init_list) : data_array(init_list) {}
 				// Perfect forwarding constructors
-				template <typename Arg, class = jkl::tmp::prevent_too_perfect_fwd<Impl, Arg>>
+				template <typename Arg, class = jkj::tmp::prevent_too_perfect_fwd<Impl, Arg>>
 				explicit array_object_crtp(Arg&& arg) : data_array(std::forward<Arg>(arg)) {}
 				template <typename FirstArg, typename SecondArg, typename... RemainingArgs>
 				array_object_crtp(FirstArg&& first_arg, SecondArg&& second_arg, RemainingArgs&&... remaining_args)
@@ -834,7 +834,7 @@ namespace jkl {
 			// Create a new entry and append it to the array
 			template <typename... Args>
 			decltype(auto) emplace(Args&&... args) {
-				return data().emplace_back(jkl::json::create<Policy>(std::forward<Args>(args)...));
+				return data().emplace_back(jkj::json::create<Policy>(std::forward<Args>(args)...));
 			}
 			// Append an existing JSON entry; entry must be convertible to entry_pointer
 			template <class EntryPtr>
@@ -907,7 +907,7 @@ namespace jkl {
 			// Create a new entry and append it to the array
 			template <class String, typename... Args>
 			decltype(auto) emplace(String&& name, Args&&... args) {
-				return data().emplace(typename data_type::value_type(std::forward<String>(name), jkl::json::create<Policy>(std::forward<Args>(args)...)));
+				return data().emplace(typename data_type::value_type(std::forward<String>(name), jkj::json::create<Policy>(std::forward<Args>(args)...)));
 			}
 			// Append an existing JSON entry; entry must be convertible to entry_pointer
 			template <class String, class EntryPtr>
@@ -1120,7 +1120,7 @@ namespace jkl {
 				using char_type = typename Policy::char_type;
 				using const_iterator = typename string_type::const_iterator;
 
-				friend entry_pointer jkl::json::parse<Policy>(string_type const& input);
+				friend entry_pointer jkj::json::parse<Policy>(string_type const& input);
 				json_parser() = delete;	// This class cannot be instantiated
 
 				static entry_pointer parse(const_iterator& itr, const_iterator const& end) {
@@ -1346,15 +1346,15 @@ namespace jkl {
 								if( code_point >= 0xD800 && code_point < 0xE000 ) {
 									if( ++itr == end || *itr != '\\' || ++itr == end || *itr != 'u' ) {
 										throw text_parsing_error(std::string("The UTF-16 code point 0x") +
-											value_to_hex_char(jkl::util::byte_at(code_point, 3)) +
-											value_to_hex_char(jkl::util::byte_at(code_point, 2)) +
-											value_to_hex_char(jkl::util::byte_at(code_point, 1)) +
-											value_to_hex_char(jkl::util::byte_at(code_point, 0)) +
+											value_to_hex_char(jkj::util::byte_at(code_point, 3)) +
+											value_to_hex_char(jkj::util::byte_at(code_point, 2)) +
+											value_to_hex_char(jkj::util::byte_at(code_point, 1)) +
+											value_to_hex_char(jkj::util::byte_at(code_point, 0)) +
 											" should come as a surrogate pair, but the second code point is not found!",
 											text_parsing_error::invalid_utf16_codepoint, (char const*)&*prev_pos, (char const*)&*itr);
 									}
 									std::uint16_t low = four_hex_to_value(++itr, end, prev_pos);
-									code_point = jkl::unicode::get_unicode({ (std::uint16_t)code_point, low });
+									code_point = jkj::unicode::get_unicode({ (std::uint16_t)code_point, low });
 								}
 								str += Policy::code_point_to_string(code_point);
 								break;

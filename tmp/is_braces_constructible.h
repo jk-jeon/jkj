@@ -18,7 +18,7 @@
 #pragma once
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Brace-initialization version of std::is_constructible

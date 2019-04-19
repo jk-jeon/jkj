@@ -22,7 +22,7 @@
 #include "pseudo_ptr.h"
 #include "tmp.h"
 
-namespace jkl {
+namespace jkj {
 	namespace array_detail {
 		// The main value class
 		template <class T, std::size_t N1, std::size_t... Nr>
@@ -108,10 +108,10 @@ namespace jkl {
 
 		public:
 			static_assert(std::is_reference_v<TargetElmtRef>,
-				"jkl::array: the first template argument into array_ref must be "
+				"jkj::array: the first template argument into array_ref must be "
 				"a reference type");
 			static_assert(std::is_convertible_v<T*, std::remove_reference_t<TargetElmtRef>*>,
-				"jkl::array: the target reference type and the underlying pointer type "
+				"jkj::array: the target reference type and the underlying pointer type "
 				"of array_ref is not compatiable");
 
 			template <class, std::size_t, std::size_t...>
@@ -130,8 +130,8 @@ namespace jkl {
 			using iterator_category = std::random_access_iterator_tag;
 			using difference_type = std::ptrdiff_t;
 			using element = std::remove_cv_t<std::remove_reference_t<TargetElmtRef>>;
-			using value_type = jkl::array<element, Nr...>;
-			using reference = jkl::array_ref<TargetElmtRef, T*, Nr...>;
+			using value_type = jkj::array<element, Nr...>;
+			using reference = jkj::array_ref<TargetElmtRef, T*, Nr...>;
 			using pointer = std::conditional_t<sizeof...(Nr) == 0,
 				std::remove_reference_t<TargetElmtRef>*,
 				pseudo_ptr<reference>>;
@@ -286,10 +286,10 @@ namespace jkl {
 
 		public:
 			static_assert(std::is_reference_v<TargetElmtRef>,
-				"jkl::array: the first template argument into array_ref must be "
+				"jkj::array: the first template argument into array_ref must be "
 				"a reference type");
 			static_assert(std::is_convertible_v<T*, std::remove_reference_t<TargetElmtRef>*>,
-				"jkl::array: the target reference type and the underlying pointer type "
+				"jkj::array: the target reference type and the underlying pointer type "
 				"of array_ref is not compatiable");
 			
 		public:
@@ -536,7 +536,7 @@ namespace jkl {
 			template <class ArrayRef>
 			static constexpr decltype(auto) at_impl(ArrayRef&& arr, size_type pos) {
 				if( pos >= N1 )
-					throw std::out_of_range{ "jkl::array: out of range" };
+					throw std::out_of_range{ "jkj::array: out of range" };
 				return access_impl(std::forward<ArrayRef>(arr), pos);
 			}
 			template <class ArrayRef>

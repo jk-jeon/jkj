@@ -22,7 +22,7 @@
 #include <utility>
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// Runtime selection of functions with integer template parameter (from 0 to N)

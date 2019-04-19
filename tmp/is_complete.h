@@ -19,7 +19,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Check if a type is a complete type

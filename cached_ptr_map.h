@@ -25,14 +25,14 @@
 #include <unordered_map>
 #include "shared_mutex.h"
 
-namespace jkl {
+namespace jkj {
 	template <class Key, class Value,
 		template <class, class, class...> class Map = std::unordered_map,
 		class... AdditionalArgs>
 	class cached_ptr_map {
 		using map_type = Map<Key, std::weak_ptr<Value>, AdditionalArgs...>;
 
-		mutable jkl::shared_mutex				mtx_;
+		mutable jkj::shared_mutex				mtx_;
 		mutable std::condition_variable_any		cv_;
 		mutable bool							terminate_ = false;
 		mutable bool							something_to_clean_ = false;
@@ -41,10 +41,10 @@ namespace jkl {
 
 
 		class upgrade_lock_guard {
-			jkl::shared_mutex& mtx;
+			jkj::shared_mutex& mtx;
 
 		public:
-			upgrade_lock_guard(jkl::shared_mutex& mtx) : mtx{ mtx } {
+			upgrade_lock_guard(jkj::shared_mutex& mtx) : mtx{ mtx } {
 				mtx.unlock_shared_and_lock();
 			}
 			~upgrade_lock_guard() {
@@ -66,7 +66,7 @@ namespace jkl {
 		{
 			// Signal to the cleaner thread
 			{
-				std::lock_guard<jkl::shared_mutex> lg{ mtx_ };
+				std::lock_guard<jkj::shared_mutex> lg{ mtx_ };
 				terminate_ = true;
 			}
 			cv_.notify_one();
@@ -87,7 +87,7 @@ namespace jkl {
 				{
 					// Signal to the cleaner thread
 					{
-						std::lock_guard<jkl::shared_mutex> lg{ mtx_ };
+						std::lock_guard<jkj::shared_mutex> lg{ mtx_ };
 						something_to_clean_ = true;
 					}
 					cv_.notify_one();
@@ -130,7 +130,7 @@ namespace jkl {
 			};
 
 			// Obtain read-lock
-			std::shared_lock<jkl::shared_mutex>	lg{ mtx_ };
+			std::shared_lock<jkj::shared_mutex>	lg{ mtx_ };
 
 			// If the key is not in the map
 			auto itr = map_.find(q);
@@ -151,7 +151,7 @@ namespace jkl {
 
 		Map<Key, std::shared_ptr<Value>> get_all() const {
 			// Obtain read lock
-			std::shared_lock<jkl::shared_mutex> lg{ mtx_ };
+			std::shared_lock<jkj::shared_mutex> lg{ mtx_ };
 
 			// Return value
 			Map<Key, std::shared_ptr<Value>> ret;
@@ -172,7 +172,7 @@ namespace jkl {
 		void cleaner_thread() {
 			while( true ) {
 				// Wait for signal
-				std::unique_lock<jkl::shared_mutex> lg{ mtx_ };
+				std::unique_lock<jkj::shared_mutex> lg{ mtx_ };
 				cv_.wait(lg, [this]() { return something_to_clean_ || terminate_; });
 
 				if( terminate_ )

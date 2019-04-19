@@ -18,7 +18,7 @@
 #pragma once
 #include <cstddef>
 
-namespace jkl {
+namespace jkj {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// Compile-time string
 	/// This class became obsolete as std::string_view is now a standard.

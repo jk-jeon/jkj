@@ -22,7 +22,7 @@
 #include <functional>
 #include <vector>
 
-namespace jkl {
+namespace jkj {
 	// When sorting a vector of items, std::sort somewhat performs very poorly
 	// if move or swap is slow. In this case, it is often much faster to perform
 	// sorting on a vector of pointers, and then reflect the result back to the original vector.

@@ -30,7 +30,7 @@
 //    (even if that member object is of callable type.).
 // 3. Otherwise, if there is no member ftn/obj called x, y, z, or w,
 //   - if the storage type is tuple-like, call an appropriate
-//     tuple access function (jkl::tmp::get);
+//     tuple access function (jkj::tmp::get);
 //   - otherwise, try to call operator[] instead; if there is no operator[] neither,
 //     generates a compile error.
 // Hence, followings are examples of classes that can be used as the storage with the default traits:

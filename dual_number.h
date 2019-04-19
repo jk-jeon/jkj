@@ -5,7 +5,7 @@
 #include "tmp/generate_constructors.h"
 #include "numerical_lie_group.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		namespace detail {
 			// Due to lack of generalized constexpr support in MSVC 2015, we need a workaround to
@@ -136,24 +136,24 @@ namespace jkl {
 				class = std::enable_if_t<
 				std::is_constructible<RingElmt, Prim>::value &&
 				std::is_convertible<Prim, RingElmt>::value>,
-				class = jkl::tmp::prevent_too_perfect_fwd<dual_number, Prim>>
+				class = jkj::tmp::prevent_too_perfect_fwd<dual_number, Prim>>
 			JKL_GPU_EXECUTABLE constexpr dual_number(Prim&& prim)
 				noexcept(base_type::template is_nothrow_constructible<Prim,
-					decltype(jkl::math::zero<DualType>())>::value) :
+					decltype(jkj::math::zero<DualType>())>::value) :
 				constructor_provider(detail::dual_number_forward_tag{},
-					std::forward<Prim>(prim), jkl::math::zero<DualType>()) {}
+					std::forward<Prim>(prim), jkj::math::zero<DualType>()) {}
 
 			// Leave the dual part zero (explicit)
 			template <class Prim, class = void,
 				class = std::enable_if_t<
 				std::is_constructible<RingElmt, Prim>::value &&
 				!std::is_convertible<Prim, RingElmt>::value>,
-				class = jkl::tmp::prevent_too_perfect_fwd<dual_number, Prim>>
+				class = jkj::tmp::prevent_too_perfect_fwd<dual_number, Prim>>
 			JKL_GPU_EXECUTABLE explicit constexpr dual_number(Prim&& prim)
 				noexcept(base_type::template is_nothrow_constructible<Prim,
-					decltype(jkl::math::zero<DualType>())>::value) :
+					decltype(jkj::math::zero<DualType>())>::value) :
 				constructor_provider(detail::dual_number_forward_tag{},
-					std::forward<Prim>(prim), jkl::math::zero<DualType>()) {}
+					std::forward<Prim>(prim), jkj::math::zero<DualType>()) {}
 
 
 			/// Nullary operations
@@ -161,13 +161,13 @@ namespace jkl {
 			// Zero
 			JKL_GPU_EXECUTABLE static constexpr dual_number zero()
 			{
-				return{ jkl::math::zero<RingElmt>(), jkl::math::zero<DualType>() };
+				return{ jkj::math::zero<RingElmt>(), jkj::math::zero<DualType>() };
 			}
 
 			// Unity
 			JKL_GPU_EXECUTABLE static constexpr dual_number unity()
 			{
-				return{ jkl::math::unity<RingElmt>(), jkl::math::zero<DualType>() };
+				return{ jkj::math::unity<RingElmt>(), jkj::math::zero<DualType>() };
 			}
 
 
@@ -199,14 +199,14 @@ namespace jkl {
 
 			// Reciprocal
 			JKL_GPU_EXECUTABLE constexpr dual_number inv() const&
-				noexcept(noexcept(detail::inv_calc<dual_number>(prim, dual, jkl::math::general_inverse(prim))))
+				noexcept(noexcept(detail::inv_calc<dual_number>(prim, dual, jkj::math::general_inverse(prim))))
 			{
-				return detail::inv_calc<dual_number>(prim, dual, jkl::math::general_inverse(prim));
+				return detail::inv_calc<dual_number>(prim, dual, jkj::math::general_inverse(prim));
 			}
 			JKL_GPU_EXECUTABLE NONCONST_CONSTEXPR dual_number inv() &&
-				noexcept(noexcept(detail::inv_calc<dual_number>(std::move(prim), std::move(dual), jkl::math::general_inverse(prim))))
+				noexcept(noexcept(detail::inv_calc<dual_number>(std::move(prim), std::move(dual), jkj::math::general_inverse(prim))))
 			{
-				return detail::inv_calc<dual_number>(std::move(prim), std::move(dual), jkl::math::general_inverse(prim));
+				return detail::inv_calc<dual_number>(std::move(prim), std::move(dual), jkj::math::general_inverse(prim));
 			}
 
 

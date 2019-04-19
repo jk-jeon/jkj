@@ -19,7 +19,7 @@
 #include <type_traits>
 #include "portability.h"
 
-namespace jkl {
+namespace jkj {
 	// pseudo_ptr is a pointer-like class mainly used for implementations of operator-> of proxy iterators
 	// When T is a reference type, it acts essentially like a real pointer
 	template <class T>

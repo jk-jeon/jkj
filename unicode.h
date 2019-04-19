@@ -22,7 +22,7 @@
 #include <string>
 #include "optional.h"
 
-namespace jkl {
+namespace jkj {
 	namespace unicode {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// Utilities for dealing with UTF-16 surrogate pairs
@@ -33,7 +33,7 @@ namespace jkl {
 		//   second : low
 		using utf16_pair = std::pair<std::uint16_t, std::uint16_t>;
 		// Convert a Unicode code point into a UTF-16 surrogate pair
-		inline jkl::optional<utf16_pair> get_utf16_pair(std::uint32_t code_point) {
+		inline jkj::optional<utf16_pair> get_utf16_pair(std::uint32_t code_point) {
 			if( code_point >= 0x110000 )
 				return{};
 			if( code_point < 0x10000 )

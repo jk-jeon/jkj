@@ -21,7 +21,7 @@
 #include <utility>
 #include "../portability.h"
 
-namespace jkl {
+namespace jkj {
 	namespace tmp {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// static_for, breakable_static_for

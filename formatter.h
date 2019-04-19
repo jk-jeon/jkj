@@ -21,7 +21,7 @@
 #include "tmp/is_convertible.h"
 #include "tmp/identity.h"
 
-namespace jkl {
+namespace jkj {
 	// Object reference together with a formatting information
 	// The stream output operator (operator<<) is overloaded for this template.
 	// If the ADL chooses that overload, the print() function of the formatter is called.
@@ -48,7 +48,7 @@ namespace jkl {
 
 	// [Example usage]
 	// std::vector<int> v{ 1, 2, 3, 4, 5 };
-	// std::cout << jkl::make_range_formatter()(v);
+	// std::cout << jkj::make_range_formatter()(v);
 	//
 	// [Output]
 	// [1, 2, 3, 4, 5]

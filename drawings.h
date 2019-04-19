@@ -27,7 +27,7 @@
 #include "numerical_lie_group.h"
 #include "tmp/assert_helper.h"
 
-namespace jkl {
+namespace jkj {
 	namespace drawings {
 		// OpenGL error checking helpers
 		namespace {
@@ -112,9 +112,9 @@ namespace jkl {
 		class mapped_device_ptr {
 		public:
 			mapped_device_ptr(cudaGraphicsResource_t rsrc, cudaStream_t stream) : rsrc{ rsrc }, stream{ stream } {
-				jkl::cuda::check_error(cudaGraphicsMapResources(1, &rsrc, stream));
+				jkj::cuda::check_error(cudaGraphicsMapResources(1, &rsrc, stream));
 				try {
-					jkl::cuda::check_error(cudaGraphicsResourceGetMappedPointer(&ptr, &size, rsrc));
+					jkj::cuda::check_error(cudaGraphicsResourceGetMappedPointer(&ptr, &size, rsrc));
 				}
 				catch( ... ) {
 					cudaGraphicsUnmapResources(1, &rsrc, stream);
@@ -172,7 +172,7 @@ namespace jkl {
 					return;
 				}
 
-				jkl::cuda::check_error(cudaGraphicsMapResources(m_number_of_non_null_rsrcs, m_rsrcs.data(), stream));
+				jkj::cuda::check_error(cudaGraphicsMapResources(m_number_of_non_null_rsrcs, m_rsrcs.data(), stream));
 				try {
 					get_mapped_pointer<0>(rsrcs);
 				}
@@ -272,7 +272,7 @@ namespace jkl {
 				class = std::enable_if_t<idx != number_of_rsrcs>>
 			void get_mapped_pointer(CudaGraphicsResourceTuple const& rsrcs) {
 				if( std::get<idx>(rsrcs) != nullptr ) {
-					jkl::cuda::check_error(
+					jkj::cuda::check_error(
 						cudaGraphicsResourceGetMappedPointer(&m_ptrs[idx], &m_sizes[idx], std::get<idx>(rsrcs)));
 				}
 				else {
@@ -297,12 +297,12 @@ namespace jkl {
 			struct initializer {
 				initializer() {
 					if( glewInit() != GLEW_OK ) {
-						throw std::runtime_error{ "jkl::drawings: GLEW Initialization failed!" };
+						throw std::runtime_error{ "jkj::drawings: GLEW Initialization failed!" };
 					}
 
 					// GL_ARB_direct_state_access is required
 					if( !GLEW_ARB_direct_state_access )
-						throw std::runtime_error{ "jkl::drawings: your platform does not support "
+						throw std::runtime_error{ "jkj::drawings: your platform does not support "
 						"GL_ARB_direct_state_access feature (OpenGL version 4.5); "
 						"please try to update your graphic driver"};
 
@@ -320,7 +320,7 @@ namespace jkl {
 			// Translation part is the position of the camera
 			// Column vectors of the rotation part are the camera coordinate frame vectors
 			// That is, m_camera is the transform from the camera frame to the world frame
-			jkl::math::SE3_elmt<Float>				pose;
+			jkj::math::SE3_elmt<Float>				pose;
 			// The distance of the rotation center
 			Float									look_at_distance;
 
@@ -346,15 +346,15 @@ namespace jkl {
 
 			// x-axis of the camera coordinate frame
 			JKL_GPU_EXECUTABLE constexpr auto right_vector() const noexcept {
-				return jkl::math::R3_elmt<Float>{ pose.rotation()[0][0], pose.rotation()[1][0], pose.rotation()[2][0] };
+				return jkj::math::R3_elmt<Float>{ pose.rotation()[0][0], pose.rotation()[1][0], pose.rotation()[2][0] };
 			}
 			// y-axis of the camera coordinate frame
 			JKL_GPU_EXECUTABLE constexpr auto direction_vector() const noexcept {
-				return jkl::math::R3_elmt<Float>{ pose.rotation()[0][1], pose.rotation()[1][1], pose.rotation()[2][1] };
+				return jkj::math::R3_elmt<Float>{ pose.rotation()[0][1], pose.rotation()[1][1], pose.rotation()[2][1] };
 			}
 			// z-axis of the camera coordinate frame
 			JKL_GPU_EXECUTABLE constexpr auto up_vector() const noexcept {
-				return jkl::math::R3_elmt<Float>{ pose.rotation()[0][2], pose.rotation()[1][2], pose.rotation()[2][2] };
+				return jkj::math::R3_elmt<Float>{ pose.rotation()[0][2], pose.rotation()[1][2], pose.rotation()[2][2] };
 			}
 			// The point where the camera is looking at
 			JKL_GPU_EXECUTABLE constexpr auto look_at() const noexcept {
@@ -399,7 +399,7 @@ namespace jkl {
 		}
 
 		template <
-			class Position = jkl::math::R3_elmtf,
+			class Position = jkj::math::R3_elmtf,
 			class Normal = none,
 			class Color = none,
 			class TexCoord = none
@@ -485,9 +485,9 @@ namespace jkl {
 		};
 
 		template <class UInt>
-		struct line : private jkl::math::R2_elmt<UInt> {
+		struct line : private jkj::math::R2_elmt<UInt> {
 		private:
-			using base_type = jkl::math::R2_elmt<UInt>;
+			using base_type = jkj::math::R2_elmt<UInt>;
 		public:
 			using base_type::base_type;
 			using component_type = typename base_type::component_type;
@@ -501,9 +501,9 @@ namespace jkl {
 		};
 
 		template <class UInt>
-		struct triangle : private jkl::math::R3_elmt<UInt> {
+		struct triangle : private jkj::math::R3_elmt<UInt> {
 		private:
-			using base_type = jkl::math::R3_elmt<UInt>;
+			using base_type = jkj::math::R3_elmt<UInt>;
 		public:
 			using base_type::base_type;
 			using component_type = typename base_type::component_type;
@@ -601,14 +601,14 @@ namespace jkl {
 
 				template <class dummy>
 				struct assertion<0, dummy> {
-					static_assert(jkl::tmp::assert_helper<Type>::value,
+					static_assert(jkj::tmp::assert_helper<Type>::value,
 						"The type is incompatible with vertex_buffer: the only allowed component_type is one of "
 						"char, unsigned char, short, unsigned short, int, unsigned int, float, and double");
 				};
 
 				template <class dummy>
 				struct assertion<1, dummy> {
-					static_assert(jkl::tmp::assert_helper<Type>::value,
+					static_assert(jkj::tmp::assert_helper<Type>::value,
 						"The type is incompatible with index_buffer: the only allowed component_type is one of "
 						"char, unsigned char, short, unsigned short, int, unsigned int, float, and double");
 				};
@@ -649,7 +649,7 @@ namespace jkl {
 				class = void
 			>
 			constexpr bool check_type() {
-				static_assert(jkl::tmp::assert_helper<Type>::value,
+				static_assert(jkj::tmp::assert_helper<Type>::value,
 					"The type is incompatible with vertex_buffer: the type does not has the member type \"component_type\"");
 				return true;
 			}
@@ -659,7 +659,7 @@ namespace jkl {
 				class = void, class = void
 			>
 			constexpr bool check_type() {
-				static_assert(jkl::tmp::assert_helper<Type>::value,
+				static_assert(jkj::tmp::assert_helper<Type>::value,
 					"The type is incompatible with vertex_buffer: the type does not has the static member \"components\"");
 				return true;
 			}
@@ -866,7 +866,7 @@ namespace jkl {
 					prepare_enough_buffer(src.size());
 
 					mapped_device_ptr dst{ cuda_rsrc, stream };
-					jkl::cuda::check_error(cudaMemcpyAsync(dst.get(), src.data(),
+					jkj::cuda::check_error(cudaMemcpyAsync(dst.get(), src.data(),
 						src.byte_size(), cudaMemcpyDeviceToDevice, stream));
 				}
 				size_ = src.size();
@@ -884,7 +884,7 @@ namespace jkl {
 			void copy_to_device(vertex_type* dst, cudaStream_t stream = nullptr) {
 				if( size_ > 0 ) {
 					mapped_device_ptr src{ cuda_rsrc, stream };
-					jkl::cuda::check_error(cudaMemcpyAsync(dst, src.get(),
+					jkj::cuda::check_error(cudaMemcpyAsync(dst, src.get(),
 						sizeof(vertex_type) * size_, cudaMemcpyDeviceToDevice, stream));
 				}
 			}
@@ -936,7 +936,7 @@ namespace jkl {
 				check_error(glBindBuffer, GL_ARRAY_BUFFER, vbo_id);
 				check_error(glBufferData, GL_ARRAY_BUFFER, sizeof(vertex_type) * n, nullptr, GL_DYNAMIC_DRAW);
 			#ifdef JKL_USE_CUDA
-				jkl::cuda::check_error(cudaGraphicsGLRegisterBuffer(&cuda_rsrc,
+				jkj::cuda::check_error(cudaGraphicsGLRegisterBuffer(&cuda_rsrc,
 					vbo_id, cudaGraphicsRegisterFlagsWriteDiscard));
 			#endif
 				capacity_ = n;
@@ -1027,7 +1027,7 @@ namespace jkl {
 					prepare_enough_buffer(src.size());
 
 					mapped_device_ptr dst{ cuda_rsrc, stream };
-					jkl::cuda::check_error(cudaMemcpyAsync(dst.get(), src.data(),
+					jkj::cuda::check_error(cudaMemcpyAsync(dst.get(), src.data(),
 						src.byte_size(), cudaMemcpyDeviceToDevice, stream));
 				}
 				size_ = src.size();
@@ -1045,7 +1045,7 @@ namespace jkl {
 			void copy_to_device(index_unit_type* dst, cudaStream_t stream = cudaStream_t(0)) {
 				if( size_ > 0 ) {
 					mapped_device_ptr src{ cuda_rsrc, stream };
-					jkl::cuda::check_error(cudaMemcpyAsync(dst, src.get(),
+					jkj::cuda::check_error(cudaMemcpyAsync(dst, src.get(),
 						sizeof(index_unit_type) * size_, cudaMemcpyDeviceToDevice, stream));
 				}
 			}
@@ -1118,7 +1118,7 @@ namespace jkl {
 				check_error(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, ibo_id);
 				check_error(glBufferData, GL_ELEMENT_ARRAY_BUFFER, sizeof(index_unit_type) * n, nullptr, GL_DYNAMIC_DRAW);
 			#ifdef JKL_USE_CUDA
-				jkl::cuda::check_error(cudaGraphicsGLRegisterBuffer(&cuda_rsrc,
+				jkj::cuda::check_error(cudaGraphicsGLRegisterBuffer(&cuda_rsrc,
 					ibo_id, cudaGraphicsRegisterFlagsWriteDiscard));
 			#endif
 				capacity_ = n;
@@ -1169,7 +1169,7 @@ namespace jkl {
 
 		#ifdef JKL_USE_CUDA
 			// Only one pair of calls to cudaGraphicsMapResources()/cudaGraphicsUnmapResources()
-			template <class BufferSpanTuple, class = std::enable_if_t<jkl::tmp::is_tuple<BufferSpanTuple>::value>>
+			template <class BufferSpanTuple, class = std::enable_if_t<jkj::tmp::is_tuple<BufferSpanTuple>::value>>
 			void copy_from_device(BufferSpanTuple const& srcs, cudaStream_t stream = nullptr) {
 				// Prepare buffers
 				prepare_enough_buffer_impl(srcs);
@@ -1206,7 +1206,7 @@ namespace jkl {
 			void copy_from_host_impl(BufferSpanTuple const&) {}
 
 		#ifdef JKL_USE_CUDA
-			jkl::cuda::stream_fork		copy_streams;
+			jkj::cuda::stream_fork		copy_streams;
 
 			template <std::size_t idx = 0, class BufferSpanTuple, class = std::enable_if_t<idx != number_of_buffers>>
 			void prepare_enough_buffer_impl(BufferSpanTuple const& srcs) {
@@ -1235,7 +1235,7 @@ namespace jkl {
 				if( get<idx>(srcs).size() > 0 ) {
 					auto dst_ptr = dsts.template get<idx>();
 					auto& src = get<idx>(srcs);
-					jkl::cuda::check_error(cudaMemcpyAsync(dst_ptr, src.data(),
+					jkj::cuda::check_error(cudaMemcpyAsync(dst_ptr, src.data(),
 						src.byte_size(), cudaMemcpyDeviceToDevice, copy_streams[idx]));
 				}
 				auto& buffer = get<idx>(buffer_refs);

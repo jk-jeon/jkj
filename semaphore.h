@@ -20,7 +20,7 @@
 #include <limits>
 #include <condition_variable>
 
-namespace jkl {
+namespace jkj {
 	// [Notes on exception safety]
 	// According to https://en.cppreference.com/w/cpp/named_req/Mutex,
 	// std::mutex::lock() can fail (and throws an exception) only on following situations:

@@ -23,7 +23,7 @@
 #include <memory>
 #include "tmp.h"
 
-namespace jkl {
+namespace jkj {
 	/// A simple circular queue with a given size
 	/// Just like other STL containers, T must not be reference types.
 	/// This implementation wastes one storage in the buffer to save the implementer from a lot of headaches 
@@ -50,7 +50,7 @@ namespace jkl {
 	};
 	struct circular_buffer_throw_on_empty_query {
 		void handle_error() const {
-			throw empty_query_exception{ "[jkl::circular_buffer] The circular_buffer is empty!" };
+			throw empty_query_exception{ "[jkj::circular_buffer] The circular_buffer is empty!" };
 		}
 	};
 
@@ -234,7 +234,7 @@ namespace jkl {
 			}
 			template <bool that_are_const>
 			difference_type operator-(iterator_impl<that_are_const> const& that) const {
-				assert(m_container_ptr == that.m_container_ptr && "jkl::circular_buffer: Incomparable iterators");
+				assert(m_container_ptr == that.m_container_ptr && "jkj::circular_buffer: Incomparable iterators");
 
 				// ----f----i1----i2----b----
 				// ----f----i2----i1----b----
@@ -677,13 +677,13 @@ namespace jkl {
 
 	template <class T, bool check_push, bool check_pop, class EmptyQueryPolicy>
 	class circular_buffer<T&, check_push, check_pop, EmptyQueryPolicy> {
-		static_assert(jkl::tmp::assert_helper<T>::value, 
+		static_assert(jkj::tmp::assert_helper<T>::value, 
 			"circular_buffer must not be instantiated with lvalue reference types!");
 	};
 
 	template <class T, bool check_push, bool check_pop, class EmptyQueryPolicy>
 	class circular_buffer<T&&, check_push, check_pop, EmptyQueryPolicy> {
-		static_assert(jkl::tmp::assert_helper<T>::value, 
+		static_assert(jkj::tmp::assert_helper<T>::value, 
 			"circular_buffer must not be instantiated with rvalue reference types!");
 	};
 }
@@ -693,8 +693,8 @@ namespace std {
 		class T1, bool check_push1, bool check_pop1, class EmptyQueryPolicy1,
 		class T2, bool check_push2, bool check_pop2, class EmptyQueryPolicy2
 	>
-	void swap(::jkl::circular_buffer<T1, check_push1, check_pop1, EmptyQueryPolicy1>& x,
-		::jkl::circular_buffer<T2, check_push2, check_pop2, EmptyQueryPolicy2>& y) {
+	void swap(::jkj::circular_buffer<T1, check_push1, check_pop1, EmptyQueryPolicy1>& x,
+		::jkj::circular_buffer<T2, check_push2, check_pop2, EmptyQueryPolicy2>& y) {
 		x.swap(y);
 	}
 }

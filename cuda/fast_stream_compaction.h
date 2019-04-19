@@ -34,7 +34,7 @@
 #include "../portability.h"
 #include "helper.h"
 
-namespace jkl {
+namespace jkj {
 	namespace cuda {
 		namespace detail {
 			/// Call trans(input, output_idx, pred_result) if the expression is well-defined; otherwise,
@@ -113,7 +113,7 @@ namespace jkl {
 				template <class dummy = void, class = void>
 				struct pass_const_reference {
 					static_assert(assert_helper<ValueType>::value,
-						"jkl::cuda::fast_stream_compaction: predicate can't be evaluated for the given input");
+						"jkj::cuda::fast_stream_compaction: predicate can't be evaluated for the given input");
 				};
 
 				template <class dummy>
@@ -277,9 +277,9 @@ namespace jkl {
 			// CUDA atomicAdd is supported only for int, unsigned int, and unsigned long long
 			static_assert(std::is_same<Counter, int>::value || std::is_same<Counter, unsigned int>::value
 				|| std::is_same<Counter, unsigned long long>::value,
-				"jkl::cuda: counter_ptr must be of one of int*, unsigned int*, or unsigned long long*");
+				"jkj::cuda: counter_ptr must be of one of int*, unsigned int*, or unsigned long long*");
 			assert(block_size % 32 == 0);
-			jkl::cuda::check_error(cudaMemsetAsync(counter_ptr, 0, sizeof(Counter), stream));
+			jkj::cuda::check_error(cudaMemsetAsync(counter_ptr, 0, sizeof(Counter), stream));
 
 			constexpr unsigned int subgroup_size = 32;
 			constexpr unsigned int group_size = 1024;
@@ -290,7 +290,7 @@ namespace jkl {
 
 			// Automatically find the optimal grid dimension
 			if( grid_size == 0 ) {
-				grid_size = jkl::cuda::get_optimal_grid_size(
+				grid_size = jkj::cuda::get_optimal_grid_size(
 					detail::fast_stream_compaction_kernel<std::remove_reference_t<InputIterator>,
 					SizeType, std::remove_reference_t<OutputIterator>,
 					Counter, std::remove_reference_t<Predicate>,

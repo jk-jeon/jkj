@@ -18,7 +18,7 @@
 #pragma once
 #include "general.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		inline namespace math_literals {
 			// Degree to radian conversion

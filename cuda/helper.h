@@ -27,7 +27,7 @@
 #include <vector>
 #include <cuda_runtime.h>
 
-namespace jkl {
+namespace jkj {
 	namespace cuda {
 	#ifndef JKL_CUDA_ENUM_TO_STRING_CASE
 	#define JKL_CUDA_ENUM_TO_STRING_CASE(e)		case e: return #e

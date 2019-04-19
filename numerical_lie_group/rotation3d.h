@@ -18,7 +18,7 @@
 #pragma once
 #include "polar_decomposition.h"
 
-namespace jkl {
+namespace jkj {
 	namespace math {
 		// Unit quaternion
 		namespace detail {
@@ -32,14 +32,14 @@ namespace jkl {
 				template <class Vector>
 				static constexpr base_type check_and_forward(Vector&& v) {
 					return close_to_one(v.normsq()) ? std::move(v) :
-						throw input_validity_error<target_type>{ "jkl::math: the vector is not normalized" };
+						throw input_validity_error<target_type>{ "jkj::math: the vector is not normalized" };
 				}
 
 				template <class Vector>
 				static base_type normalize_and_forward(Vector&& v) {
 					auto norm = v.norm();
 					return is_invertible(norm) ? std::move(v /= norm) :
-						throw input_validity_error<target_type>{ "jkl::math: the vector cannot be normalized" };
+						throw input_validity_error<target_type>{ "jkj::math: the vector cannot be normalized" };
 				}
 
 			protected:
@@ -403,7 +403,7 @@ namespace jkl {
 				R4_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !close_to_one(that.normsq()) )
-					throw input_validity_error<SU2_elmt>{ "jkl::math: the vector is not normalized" };
+					throw input_validity_error<SU2_elmt>{ "jkj::math: the vector is not normalized" };
 				static_cast<R4_elmt_type&>(*this) = that;
 				return *this;
 			}
@@ -413,7 +413,7 @@ namespace jkl {
 				R4_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !close_to_one(that.normsq()) )
-					throw input_validity_error<SU2_elmt>{ "jkl::math: the vector is not normalized" };
+					throw input_validity_error<SU2_elmt>{ "jkj::math: the vector is not normalized" };
 				static_cast<R4_elmt_type&>(*this) = std::move(that);
 				return *this;
 			}
@@ -615,10 +615,10 @@ namespace jkl {
 				auto ww = std::forward<ThisType>(q).w();
 
 				// Clamp the range to avoid NaN caused by numerical errors
-				if( ww > jkl::math::unity<ComponentType>() )
-					ww = jkl::math::unity<ComponentType>();
-				else if( ww < -jkl::math::unity<ComponentType>() )
-					ww = -jkl::math::unity<ComponentType>();
+				if( ww > jkj::math::unity<ComponentType>() )
+					ww = jkj::math::unity<ComponentType>();
+				else if( ww < -jkj::math::unity<ComponentType>() )
+					ww = -jkj::math::unity<ComponentType>();
 
 				return 2 * acos(std::move(ww));
 			}
@@ -667,11 +667,11 @@ namespace jkl {
 
 			JKL_GPU_EXECUTABLE static constexpr SU2_elmt unity()
 				noexcept(noexcept(R4_elmt_type{
-				jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
-				jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>() }))
+				jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(),
+				jkj::math::zero<ComponentType>(), jkj::math::unity<ComponentType>() }))
 			{
-				return{ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(), jkl::math::unity<ComponentType>(),
+				return{ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(), jkj::math::unity<ComponentType>(),
 					no_validity_check{} };
 			}
 
@@ -734,7 +734,7 @@ namespace jkl {
 			template <class Matrix>
 			static constexpr GL3_elmt_type check_and_forward(Matrix&& m) {
 				return m.is_special_orthogonal() ? GL3_elmt_type{ std::forward<Matrix>(m), no_validity_check{} } :
-					throw input_validity_error<SO3_elmt>{ "jkl::math: the matrix is not special orthogonal" };
+					throw input_validity_error<SO3_elmt>{ "jkj::math: the matrix is not special orthogonal" };
 			}
 
 		public:
@@ -974,7 +974,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits> const& that) &
 			{
 				if( !that.is_special_othogonal() )
-					throw input_validity_error<SO3_elmt>{ "jkl::math: the matrix is not special orthogonal" };
+					throw input_validity_error<SO3_elmt>{ "jkj::math: the matrix is not special orthogonal" };
 				static_cast<GL3_elmt_type&>(*this).assign_no_check(that);
 				return *this;
 			}
@@ -984,7 +984,7 @@ namespace jkl {
 				gl3_elmt<OtherComponentType, OtherStorage, OtherStorageTraits>&& that) &
 			{
 				if( !that.is_special_othogonal() )
-					throw input_validity_error<SO3_elmt>{ "jkl::math: the matrix is not special orthogonal" };
+					throw input_validity_error<SO3_elmt>{ "jkj::math: the matrix is not special orthogonal" };
 				static_cast<GL3_elmt_type&>(*this).assign_no_check(std::move(that));
 				return *this;
 			}
@@ -1131,15 +1131,15 @@ namespace jkl {
 				noexcept(noexcept(GL3_elmt_type::unity()))
 			{
 				return{
-					jkl::math::unity<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::unity<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::zero<ComponentType>(),
-					jkl::math::unity<ComponentType>(),
+					jkj::math::unity<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::unity<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::zero<ComponentType>(),
+					jkj::math::unity<ComponentType>(),
 					no_validity_check{}
 				};
 			}
@@ -1240,12 +1240,12 @@ namespace jkl {
 				using std::cos;
 
 				ComponentType theta_x, theta_y, theta_z;
-				if( close_to(get<2, 0>(), jkl::math::unity<ComponentType>()) ) {
+				if( close_to(get<2, 0>(), jkj::math::unity<ComponentType>()) ) {
 					theta_z = 0;
 					theta_y = -constants<ComponentType>::pi / 2;
 					theta_x = atan2(-get<0, 1>(), -get<0, 2>());
 				}
-				else if( close_to(get<2, 0>(), -jkl::math::unity<ComponentType>()) ) {
+				else if( close_to(get<2, 0>(), -jkj::math::unity<ComponentType>()) ) {
 					theta_z = 0;
 					theta_y = constants<ComponentType>::pi / 2;
 					theta_x = atan2(get<0, 1>(), get<0, 2>());
@@ -1259,19 +1259,19 @@ namespace jkl {
 			}
 
 			JKL_GPU_EXECUTABLE static SO3_elmt rotx(ComponentType theta)
-				noexcept(noexcept(exp({ std::move(theta), jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() })))
+				noexcept(noexcept(exp({ std::move(theta), jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>() })))
 			{
-				return exp({ std::move(theta), jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>() });
+				return exp({ std::move(theta), jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>() });
 			}
 			JKL_GPU_EXECUTABLE static SO3_elmt roty(ComponentType theta)
-				noexcept(noexcept(exp({ jkl::math::zero<ComponentType>(), std::move(theta), jkl::math::zero<ComponentType>() })))
+				noexcept(noexcept(exp({ jkj::math::zero<ComponentType>(), std::move(theta), jkj::math::zero<ComponentType>() })))
 			{
-				return exp({ jkl::math::zero<ComponentType>(), std::move(theta), jkl::math::zero<ComponentType>() });
+				return exp({ jkj::math::zero<ComponentType>(), std::move(theta), jkj::math::zero<ComponentType>() });
 			}
 			JKL_GPU_EXECUTABLE static SO3_elmt rotz(ComponentType theta)
-				noexcept(noexcept(exp({ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(), std::move(theta) })))
+				noexcept(noexcept(exp({ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(), std::move(theta) })))
 			{
-				return exp({ jkl::math::zero<ComponentType>(), jkl::math::zero<ComponentType>(), std::move(theta) });
+				return exp({ jkj::math::zero<ComponentType>(), jkj::math::zero<ComponentType>(), std::move(theta) });
 			}
 
 			template <class OtherComponentType, class OtherStorage, class OtherStorageTraits>
@@ -1370,10 +1370,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot multiply two SU2_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot multiply two SU2_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot multiply two SU2_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot multiply two SU2_elmt's; failed to deduce the resulting storage type");
 			
 			return{ p.w() * q.vector_part() + p.vector_part() * q.w() +
 				cross(p.vector_part(), q.vector_part()),
@@ -1392,10 +1392,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot divide two SU2_elmt's; failed to deduce the resulting component type");
+				"jkj::math: cannot divide two SU2_elmt's; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot divide two SU2_elmt's; failed to deduce the resulting storage type");
+				"jkj::math: cannot divide two SU2_elmt's; failed to deduce the resulting storage type");
 
 			return std::forward<LeftOperand>(p) * std::forward<RightOperand>(q).inv();
 		}
@@ -1412,10 +1412,10 @@ namespace jkl {
 
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::component_type_not_compatible>>::value,
-				"jkl::math: cannot compute SU2 interpolation; failed to deduce the resulting component type");
+				"jkj::math: cannot compute SU2 interpolation; failed to deduce the resulting component type");
 			static_assert(!std::is_same<result_type,
 				no_operation_tag<no_operation_reason::storage_not_compatible>>::value,
-				"jkl::math: cannot compute SU2 interpolation; failed to deduce the resulting storage type");
+				"jkj::math: cannot compute SU2 interpolation; failed to deduce the resulting storage type");
 
 			return std::forward<LeftOperand>(p) * result_type::exp(
 				(p.inv() * std::forward<RightOperand>(q)).log() * std::forward<Parameter>(t));

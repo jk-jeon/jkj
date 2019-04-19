@@ -22,7 +22,7 @@
 #include <nana/gui/widgets/textbox.hpp>
 #include "../cache.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		// Input panel for integers
 		// [label]: [textbox]

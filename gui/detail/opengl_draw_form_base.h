@@ -24,7 +24,7 @@
 #include "../../utilities.h"
 #include "../../tmp/identity.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		namespace detail {
 			class opengl_draw_form_base : public nana::nested_form, private util::fps_counter {

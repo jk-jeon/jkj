@@ -18,7 +18,7 @@
 #pragma once
 #include "draw_circle.h"
 
-namespace jkl {
+namespace jkj {
 	namespace gui {
 		namespace draw_detail {
 			// For thin rectangle drawing

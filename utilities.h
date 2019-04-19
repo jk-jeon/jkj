@@ -24,7 +24,7 @@
 #include <thread>
 #include <type_traits>
 
-namespace jkl {
+namespace jkj {
 	namespace util {
 		/// Self-updating frame rate counter
 		/// Counter is reset to zero under one of the following conditions:
@@ -279,14 +279,14 @@ namespace jkl {
 		class permutation_sampler {
 		public:
 			static_assert(std::is_integral<UIntType>::value && std::is_unsigned<UIntType>::value,
-				"jkl::permutation_sampler must be instantiated with an unsigned integral type");
+				"jkj::permutation_sampler must be instantiated with an unsigned integral type");
 
 			permutation_sampler() noexcept = default;
 			explicit permutation_sampler(UIntType n) :
 				m_seq{ std::make_unique<UIntType[]>(n) }, m_capacity{ n }, m_size{ n }
 			{
 				if( n == 0 )
-					throw std::invalid_argument{ "jkl::permutation_sampler: n should be positive" };
+					throw std::invalid_argument{ "jkj::permutation_sampler: n should be positive" };
 
 				for( UIntType i = 0; i < n; ++i )
 					m_seq[i] = i;
